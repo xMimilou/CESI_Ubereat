@@ -43,7 +43,7 @@ import counters from '../components/widget/counters.vue'
 .widget {
   width: 100%;
   padding: 1rem;
-  height: 100%;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
