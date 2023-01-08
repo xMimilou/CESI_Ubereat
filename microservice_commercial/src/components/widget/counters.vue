@@ -75,7 +75,7 @@ export default{
 .counters__title::after {
   content: "";
   display: block;
-  width: 80%;
+  width: 70%;
   height: 2px;
   background-color: hsla(0, 0%, 59%, 0.2);
   margin: 0 auto;
@@ -86,7 +86,7 @@ export default{
 .counters__title {
   display: flex;
   flex: 1;
-  width: 70%;
+  width: 100%;
   margin: 20px auto;
   line-height: 1em;
   font-weight: 50px;
@@ -110,21 +110,14 @@ export default{
   color: hsla(160, 100%, 37%, 1);
 } */
 
-.widget {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
+
 
 .counters {
   width: 100%;
   height: 100%;
   background-color: var(--color-widget);
   border-radius: 10px;
-  padding: 1rem;
+  
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -11,6 +11,20 @@ import counters from '../components/widget/counters.vue'
             <counters title="commandes" query="command"/>
         </div>
         <div class="columns-3">
+            <counters title="nombre de restaurateur" query="command"/>
+        </div>
+        <div class="columns-3">
+            <counters title="test" query="command"/>
+        </div>
+        <div class="columns-3">
+            <counters title="test" query="command"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns-3">
+            <counters title="commandes" query="command"/>
+        </div>
+        <div class="columns-3">
             <counters title="test" query="command"/>
         </div>
         <div class="columns-3">
@@ -25,6 +39,16 @@ import counters from '../components/widget/counters.vue'
 </template>
 
 <style scoped>
+
+.widget {
+  width: 100%;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 .container {
     width: 100%;
     height: 100%;
