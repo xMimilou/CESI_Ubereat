@@ -13,7 +13,7 @@ defineProps<{
 <style scoped>
 h1 {
   font-weight: 500;
-  top: -10px;
+  animation: fadein 2s;
 }
 h3 {
   font-size: 1.2rem;
@@ -25,20 +25,19 @@ h3 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 40vh;
+  height: calc(100vh - 50px);
   font-size: 50px;
-  transform: translateY(150px);
-  animation: fadein 2s;
+  
 }
   /* Transition appear text from bottom */
   @keyframes fadein {
     from {
       opacity: 0;
-      transform: translate3d(0, 150%, 0);
+      transform: translate3d(0, 300px, 0);
     }
     to {
       opacity: 1;
-      transform: translate3d(0, 150px, 0);
+      transform: translate3d(0, 0, 0);
     }
   }
 .greetings h1,

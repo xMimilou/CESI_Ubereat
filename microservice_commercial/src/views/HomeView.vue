@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import HelloWorldVue from '@/components/HelloWorld.vue';
 </script>
 
 <template>
-  
+  <HelloWorldVue msg="Welcome to the commercial part" />
 </template>
