@@ -1,17 +1,37 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+
+let jwt = localStorage.getItem('token');
+// test if jwt != null and valid
+let display_login = false;
+if (jwt) {
+  console.log('jwt is set');
+  display_login = false;
+  
+} else {
+  console.log('jwt is not set');
+  display_login = true;
+}
+
+
 </script>
 
 <template>
   <header>
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/statistique">Statistique</RouterLink>
+        <RouterLink to="/statistique" v-if="!display_login">Statistique</RouterLink>
       </nav>
-      <nav class="end">
+      <!-- if jwt is not set -->
+      <nav class="end" v-if="display_login">
         <RouterLink to="/login">Login</RouterLink>
         <RouterLink to="/register">Register</RouterLink>
+      </nav>
+      <!-- if jwt is set -->
+      <nav class="end" v-else>
+        <RouterLink to="/profile">Profile</RouterLink>
+        <RouterLink to="/logout">Logout</RouterLink>
       </nav>
   </header>
   <RouterView />
