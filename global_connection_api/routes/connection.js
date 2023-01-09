@@ -1,30 +1,63 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
+const pool = require('../helpers/database.js')
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const mariadb = require('../models/user');
+
 // const mongodb = require('mongodb');
 
+router.get('/:id', async function(req, res) {
 
-router.post('/register', async(req,res) => {
-    if(!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password){
-        return res.status(400).send({error: 'All fields are required.'});
+    try{
+        const sqlQuery = `SELECT * FROM user WHERE iduser = ?`;
+        const result = await pool.query(sqlQuery, [req.params.id]);
+        res.status(200).json(result);
+
+    }catch(err){
+        res.status(400).json({message: err.message});
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+    res.status(200).json({id: req.params.id});
+    
+});
 
-    // create user model containes all user data
-    const user = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        password: hashedPassword,
+router.post('/register', async (req, res) => {
+    try{
+        const { first_name, last_name, username, password, email, referal_by, role } = req.body;
+        
+        // generate a unique referal number
+        const referal_code = Math.floor(Math.random() * 1000000000);
+        
+        // check if the user already exists
+        const checkUser = `SELECT * FROM user WHERE username = ?`;
+        const checkUserResult = await pool.query
+        if(checkUserResult.length > 0){
+            return res.status(400).json({message: "User already exists"});
+        }
+
+
+        // get actual datetime in format YYYY-MM-DD HH:MM:SS
+        const date = new Date();
+
+        // hash the password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        // insert the user
+        const sqlQuery = `INSERT INTO user (first_name, last_name, username, password, email, referal_by, referal_code, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const result = await pool.query(sqlQuery, [first_name, last_name, username, hashedPassword, email, referal_by, referal_code, role, date, date]);
+        res.status(200).json(result);
+
+    } catch(err){
+        res.status(400).json({message: err.message});
     }
+});
 
-    // send this to database mariadb using mariadb module
     
 
-});
+
+
+
 
 // router.post('/register', async (req, res) => {
 //   if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password) {
