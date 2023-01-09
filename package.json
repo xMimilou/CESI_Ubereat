@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vue-google-charts": "^1.1.0"
+  }
+}

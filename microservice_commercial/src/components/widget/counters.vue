@@ -14,7 +14,7 @@ defineProps<{
     <div class="counters__content">
       <div class="counters__content__item">
         <div class="counters__content__item__text">
-          <h3>Nombre de {{ title }}</h3>
+          <h3>{{ title }}</h3>
           <div class="display_val">
             <h1>{{ count }}</h1>
           </div>
@@ -45,7 +45,7 @@ export default{
     }
   },
   mounted() {
-    this.getCount()
+    //this.getCount()
   },
   methods: {
     getCount() {

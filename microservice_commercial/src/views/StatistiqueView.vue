@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import counters from '../components/widget/counters.vue'
+import graph from '../components/widget/graph.vue'
+import list from '../components/widget/list.vue'
 </script>
 
 <template>
@@ -8,30 +10,31 @@ import counters from '../components/widget/counters.vue'
 <div class="container">
     <div class="row">
         <div class="columns-3">
-            <counters title="commandes" query="command"/>
+            <counters title="nombre de client" query="command"/>
         </div>
         <div class="columns-3">
             <counters title="nombre de restaurateur" query="command"/>
         </div>
         <div class="columns-3">
-            <counters title="test" query="command"/>
+            <counters title="nombre de livreur" query="command"/>
         </div>
         <div class="columns-3">
-            <counters title="test" query="command"/>
+            <counters title="nombre total de commandes" query="command"/>
         </div>
     </div>
     <div class="row">
-        <div class="columns-3">
-            <counters title="commandes" query="command"/>
+        <div class="columns-12">
+            <graph title="Commandes par minutes" query="command"/>
         </div>
-        <div class="columns-3">
-            <counters title="test" query="command"/>
+    </div>
+    <div class="row">
+        <!-- Display list of last 5 new poeple col-6 -->
+        <div class="columns-6">
+            <list title="Derniers clients" entete="nom,prenom" :limit="5"/>
         </div>
-        <div class="columns-3">
-            <counters title="test" query="command"/>
-        </div>
-        <div class="columns-3">
-            <counters title="test" query="command"/>
+        <!-- Top 5 des clients avec le plus de commandes-->
+        <div class="columns-6">
+            <list title="Top 5 des clients" entete="nom,prenom" :limit="5"/>
         </div>
     </div>
 </div>
@@ -39,6 +42,27 @@ import counters from '../components/widget/counters.vue'
 </template>
 
 <style scoped>
+
+.columns-6 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+
+}
+
+.columns-12 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+}
 
 .widget {
   width: 100%;
