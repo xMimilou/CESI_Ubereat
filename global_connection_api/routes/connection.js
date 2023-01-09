@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../helpers/database.js')
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+var referralCodes = require("referral-codes")
 
 // const mongodb = require('mongodb');
 
@@ -25,10 +26,12 @@ router.post('/register', async (req, res) => {
         const { first_name, last_name, username, password, email, referal_by, role } = req.body;
         
         // generate a unique referal number
-        const code = Math.floor(Math.random() * 1000000000);
-        // get only integer part of the number
-        const referal_code = Math.trunc(code);
-        console.log(referal_code)
+        var referal_code = referralCodes.generate({
+            pattern: '#####-##-###'
+        });
+
+        // get first element of the array
+        referal_code = referal_code[0];
         
         // check if the user already exists
         const checkUser = `SELECT * FROM user WHERE username = ?`;
@@ -48,7 +51,7 @@ router.post('/register', async (req, res) => {
         // insert the user
         const sqlQuery = `INSERT INTO user (first_name, last_name, username, password, email, referal_by, referal_code, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const result = await pool.query(sqlQuery, [first_name, last_name, username, hashedPassword, email, referal_by, referal_code, role, date, date]);
-        res.status(200).json(result);
+        res.status(200).json({message: "User created successfully"});
 
     } catch(err){
         res.status(400).json({message: err.message});
