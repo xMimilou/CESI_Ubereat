@@ -1,13 +1,13 @@
 ## NodeJS, Express and MariaDB
 
 ### Command
-/user/:id - GET : Retrive all user information by id
-/user/all - GET : Retrive all user information
-/user/register - POST : Create new user
-/user/login - POST : Login user
-/user/:id - PUT : Update user information by id
-/user/:id - DELETE : Delete user information by id
-/user/resetpassword - PUT : Reset password
+/users/user/:id - GET : Retrive all user information by id
+/users/all - GET : Retrive all user information
+/users/register - POST : Create new user
+/users/login - POST : Login user
+/users/:id - PUT : Update user information by id
+/users/:id - DELETE : Delete user information by id
+/users/resetpassword - PUT : Reset password
 
 ### Database
 CREATE TABLE `user` (

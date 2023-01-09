@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 // const mongodb = require('mongodb');
 
-router.get('/:id', async function(req, res) {
+router.get('user/:id', async function(req, res) {
 
     try{
         const sqlQuery = `SELECT * FROM user WHERE iduser = ?`;
@@ -17,7 +17,6 @@ router.get('/:id', async function(req, res) {
         res.status(400).json({message: err.message});
     }
 
-    res.status(200).json({id: req.params.id});
     
 });
 
@@ -26,11 +25,14 @@ router.post('/register', async (req, res) => {
         const { first_name, last_name, username, password, email, referal_by, role } = req.body;
         
         // generate a unique referal number
-        const referal_code = Math.floor(Math.random() * 1000000000);
+        const code = Math.floor(Math.random() * 1000000000);
+        // get only integer part of the number
+        const referal_code = Math.trunc(code);
+        console.log(referal_code)
         
         // check if the user already exists
         const checkUser = `SELECT * FROM user WHERE username = ?`;
-        const checkUserResult = await pool.query
+        const checkUserResult = await pool.query(checkUser, [username])
         if(checkUserResult.length > 0){
             return res.status(400).json({message: "User already exists"});
         }
@@ -81,14 +83,14 @@ router.post('/login', async (req, res) => {
 router.get("/all", async (req, res) => {
     try{
         // check jwt token
-        const token = req.header('auth-token');
+        //const token = req.header('auth-token');
         
-        if(!token) return res.status(401).json({message: "Access denied"});
+        //if(!token) return res.status(401).json({message: "Access denied"});
 
         // return all user from database
 
         const sqlQuery = `SELECT * FROM user`;
-        const result = await pool.query
+        const result = await pool.query(sqlQuery);
         res.status(200).json(result);
 
     } catch(err){

@@ -7,21 +7,23 @@ const app = express();
 
 /* Middleware */
 
-//app.use(cookieParser())
-app.use(cors({
-    credentials: true,
-    origin: ['*']
-}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+app.use(cookieParser())
+app.use(cors({
+    credentials: true,
+    origin: ['http://localhost:5173']
+}))
+
 
 
 /* Routes */
 
 const routes = require("./routes/connection")
 
-app.use('/user', routes)
+app.use('/api', routes)
 
 const port = 3000;
 app.listen(port, () => {
