@@ -1,16 +1,17 @@
 <template>
     <div class="container">
         <div class="box">
-            <form class="">
+            <form @submit.prevent="LoginUser">
             
                 <h3>Se connecter</h3>
             
                 <div class="form-group">
-                    <label>Email</label>
+                    <label>Username</label>
                     <input
-                    type="email"
+                    type="username"
                     class="form-control"
-                    placeholder="Email"
+                    placeholder="username"
+                    v-model="form.username"
                     />
                 </div>
             
@@ -20,6 +21,7 @@
                     type="password"
                     class="form-control"
                     placeholder="Mot de passe"
+                    v-model="form.password"
                     />
                 </div>
             
@@ -32,7 +34,39 @@
         </div>
     </div>
 </template>
-  
+
+<script lang="ts">
+import axios from 'axios';
+// import localStorage
+
+export default{
+    data(){
+        return{
+            form:{
+                username: '',
+                password: ''
+            }
+        };
+    },
+    methods:{
+        LoginUser(){
+            var data = {
+                username: this.form.username,
+                password: this.form.password
+            }
+            const response = axios.post('http://localhost:3000/api/login', data);
+            // get jwt token in response and store it in local storage
+            localStorage.setItem('token', response.data.token);
+            let jwt = localStorage.getItem('token');
+            console.log(jwt);
+        }
+    }
+
+}
+
+</script>
+
+
 <style>
 .container {
     display: flex;
@@ -85,5 +119,3 @@ h3{
 </style>
 
 
-<script lang="ts">
-</script>
