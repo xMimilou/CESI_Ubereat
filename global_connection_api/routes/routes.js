@@ -1,8 +1,30 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const User = require('../models/user');
+const mariadb = require('../models/user');
 // const mongodb = require('mongodb');
+
+
+router.post('/register', async(req,res) => {
+    if(!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password){
+        return res.status(400).send({error: 'All fields are required.'});
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+    // create user model containes all user data
+    const user = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: hashedPassword,
+    }
+
+    // send this to database mariadb using mariadb module
+    
+
+});
 
 // router.post('/register', async (req, res) => {
 //   if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password) {

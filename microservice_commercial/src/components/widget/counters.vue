@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 defineProps<{
   title: string
   query: string
-  units: string
+  units: string, required: false, default: ''
 }>()
+
+var myvar:string = ""
+var count:number = 20
+onMounted(() => {
+  
+  myvar = "test"
+  console.log(myvar)
+})
+
 </script>
 
 <template>
@@ -28,41 +38,41 @@ defineProps<{
 
 <script lang="ts">
 
-export default{
-  name: "counters",
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    query: {
-      type: String,
-      required: true
-    },
-    units: {
-      type: String,
-      required: false,
-      default: ""
-    }
-  },
-  data() {
-    return {
-      count: 10
-    }
-  },
-  mounted() {
-    //this.getCount()
-  },
-  methods: {
-    getCount() {
-      fetch(`http://localhost:3000/${this.query}`)
-        .then(res => res.json())
-        .then(data => {
-          this.count = data.length
-        })
-    }
-  }
-}
+// export default{
+//   name: "counters",
+//   props: {
+//     title: {
+//       type: String,
+//       required: true
+//     },
+//     query: {
+//       type: String,
+//       required: true
+//     },
+//     units: {
+//       type: String,
+//       required: false,
+//       default: ""
+//     }
+//   },
+//   data() {
+//     return {
+//       count: 10
+//     }
+//   },
+//   mounted() {
+//     //this.getCount()
+//   },
+//   methods: {
+//     getCount() {
+//       fetch(`http://localhost:3000/${this.query}`)
+//         .then(res => res.json())
+//         .then(data => {
+//           this.count = data.length
+//         })
+//     }
+//   }
+// }
 
 </script>
 

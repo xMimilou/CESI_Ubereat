@@ -1,26 +1,17 @@
-const sql = require('mssql');
-require('dotenv').config();
-
-// get .env variables
+// connect to mariadb database 
+const mariadb = require('mariadb');
 const config = {
-    user: process.env.sql_username,
-    password: process.env.sql_password,
-    server: process.env.sql_server,
-    database: process.env.sql_database,
-    stream: false,
-    options: {
-        trustedConnection: true,
-        encrypt: true,
-        enableArithAbort: true,
-        trustServerCertificate: false,
-      },
-  };
+    host: 'localhost',
+    user: 'cesi',
+    password: 'cesi',
+    database: 'cesi_ubereat',
+    connectionLimit: 10
+};
 
-  console.log(process.env.sql_username);
-sql.connect(config, err => {
-    if (err) console.log(err);
-    else console.log('Connected to SQL Server');
-});
+// connect to mariadb
+const pool = mariadb.createPool(config);
+
+
 
 // const userSchema = new mongoose.Schema({
 //     first_name: {
@@ -67,4 +58,4 @@ sql.connect(config, err => {
 // })
 
 //module.exports = mongoose.model('User', userSchema);
-module.exports = config;
+module.exports = pool;
