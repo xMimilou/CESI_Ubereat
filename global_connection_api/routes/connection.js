@@ -78,6 +78,43 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get("/all", async (req, res) => {
+    try{
+        // check jwt token
+        const token = req.header('auth-token');
+        
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        // return all user from database
+
+        const sqlQuery = `SELECT * FROM user`;
+        const result = await pool.query
+        res.status(200).json(result);
+
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.put("/update/:id", async (req, res) => {
+    try{
+        // check jwt token
+        const token = req.header('auth-token');
+        
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        // get actual datetime in format YYYY-MM-DD HH:MM:SS
+        const date = new Date();
+
+        // update user
+        const sqlQuery = `UPDATE user SET first_name = ?, last_name = ?, username = ?, email = ?, updated_at = ? WHERE iduser = ?`;
+        const result = await
+        res.status(200).json(result);
+
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
 
 
 

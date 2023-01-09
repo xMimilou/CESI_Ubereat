@@ -3,7 +3,8 @@
 ### Command
 /user/:id - GET : Retrive all user information by id
 /user/all - GET : Retrive all user information
-/user - POST : Create new user
+/user/register - POST : Create new user
+/user/login - POST : Login user
 /user/:id - PUT : Update user information by id
 /user/:id - DELETE : Delete user information by id
 
