@@ -2,6 +2,7 @@
 defineProps<{
   title: string
   query: string
+  units: string
 }>()
 </script>
 
@@ -16,7 +17,7 @@ defineProps<{
         <div class="counters__content__item__text">
           <h3>{{ title }}</h3>
           <div class="display_val">
-            <h1>{{ count }}</h1>
+            <h1>{{ count }} {{ units }}</h1>
           </div>
         </div>
       </div>
@@ -37,6 +38,11 @@ export default{
     query: {
       type: String,
       required: true
+    },
+    units: {
+      type: String,
+      required: false,
+      default: ""
     }
   },
   data() {

@@ -24,16 +24,16 @@ import list from '../components/widget/list.vue'
     </div>
     <div class="row">
         <div class="columns-3">
-            <counters title="Chiffre d'affaire" query="command"/>
+            <counters title="Chiffre d'affaire" units="€" query="command"/>
         </div>
         <div class="columns-3">
             <counters title="Utilisateur actif" query="command"/>
         </div>
         <div class="columns-3">
-            <counters title="" query="command"/>
+            <counters title="Nombre total d'utilisateur" query="command"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre total de commandes" query="command"/>
+            <counters title="Commandes par jours" query="command"/>
         </div>
     </div>
     <div class="row">
