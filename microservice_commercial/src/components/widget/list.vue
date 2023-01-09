@@ -88,33 +88,33 @@ export default{
 
 .list{
     width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
     margin: 5px;
 }
 
 table{
     width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin: 5px;
+    border-collapse: collapse;
+    text-align: center;
 }
 
-tr{
-    
+table th, table td{
+    padding: 5px;
 }
 
-thead > tr > th{
-    width: 100%;
-    background: hsla(160, 100%, 37%, 1);
+table tr:nth-child(even) {
+    background-color: hsla(160, 100%, 37%, 0.2);
+}
+table tr:hover{
+    background-color: hsla(0, 0%, 59%, 0.2);
+}
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: hsla(160, 100%, 37%, 1);
     color: white;
 }
+
 
 .display_val {
   display: flex;
