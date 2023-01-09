@@ -98,6 +98,9 @@ router.get("/all", async (req, res) => {
 
 router.put("/update/:id", async (req, res) => {
     try{
+
+        const { first_name, last_name, username, email  } = req.body;
+
         // check jwt token
         const token = req.header('auth-token');
         
@@ -106,11 +109,65 @@ router.put("/update/:id", async (req, res) => {
         // get actual datetime in format YYYY-MM-DD HH:MM:SS
         const date = new Date();
 
+
         // update user
         const sqlQuery = `UPDATE user SET first_name = ?, last_name = ?, username = ?, email = ?, updated_at = ? WHERE iduser = ?`;
-        const result = await
+        const result = await pool.query(sqlQuery, [first_name, last_name, username, email, date, req.params.id]);
         res.status(200).json(result);
 
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.delete("/delete/:id", async (req, res) => {
+    try{
+        
+        // check jwt token
+        const token = req.header('auth-token');
+        
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        // delete user
+        const sqlQuery = `DELETE FROM user WHERE iduser = ?`;
+        const result = await pool.query(sqlQuery, [req.params.id]);
+        res.status(200).json(result);
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.put('/resetpassword', async (req, res) => {
+    try{
+        const { last_password, new_password } = req.body;
+
+        // check jwt token
+        const token = req.header('auth-token');
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        // check if the user exists
+        const checkUser = `SELECT * FROM user WHERE iduser = ?`;
+        const checkUserResult = await pool.query(checkUser, [req.user.id]);
+        if(checkUserResult.length == 0){
+            return res.status(400).json({message: "User does not exist"});
+        }
+
+        // check if the password is correct
+        const validPassword = await bcrypt.compare(last_password, checkUserResult[0].password);
+        if (!validPassword) return res.status(400).json({message: "Invalid password"});
+
+        // get actual datetime in format YYYY-MM-DD HH:MM:SS
+        const date = new Date();
+
+        // hash the password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(new_password, salt)
+
+        // update user password
+        const sqlQuery = `UPDATE user SET password = ?, updated_at = ? WHERE iduser = ?`;
+        const result = await pool.query(sqlQuery, [hashedPassword, date, req.user.id]);
+        res.status(200).json(result);
     } catch(err){
         res.status(400).json({message: err.message});
     }

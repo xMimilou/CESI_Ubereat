@@ -7,6 +7,7 @@
 /user/login - POST : Login user
 /user/:id - PUT : Update user information by id
 /user/:id - DELETE : Delete user information by id
+/user/resetpassword - PUT : Reset password
 
 ### Database
 CREATE TABLE `user` (
