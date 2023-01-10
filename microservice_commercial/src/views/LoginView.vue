@@ -56,10 +56,10 @@ export default{
             }
             const response = await axios.post('http://localhost:3000/api/login', data);
             // get jwt token in response and store it in local storage
-            console.log(response)
             localStorage.setItem('token', response.data.token);
-            let jwt = localStorage.getItem('token');
-            console.log(jwt);
+            localStorage.setItem('username', response.data.username);
+            localStorage.setItem('role', response.data.role);
+            
             this.$router.push('/');
         }
     }

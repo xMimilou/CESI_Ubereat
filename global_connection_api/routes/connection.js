@@ -83,11 +83,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get("/tokenCheckup", async(req, res) => {
+router.post("/tokenCheckup", async(req, res) => {
     try{
         // check jwt token
         
         const token = req.header('auth-token');
+        console.log(token);
 
         // check if the token is valid
 
@@ -96,7 +97,7 @@ router.get("/tokenCheckup", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-
+        console.log("Access granted");
         res.status(200).json({message: "Access granted"});
     }
     catch(err){

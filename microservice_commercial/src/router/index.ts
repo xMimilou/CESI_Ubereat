@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
@@ -20,7 +21,8 @@ const router = createRouter({
     {
       path: '/statistique',
       name: 'statistique',
-      component: () => import('../views/StatistiqueView.vue')
+      component: () => import('../views/StatistiqueView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -31,13 +33,34 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/RegisterView.vue')
-    },
-    {
-      path: '/logout',
-      name: 'logout',
-      component: () => import('../views/LogoutView.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    var token = localStorage.getItem('token');
+    if (token == null || token == undefined) {
+      next({ name: 'login' });
+    } else {
+      // make axios post on tokenCheckup and token in header at auth-token
+      axios.post('http://localhost:3000/api/tokenCheckup', {}, { headers: { 'auth-token': token } }).then((response) => {
+        if (response.data.message == 'Access granted') {
+          next();
+        } else {
+          next({ name: 'login' });
+        }
+      }).catch((error) => {
+        console.log(error);
+        next({ name: 'login' });
+      });
+
+
+      
+    }
+  }else{
+    next();
+  }
+});
 
 export default router

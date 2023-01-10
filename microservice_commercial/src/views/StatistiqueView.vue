@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import counters from '../components/widget/counters.vue'
 import graph from '../components/widget/graph.vue'
 import list from '../components/widget/list.vue'
+import axios from 'axios'
 
 
 </script>
