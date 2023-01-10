@@ -1,26 +1,27 @@
 const express = require('express');
-const mongoose = require('mongoose')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-
-mongoose.connect('mongodb://127.0.0.1:27017/auth', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}, () => {
-    console.log('connected to the database')
-})
-
-const routes = require("./routes/routes")
-
 const app = express();
+
+
+
+/* Middleware */
+
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 app.use(cookieParser())
 app.use(cors({
     credentials: true,
-    origin: ['*']
+    origin: ['http://localhost:5173']
 }))
 
-app.use(express.json())
+
+
+/* Routes */
+
+const routes = require("./routes/connection")
 
 app.use('/api', routes)
 
