@@ -148,6 +148,7 @@ th {
   height: 20%;
   justify-content: start;
   color: hsla(160, 100%, 37%, 1);
+  margin-left: 5px;
 }
 
 
