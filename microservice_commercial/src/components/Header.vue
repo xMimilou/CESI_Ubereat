@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import axios from 'axios'
+import { onUpdated } from '@vue/runtime-core';
 
 export default {
     name: 'App',
@@ -33,12 +34,18 @@ export default {
     async created() {
         this.isLoggedIn = await this.IsLoggin();
     },
+    // refresh nav bar when local storage is updated
+
     methods:{
+        refreshPage() {
+            location.reload()
+        },
         LogoutUser(){
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             localStorage.removeItem('role');
             this.$router.push('/login');
+            this.refreshPage();
         },
         async IsLoggin(){
             var token = localStorage.getItem('token');

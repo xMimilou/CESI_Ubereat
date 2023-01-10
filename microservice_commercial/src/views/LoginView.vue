@@ -49,6 +49,9 @@ export default{
         };
     },
     methods:{
+        refreshPage() {
+            location.reload()
+        },
         async LoginUser(){
             var data = {
                 username: this.form.username,
@@ -60,6 +63,7 @@ export default{
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
             
+            location.reload()
             this.$router.push('/');
         }
     }
