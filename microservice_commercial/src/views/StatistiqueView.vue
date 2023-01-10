@@ -13,30 +13,30 @@ import axios from 'axios'
 <div class="container">
     <div class="row">
         <div class="columns-3">
-            <counters title="nombre de client" query="getclient"/>
+            <counters title="nombre de client" query="/total/client"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre de restaurateur" query="getrestaurateur"/>
+            <counters title="nombre de restaurateur" query="/total/restaurateur"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre de livreur" query="getlivreur"/>
+            <counters title="nombre de livreur" query="/total/livreur"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre total de commandes" query="countcommandes"/>
+            <counters title="nombre total de commandes" query="#"/>
         </div>
     </div>
     <div class="row">
         <div class="columns-3">
-            <counters title="Chiffre d'affaire" units="€" query="getCA"/>
+            <counters title="Chiffre d'affaire" units="€" query="#"/>
         </div>
         <div class="columns-3">
-            <counters title="Utilisateur actif" query="ActiveUser"/>
+            <counters title="Utilisateur actif" query="#"/>
         </div>
         <div class="columns-3">
-            <counters title="Nombre total d'utilisateur" query="countallusers"/>
+            <counters title="Nombre total d'utilisateur" query="/total/users"/>
         </div>
         <div class="columns-3">
-            <counters title="Commandes par jours" query="commandsperdays"/>
+            <counters title="Commandes par jours" query="#"/>
         </div>
     </div>
     <div class="row">
@@ -47,11 +47,11 @@ import axios from 'axios'
     <div class="row">
         <!-- Display list of last 5 new poeple col-6 -->
         <div class="columns-6">
-            <list title="Derniers clients" query="getlastclient" entete="nom,prenom" :limit="5"/>
+            <list title="Derniers clients" query="/list/lastuser" entete="nom,prenom,username,email,role,created" :limit="5"/>
         </div>
         <!-- Top 5 des clients avec le plus de commandes-->
         <div class="columns-6">
-            <list title="Top 5 des clients" query="gettopclient" entete="nom,prenom,depense" :limit="5"/>
+            <list title="Top 5 des clients" query="/list/highest" entete="username,depense" :limit="5"/>
         </div>
     </div>
 </div>

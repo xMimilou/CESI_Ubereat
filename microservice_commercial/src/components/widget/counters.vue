@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import axios from 'axios';
 defineProps<{
   title: string
   query: string
@@ -7,14 +8,10 @@ defineProps<{
 }>()
 
 var myvar:string = ""
-var count:number = 20
-onMounted(() => {
-  
-  myvar = "test"
-  console.log(myvar)
-})
 
-</script>
+
+
+</script> -->
 
 <template>
 
@@ -37,42 +34,47 @@ onMounted(() => {
 </template>
 
 <script lang="ts">
-
-// export default{
-//   name: "counters",
-//   props: {
-//     title: {
-//       type: String,
-//       required: true
-//     },
-//     query: {
-//       type: String,
-//       required: true
-//     },
-//     units: {
-//       type: String,
-//       required: false,
-//       default: ""
-//     }
-//   },
-//   data() {
-//     return {
-//       count: 10
-//     }
-//   },
-//   mounted() {
-//     //this.getCount()
-//   },
-//   methods: {
-//     getCount() {
-//       fetch(`http://localhost:3000/${this.query}`)
-//         .then(res => res.json())
-//         .then(data => {
-//           this.count = data.length
-//         })
-//     }
-//   }
-// }
+import axios from 'axios';
+export default{
+  name: "counters",
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    query: {
+      type: String,
+      required: true
+    },
+    units: {
+      type: String,
+      required: false,
+      default: ""
+    }
+  },
+  data() {
+    return {
+      count: 10
+    }
+  },
+  mounted() {
+    this.getCount()
+  },
+  methods: {
+    getCount() {
+      var token = localStorage.getItem('token');
+      console.log(token)
+      var request = 'http://localhost:3001/commercial' + this.query
+      axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+        this.count = response.data
+        console.log(response.data)
+      }).catch((error) => {
+        console.log(error)
+      })
+     
+    }
+  }
+}
 
 </script>
 
