@@ -1,18 +1,22 @@
 <script setup lang="ts">
+// import onMounted
+import { onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 
-let jwt = localStorage.getItem('token');
-// test if jwt != null and valid
-let display_login = false;
-if (jwt) {
-  console.log('jwt is set');
-  display_login = false;
-  
-} else {
-  console.log('jwt is not set');
-  display_login = true;
-}
+
+  let jwt = localStorage.getItem('token');
+  // test if jwt != null and valid
+  let display_login = false;
+  if (jwt) {
+    console.log('jwt is set');
+    display_login = false;
+    
+  } else {
+    console.log('jwt is not set');
+    display_login = true;
+  }
+
 
 
 </script>
@@ -27,11 +31,13 @@ if (jwt) {
       <nav class="end" v-if="display_login">
         <RouterLink to="/login">Login</RouterLink>
         <RouterLink to="/register">Register</RouterLink>
+        
       </nav>
       <!-- if jwt is set -->
       <nav class="end" v-else>
         <RouterLink to="/profile">Profile</RouterLink>
         <RouterLink to="/logout">Logout</RouterLink>
+        <i class="fas fa-shopping-cart"></i>
       </nav>
   </header>
   <RouterView />

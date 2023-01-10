@@ -76,19 +76,45 @@ router.post('/login', async (req, res) => {
         // create and assign a token
         const token = jwt.sign({id: checkUserResult[0].iduser}, 'secret');
 
-        res.header('auth-token', token).json({token: token});
+        res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role});
 
     } catch(err){
         res.status(500).json({message: err.message});
     }
 });
 
-router.get("/all", async (req, res) => {
+router.get("/tokenCheckup", async(req, res) => {
     try{
         // check jwt token
-        //const token = req.header('auth-token');
         
-        //if(!token) return res.status(401).json({message: "Access denied"});
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        res.status(200).json({message: "Access granted"});
+    }
+    catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.get("/all", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
 
         // return all user from database
 
@@ -106,10 +132,15 @@ router.put("/update/:id", async (req, res) => {
 
         const { first_name, last_name, username, email  } = req.body;
 
-        // check jwt token
         const token = req.header('auth-token');
-        
+
+        // check if the token is valid
+
         if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
 
         // get actual datetime in format YYYY-MM-DD HH:MM:SS
         const date = new Date();
@@ -128,10 +159,15 @@ router.put("/update/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
     try{
         
-        // check jwt token
         const token = req.header('auth-token');
-        
+
+        // check if the token is valid
+
         if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
 
         // delete user
         const sqlQuery = `DELETE FROM user WHERE iduser = ?`;
@@ -146,10 +182,15 @@ router.put('/resetpassword', async (req, res) => {
     try{
         const { last_password, new_password } = req.body;
 
-        // check jwt token
         const token = req.header('auth-token');
 
+        // check if the token is valid
+
         if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
 
         // check if the user exists
         const checkUser = `SELECT * FROM user WHERE iduser = ?`;

@@ -27,7 +27,7 @@
             
                 <button class="btn btn-primary btn-block">Se connecter</button>
             
-                <p class="forgot-password text-right">
+                <p class="forgot-password text-center">
                     <router-link to="forgot">Mot de passe oublié ?</router-link>
                 </p>
             </form>
@@ -60,6 +60,7 @@ export default{
             localStorage.setItem('token', response.data.token);
             let jwt = localStorage.getItem('token');
             console.log(jwt);
+            this.$router.push('/');
         }
     }
 

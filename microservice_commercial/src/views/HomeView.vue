@@ -4,4 +4,6 @@ import HelloWorldVue from '@/components/HelloWorld.vue';
 
 <template>
   <HelloWorldVue msg="Welcome to the commercial part" />
+  <!-- use cart font awesome-->
+
 </template>
