@@ -3,6 +3,7 @@ const router = express.Router();
 const ObjectId = require('mongoose').Types.ObjectId;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const pool = require('../helpers/database.js')
 
 
 const { commandesModel } = require('../models/commandesModels');
@@ -191,6 +192,51 @@ router.post("/graph/commandes/minutes", async (req, res) => {
         });
         
 
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.post("/list/top/client", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // get all commandes from mongo db and sort them by order.total_cost and cumulate the total_cost of the same client
+        commandesModel.find({}, function (err, commandes) {
+            if (err) {
+                res.status(400).json({message: err.message});
+            } else {
+                // count the number of commandes with order.time_place is same as today
+                var clients = [];
+                commandes.forEach(function(commande) {
+                    var client = commande.username;
+                    var total_cost = commande.order.total_cost;
+                    var found = false;
+                    clients.forEach(function(c) {
+                        if(c.client == client){
+                            c.total_cost += parseFloat(total_cost);
+                            found = true;
+                        }
+                    });
+                    if(!found){
+                        clients.push({client: client, total_cost: parseFloat(total_cost)});
+                    }
+                });
+                // sort the array by total_cost
+                clients.sort(function(a, b){return b.total_cost - a.total_cost});
+                // limit array to 5 lines
+                clients.splice(5, clients.length - 5);
+                res.status(200).json(clients);
+            }
+        });
     } catch(err){
         res.status(400).json({message: err.message});
     }

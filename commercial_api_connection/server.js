@@ -26,9 +26,11 @@ app.use(cors({
 
 const routes = require("./routes/connection")
 const commandes = require("./routes/commandes")
+const administration = require("./routes/administration")
 
 app.use('/commercial', routes)
 app.use('/commandes', commandes)
+app.use('/administration', administration)
 
 const port = 3001;
 app.listen(port, () => {

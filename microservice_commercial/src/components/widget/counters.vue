@@ -54,13 +54,16 @@ export default{
   },
   data() {
     return {
-      count: 10
+      count: 'No data'
     }
   },
   async mounted() {
     setInterval(async () => {
       this.getCount()
     }, 10000)
+  },
+  OnSetup() {
+    this.getCount()
   },
   methods: {
     getCount() {

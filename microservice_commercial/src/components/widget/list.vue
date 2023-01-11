@@ -67,7 +67,7 @@ export default{
         },
         getList() {
           var token = localStorage.getItem('token');
-          var request = 'http://localhost:3001/commercial' + this.query
+          var request = 'http://localhost:3001' + this.query
           axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
             this.lists = response.data
             this.listlength = this.lists.length

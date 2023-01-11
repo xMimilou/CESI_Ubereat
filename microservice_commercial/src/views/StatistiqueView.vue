@@ -47,11 +47,11 @@ import axios from 'axios'
     <div class="row">
         <!-- Display list of last 5 new poeple col-6 -->
         <div class="columns-6">
-            <list title="Derniers clients" query="/list/lastuser" entete="nom,prenom,username,email,role,created" :limit="5"/>
+            <list title="Derniers clients" query="/commercial/list/lastuser" entete="nom,prenom,username,email,role,created" :limit="5"/>
         </div>
         <!-- Top 5 des clients avec le plus de commandes-->
         <div class="columns-6">
-            <list title="Top 5 des clients" query="/list/highest" entete="username,depense" :limit="5"/>
+            <list title="Top 5 des clients" query="/commandes/list/top/client" entete="username,depense" :limit="5"/>
         </div>
     </div>
 </div>
