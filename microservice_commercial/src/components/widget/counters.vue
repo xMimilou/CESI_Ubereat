@@ -57,14 +57,16 @@ export default{
       count: 10
     }
   },
-  mounted() {
-    this.getCount()
+  async mounted() {
+    setInterval(async () => {
+      this.getCount()
+    }, 10000)
   },
   methods: {
     getCount() {
       var token = localStorage.getItem('token');
       console.log(token)
-      var request = 'http://localhost:3001/commercial' + this.query
+      var request = 'http://localhost:3001' + this.query
       axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
         this.count = response.data
         console.log(response.data)

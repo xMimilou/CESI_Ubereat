@@ -122,7 +122,7 @@ router.post("/list/lastuser", async(req, res) => {
         const sqlQuery = 'SELECT last_name,first_name,username,email,role,created_at FROM `user` ORDER BY created_at DESC LIMIT 5';
         const result = await pool.query
         (sqlQuery);
-        console.log(result[0]);
+        //console.log(result[0]);
         var query_result = result;
         
         

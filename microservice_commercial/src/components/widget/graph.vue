@@ -1,7 +1,4 @@
 <script setup lang="ts">
-defineProps<{
-  title: string
-}>()
 </script>
 
 <template>
@@ -14,6 +11,7 @@ defineProps<{
         <GChart
             type="ColumnChart"
             :data="chartData"
+            
             :options="chartOptions"
             
         />
@@ -24,22 +22,25 @@ defineProps<{
 
 <script lang="ts">
 import { GChart } from 'vue-google-charts'
+import axios from 'axios';
 export default {
+  name: "graph",
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    query: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
       chartData: [
         ['Time', 'Nombre de ventes'],
-        ['10:00', 5],
-        ['10:01', 10],
-        ['10:02', 11],
-        ['10:03', 6],
-        ['10:04', 7],
-        ['10:05', 60],
-        ['10:06', 30],
-        ['10:07', 20],
-        ['10:08', 1],
-        ['10:09', 60],
+        ['00:00', 0]
 
 
       ],
@@ -54,7 +55,30 @@ export default {
         colors: ['#00bd7e'],
       }
     }
+  },
+  components: {
+    GChart
+  }, // make async function reload every 10 secondes
+  async mounted() {
+    setInterval(async () => {
+      this.getChart()
+    }, 10000)
+  },
+  Onsetup() {
+      this.getChart()
+  },
+  methods: {
+    getChart() {
+      var token = localStorage.getItem('token');
+      var request = 'http://localhost:3001' + this.query
+      axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+        this.chartData = response.data
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
   }
+
 }
 </script>
 
