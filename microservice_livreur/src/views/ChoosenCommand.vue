@@ -1,28 +1,30 @@
-
-
-
-<script lang="ts">
-import counters from "../components/counters.vue"
-
-export default {
-    name: "ChoosenCommand",
-    props: ['title'],
+<template>
+    <div>
+      <counters  @update:username="handleUsername"/>
+    </div>
+  </template>
+  
+  <script lang="ts">
+  import counters from '../components/counters.vue';
+  
+  export default {
+    name: "choosenCommand",
     data() {
-        return {
-           title: ""
-        }
+      return {
+        receivedUsername: "",
+        username: null,
+      }
+    },
+    created() {
+    this.$on('username', (username:string) => {
+      this.username = username;
+    });
     },
     methods: {
-        onSubmitEvent(title : string) {
-            console.log(title);
-            console.log("test");
-        }
+      handleUsername(username) {
+        this.receivedUsername = username;
+        console.log(username);
+        console.log("test");      }
     }
-}
-
-</script>
-
-<template>
-   <counters @submitEvent="onSubmitEvent"></counters>
-</template>
-
+  }
+  </script>

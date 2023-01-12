@@ -7,32 +7,58 @@ import ChoosenCommand from './ChoosenCommand.vue';
 </script>
 
 <script lang="ts">
+import axios from 'axios';
 export default{
+  name: 'ListOfCommandsView',
   components: {
     ChoosenCommand
 },data() {
     return {
       count: 10,
-      dataImported: [{
-        title: "Macdo",
-        query: "command",
-        distance: "40 km",
-        cost: "10€"
-      },{
-        title: "Macdccveo",
-        query: "command",
-        distance: "20 km",
-        cost: "5€"}]
+      Selectedtitle : [
+
+      ],FiltredTable : [
+
+      ]
     }
+  },created() {
+    this.getData();
+  },methods: {
+    getData() {
+      axios.get('http://localhost:5500/posts')
+          .then(response => {
+            console.log(response.data); 
+            this.Selectedtitle = response.data;
+            console.log(this.Selectedtitle);
+            
+            
+            this.Selectedtitle.forEach((element) => {
+            //console.log("Le statut : ");
+            //console.log(element.order.status);
+            if(element.order.status != "Delivered")
+            {
+              this.FiltredTable.push(element);
+            }
+            console.log(this.FiltredTable);
+            });
+
+           })
+          .catch(error => {
+            console.log(error);
+  });
+
+    }
+    
   }
 }
+
 </script>
 
 <template>
   <h1> Requêtes en cours </h1>
   <div class="container">
-    <div class="columns-3" v-for="item in dataImported" :key="item.title">
-      <counters :title="item.title" :distance='item.distance' :cost='item.cost' query="command"/>
+    <div class="container" v-for="item in FiltredTable" :key="item._id">
+      <counters :username='item.customer_username' :costumer_adress = 'item.delivery_person.delivery_location' :restaurant_name ='item.restaurant.name' :restaurant_adress='item.restaurant.location' :total_price='item.order.total_cost' :timeDelivered = 'item.order.time_placed' />
     </div>
   </div>
 </template>

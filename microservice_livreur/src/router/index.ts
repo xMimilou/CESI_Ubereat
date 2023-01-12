@@ -27,7 +27,6 @@ const router = createRouter({
       name: 'ChoosenCommand',
       component: () => import('../views/ChoosenCommand.vue')
     },
-    ,
     {
       path: '/login',
       name: 'login',
