@@ -137,6 +137,51 @@ router.post("/list/lastuser", async(req, res) => {
     }
 });
 
+
+router.post("/new/users", async(req, res) => {
+    try{
+        
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        
+        const sqlQuery = 'SELECT * FROM user';
+        const result = await pool.query
+        (sqlQuery);
+
+        var query_result = result;
+        // get date of today in format YYYY/MM/DD
+        var date = new Date();
+        var today = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+        var count = 0
+        // for each user in the database we check if the user is new or not
+        for (var i = 0; i < query_result.length; i++) {
+            var date = new Date(query_result[i].created_at);
+            // change date in created_at into format YYYY/MM/DD containing 0 for exemple janvier = 01
+            query_result[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+            
+            // check if the user is new or not
+            if(query_result[i].created_at == today){
+                count = count + 1;
+            }else{
+                count = count;
+            }
+        }
+
+
+        res.status(200).json(count);
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
 router.post("/list/highest", async(req, res) => {
     try{
     }catch(err){
@@ -160,7 +205,6 @@ router.post("/tokenCheckup", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        console.log("Access granted");
         res.status(200).json({message: "Access granted"});
     }
     catch(err){

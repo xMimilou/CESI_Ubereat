@@ -30,7 +30,7 @@ import axios from 'axios'
             <counters title="Chiffre d'affaire" units="€" query="/commandes/count/CA"/>
         </div>
         <div class="columns-3">
-            <counters title="Utilisateur actif" query="#"/>
+            <counters title="Nombre de nouveau utilisateur" query="/commercial/new/users"/>
         </div>
         <div class="columns-3">
             <counters title="Nombre total d'utilisateur" query="/commercial/total/users"/>
