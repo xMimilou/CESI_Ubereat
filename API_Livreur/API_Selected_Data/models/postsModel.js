@@ -3,29 +3,37 @@ const mongoose = require("mongoose");
 const PostsModel = mongoose.model(
   "cesi_ubereat",
   {
-    order_id: {
+    username: {
         type: String,
-        required : true
-    },
-    user_id: {
-        type: String,
-        required: true
+        required: false
     },
     order_time: {
-        type: Date,
-        required: true
+        type: String,
+        required: false
     },
-    address: {
+    costumerAddress: {
         type: String,
         required: true
     },
-    quantity: {
-        type: Number,
+    restaurantAdress: {
+        type: String,
+        required: true
+    },
+    restaurantName: {
+        type: String,
         required: true
     },
     total_price: {
         type: Number,
         required: true
+    },time_delivered:{
+        type: String,
+        required : true
+    
+    },
+    statusDeliver:{
+        type: String,
+        required : true
     }
   },
   "orders_choosen"

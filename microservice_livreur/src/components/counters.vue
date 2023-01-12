@@ -2,21 +2,28 @@
 
     <div class="counters widget" v-if="!SelectedOrder">
         <div class="counters__title">
-          <h3>{{title}}</h3>
+
         </div>
         <div class="counters__content">
         <div class="counters__content__item">
             <div class="counters__content__item__text">
-              <h3>{{ distance }}</h3>
-              <h3>{{ cost }}</h3>
+
             <div class="display_val">
-                <button @click="onSubmit(title)" class="button">Accepter</button>
+                <button @click="onSubmit(username,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" class="button">Accepter</button>
                 
                 <a class="button" >Refuser</a>
             </div>
             </div>
         </div>
         </div>
+        <h3> {{ username }} </h3>
+        <h3>{{ costumer_adress }}</h3>
+            <h3>{{ restaurant_name }}</h3>
+    <h3>{{ restaurant_adress }}</h3>
+    <h3>{{ total_price }}</h3>
+    <h3> {{ timeDelivered }} </h3>
+
+    
     </div>
 
     <div v-if="SelectedOrder">
@@ -35,19 +42,27 @@ import LisOfCommandsView from '@/views/ListOfCommandsView.vue';
 export default{
     name: "counters",
     props: {
-        title: {
+        costumer_adress: {
             type: String,
             required: true
         },
-        query: {
+        restaurant_name: {
             type: String,
             required: true
         },
-        distance: {
+        restaurant_adress: {
             type: String,
             required: true
         },
-        cost: {
+        total_price: {
+            type: String,
+            required: true
+        },
+        timeDelivered: {
+            type: String,
+            required: true
+        },
+        username: {
             type: String,
             required: true
         },
@@ -68,19 +83,42 @@ export default{
         //this.getCount()
     },
     methods: {
-        getCount() {
-            fetch(`http://localhost:3000/${this.query}`)
-                .then(res => res.json())
-                .then(data => {
-                this.count = data.length;
-            });
-        },
-        onSubmit(title: string) {
-          console.log(title);
-          //this.Selectedtitle = title;
-
-
+        onSubmit(username : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
           
+          this.$emit('username', username);
+          this.$router.push("/choosencommand");
+
+          console.log(this.username);
+          //this.Selectedtitle = title;
+          const data = {
+            costumerAddress: costumer_adress,
+            restaurantAdress : restaurant_adress,
+            restaurantName : restaurant_name,
+            total_price: total_price,
+            time_delivered : timeDelivered,
+            statusDeliver : "En cours"
+          };
+/*
+          axios.post('http://localhost:5501/posts', data)
+            .then(response => {
+              console.log(response.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+
+            const dataToPut = {
+              statusDeliver : "En cours"
+            };
+
+            axios.put(`http://localhost:5500/posts/${username}/${timeDelivered}`, dataToPut)
+            .then(response => {
+              console.log(response.data);
+            })
+            .catch(error => {
+              console.log(error);
+  });
+  */        
         }
     },
     components: { ChoosenCommandVue }
