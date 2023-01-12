@@ -19,27 +19,52 @@ export default{
 
       ],FiltredTable : [
 
-      ]
+      ],
+      Empty: "",
+      UndesirableIDS : []
     }
-  },created() {
-    this.getData();
-  },methods: {
+  },mounted() {
+  setInterval(() => {
+    //this.getData();
+  }, 3000);
+  //this.getData();
+},methods: {
     getData() {
+
+      // Partie des valeurs indésirables
+      let id = localStorage.getItem("CommandID");
+      console.log(id);
+      if(id != "") {
+        this.UndesirableIDS.push(id);
+        localStorage.setItem('CommandID', "");
+      }
+      console.log("Voici les id à ne pas afficher : ");
+      console.log(this.UndesirableIDS);
+
+
+      // Récupération des données
       axios.get('http://localhost:5500/posts')
           .then(response => {
-            console.log(response.data); 
+            //console.log(response.data); 
             this.Selectedtitle = response.data;
-            console.log(this.Selectedtitle);
+            //console.log(this.Selectedtitle);
             
-            
+            this.FiltredTable = [];
             this.Selectedtitle.forEach((element) => {
+            
             //console.log("Le statut : ");
             //console.log(element.order.status);
-            if(element.order.status != "Delivered")
+            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty)
             {
-              this.FiltredTable.push(element);
+              
+              
+              if(!this.UndesirableIDS.includes(element._id))
+              {
+                this.FiltredTable.push(element);
+              }
+              
             }
-            console.log(this.FiltredTable);
+
             });
 
            })
@@ -58,7 +83,7 @@ export default{
   <h1> Requêtes en cours </h1>
   <div class="container">
     <div class="container" v-for="item in FiltredTable" :key="item._id">
-      <counters :username='item.customer_username' :costumer_adress = 'item.delivery_person.delivery_location' :restaurant_name ='item.restaurant.name' :restaurant_adress='item.restaurant.location' :total_price='item.order.total_cost' :timeDelivered = 'item.order.time_placed' />
+      <counters :username_customer='item.customer_username' :costumer_adress = 'item.delivery_person.delivery_location' :restaurant_name ='item.restaurant.name' :restaurant_adress='item.restaurant.location' :total_price='item.order.total_cost' :timeDelivered = 'item.order.time_placed' />
     </div>
   </div>
 </template>

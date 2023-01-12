@@ -11,12 +11,14 @@ router.get('/', (req, res) => {
 });
 router.post('/', (req, res) => {
   const newRecord = new PostsModel({
+    username: req.body.username,
     costumerAddress: req.body.costumerAddress,
     restaurantAdress: req.body.restaurantAdress,
     restaurantName: req.body.restaurantName,
     total_price: req.body.total_price,
     time_delivered: req.body.time_delivered,
-    statusDeliver: req.body.statusDeliver
+    statusDeliver: req.body.statusDeliver,
+    usernameLivreur: req.body.usernameLivreur
   });
 
   newRecord.save((err, docs) => {

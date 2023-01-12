@@ -9,14 +9,14 @@
             <div class="counters__content__item__text">
 
             <div class="display_val">
-                <button @click="onSubmit(username,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" class="button">Accepter</button>
+                <button @click="onSubmit(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" class="button">Accepter</button>
                 
-                <a class="button" >Refuser</a>
+                <button class="button" @click="onRemoveCommand(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" >Refuser</button>
             </div>
             </div>
         </div>
         </div>
-        <h3> {{ username }} </h3>
+        <h3> {{ username_customer }} </h3>
         <h3>{{ costumer_adress }}</h3>
             <h3>{{ restaurant_name }}</h3>
     <h3>{{ restaurant_adress }}</h3>
@@ -62,7 +62,7 @@ export default{
             type: String,
             required: true
         },
-        username: {
+        username_customer: {
             type: String,
             required: true
         },
@@ -76,49 +76,132 @@ export default{
         return {
             count: 10,
             Selectedtitle : "",
-            SelectedOrder: false
+            SelectedOrder: false,
+            ArrayToCollectID: [],
+            Empty: ""
         };
     },
     mounted() {
         //this.getCount()
     },
     methods: {
-        onSubmit(username : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
-          
-          this.$emit('username', username);
+        onSubmit(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
+          var usernameCollected = localStorage.getItem('username');
+          console.log(usernameCollected);
           this.$router.push("/choosencommand");
 
-          console.log(this.username);
+          console.log(this.username_customer);
           //this.Selectedtitle = title;
           const data = {
+            username : username_customer,
             costumerAddress: costumer_adress,
             restaurantAdress : restaurant_adress,
             restaurantName : restaurant_name,
             total_price: total_price,
             time_delivered : timeDelivered,
-            statusDeliver : "En cours"
+            statusDeliver : "En cours",
+            usernameLivreur : usernameCollected
           };
-/*
-          axios.post('http://localhost:5501/posts', data)
+          
+          
+
+            
+
+            // Récupération des données existantes
+            axios.get('http://localhost:5501/posts')
+            .then(response => {
+            // Vérification de l'existence de la donnée
+            const existingData = response.data;
+            let dataExist = false;
+            existingData.forEach(dataToCheck => {
+              console.log(dataToCheck);
+              console.log("Le username de la bdd " + dataToCheck.username + " le username de la bde " + data.username);
+            if (dataToCheck.usernameLivreur === data.usernameLivreur && dataToCheck.username === data.username && dataToCheck.costumerAddress === data.costumerAddress && dataToCheck.restaurantAdress === data.restaurantAdress && dataToCheck.restaurantName === data.restaurantName && dataToCheck.total_price === data.total_price && dataToCheck.time_delivered === data.time_delivered) {
+                dataExist = true;
+            }
+            });
+            if (dataExist) {
+              console.log('La donnée existe déjà');
+            } else {
+            // Envoi de la requête axios.post
+            axios.post('http://localhost:5501/posts', data)
             .then(response => {
               console.log(response.data);
             })
             .catch(error => {
               console.log(error);
             });
-
-            const dataToPut = {
-              statusDeliver : "En cours"
-            };
-
-            axios.put(`http://localhost:5500/posts/${username}/${timeDelivered}`, dataToPut)
-            .then(response => {
-              console.log(response.data);
+              }
             })
             .catch(error => {
-              console.log(error);
-  });
-  */        
+              console.log('Erreur lors de la récupération des données existantes');
+            });
+
+          const dataToPut = {
+            statusDeliver : "En cours"
+          };
+          // Collecte de l'id de la commande
+          axios.get('http://localhost:5500/posts')
+          .then(response => {
+            //console.log(response.data); 
+            this.ArrayToCollectID = response.data;
+            //console.log(this.ArrayToCollectID);
+            
+            this.ArrayToCollectID.forEach((element) => {
+            //console.log("Le statut : ");
+            //console.log(element.order.status);
+            const dataToPut = {
+              status : "En cours"
+            };
+
+            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.customer_username == this.username_customer && element.delivery_person.delivery_location == this.costumer_adress && element.restaurant.name == this.restaurant_name && element.restaurant.location == this.restaurant_adress && element.order.total_cost == this.total_price && element.order.time_placed == this.timeDelivered)
+            {
+              console.log("L'id de la commande est : " + element._id);
+              axios.put(`http://localhost:5500/posts/${element._id}/${usernameCollected}`, dataToPut)
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(error => {
+                console.log(error);
+            });
+              //localStorage.setItem('CommandID', element._id);
+            }
+            });
+
+           })
+          .catch(error => {
+            console.log(error);
+          });
+            
+
+  
+        
+        },onRemoveCommand(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
+          
+          axios.get('http://localhost:5500/posts')
+          .then(response => {
+            //console.log(response.data); 
+            this.ArrayToCollectID = response.data;
+            //console.log(this.ArrayToCollectID);
+            
+            this.ArrayToCollectID.forEach((element) => {
+            //console.log("Le statut : ");
+            //console.log(element.order.status);
+            const dataToPut = {
+              status : "En cours"
+            };
+
+            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.customer_username == username_customer && element.delivery_person.delivery_location == costumer_adress && element.restaurant.name == restaurant_name && element.restaurant.location == restaurant_adress && element.order.total_cost == total_price && element.order.time_placed == timeDelivered)
+            {
+              console.log("L'id de la commande est : " + element._id);
+              localStorage.setItem('CommandID', element._id);
+            }
+            });
+
+           })
+          .catch(error => {
+            console.log(error);
+          });
         }
     },
     components: { ChoosenCommandVue }
