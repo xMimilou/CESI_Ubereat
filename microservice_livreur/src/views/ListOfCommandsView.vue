@@ -7,34 +7,38 @@ import ChoosenCommand from './ChoosenCommand.vue';
 </script>
 
 <script lang="ts">
+import axios from 'axios';
 export default{
   components: {
     ChoosenCommand
 },data() {
     return {
       count: 10,
-      dataImported: [{
-        title: "Macdo",
-        query: "command",
-        distance: "40 km",
-        cost: "10€"
-      },{
-        title: "Macdccveo",
-        query: "command",
-        distance: "20 km",
-        cost: "5€"}]
+      Selectedtitle : []
     }
+  },created() {
+    this.getData();
+  },methods: {
+    getData() {
+      axios.get('http://localhost:5500/posts')
+          .then(response => {
+            this.Selectedtitle = response.data;
+            console.log(response.data["address"]);
+            console.log(response.data);         
+           })
+          .catch(error => {
+            console.log(error);
+  });
+    }
+
   }
 }
+
 </script>
 
 <template>
   <h1> Requêtes en cours </h1>
-  <div class="container">
-    <div class="columns-3" v-for="item in dataImported" :key="item.title">
-      <counters :title="item.title" :distance='item.distance' :cost='item.cost' query="command"/>
-    </div>
-  </div>
+
 </template>
 
 

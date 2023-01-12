@@ -1,6 +1,6 @@
 <template>
 
-    <div class="counters widget">
+    <div class="counters widget" v-if="!SelectedOrder">
         <div class="counters__title">
           <h3>{{title}}</h3>
         </div>
@@ -10,8 +10,8 @@
               <h3>{{ distance }}</h3>
               <h3>{{ cost }}</h3>
             <div class="display_val">
-                <router-link @click="onSubmit(title)" :to="'/choosencommand'" class="button">Accepter</router-link>
-                <ChoosenCommandVue v-bind:title="title" />
+                <button @click="onSubmit(title)" class="button">Accepter</button>
+                
                 <a class="button" >Refuser</a>
             </div>
             </div>
@@ -19,11 +19,17 @@
         </div>
     </div>
 
+    <div v-if="SelectedOrder">
+      <h1> </h1>
+    </div>
+
 </template>
 <script lang="ts">
 import Vue from 'vue';
+import axios from 'axios';
 import counters from './counters.vue'
 import ChoosenCommandVue from '@/views/ChoosenCommand.vue';
+import LisOfCommandsView from '@/views/ListOfCommandsView.vue';
 
 
 export default{
@@ -44,12 +50,18 @@ export default{
         cost: {
             type: String,
             required: true
+        },
+        Selectedtitled: {
+          type: String,
+          default : "",
+          required : false
         }
     },
     data() {
         return {
             count: 10,
-            Selectedtitle : ""
+            Selectedtitle : "",
+            SelectedOrder: false
         };
     },
     mounted() {
@@ -64,10 +76,11 @@ export default{
             });
         },
         onSubmit(title: string) {
-          //console.log(title);
-          this.$emit('submitEvent', title);
-          
+          console.log(title);
+          //this.Selectedtitle = title;
 
+
+          
         }
     },
     components: { ChoosenCommandVue }
