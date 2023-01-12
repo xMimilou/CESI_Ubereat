@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import userlist from "../components/widget/usercard.vue";
+import add_user_formVue from "@/components/widget/add_user_form.vue";
 import axios from "axios";
 </script>
 
@@ -12,6 +13,7 @@ import axios from "axios";
           title="Clients"
           query="/administration/list/clients"
           entete="nom,prenom,username,email,role,created,update,delete"
+          displayall="client"
           :limit="5"
         />
       </div>
@@ -20,6 +22,7 @@ import axios from "axios";
           title="Restaurateur"
           query="/administration/list/restaurateur"
           entete="nom,prenom,username,email,role,created,update,delete"
+          displayall="restaurateur"
           :limit="5"
         />
       </div>
@@ -30,16 +33,12 @@ import axios from "axios";
           title="Livreur"
           query="/administration/list/livreur"
           entete="nom,prenom,username,email,role,created,update,delete"
+          displayall="livreur"
           :limit="5"
         />
       </div>
       <div class="columns-6">
-        <userlist
-          title="Ajouter une utilisateur"
-          query="/commercial/list/lastuser"
-          entete="nom,prenom,username,email,role,created"
-          :limit="5"
-        />
+        <add_user_formVue />
       </div>
     </div>
   </div>
@@ -86,6 +85,4 @@ import axios from "axios";
 }
 
 /* add vertical scrool in columns-6 */
-
-
 </style>

@@ -137,6 +137,51 @@ router.post("/list/lastuser", async(req, res) => {
     }
 });
 
+
+router.post("/new/users", async(req, res) => {
+    try{
+        
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        
+        const sqlQuery = 'SELECT * FROM user';
+        const result = await pool.query
+        (sqlQuery);
+
+        var query_result = result;
+        // get date of today in format YYYY/MM/DD
+        var date = new Date();
+        var today = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+        var count = 0
+        // for each user in the database we check if the user is new or not
+        for (var i = 0; i < query_result.length; i++) {
+            var date = new Date(query_result[i].created_at);
+            // change date in created_at into format YYYY/MM/DD containing 0 for exemple janvier = 01
+            query_result[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+            
+            // check if the user is new or not
+            if(query_result[i].created_at == today){
+                count = count + 1;
+            }else{
+                count = count;
+            }
+        }
+
+
+        res.status(200).json(count);
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
 router.post("/list/highest", async(req, res) => {
     try{
     }catch(err){
@@ -144,148 +189,163 @@ router.post("/list/highest", async(req, res) => {
     }
 });
 
-
-
-
-router.post("/tokenCheckup", async(req, res) => {
+router.post("/get/client/:page", async(req, res) => {
     try{
-        // check jwt token
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
         
-        const token = req.header('auth-token');
+        // get page number 
+        const page = req.params.page;
 
-        // check if the token is valid
+        // get the number of client per page
+        const limit = 20;
 
-        if(!token) return res.status(401).json({message: "Access denied"});
+        // get the offset
+        const offset = (page - 1) * limit;
 
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-        console.log("Access granted");
-        res.status(200).json({message: "Access granted"});
-    }
-    catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-router.get("/all", async (req, res) => {
-    try{
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        // return all user from database
-
-        const sqlQuery = `SELECT * FROM user`;
-        const result = await pool.query(sqlQuery);
-        res.status(200).json(result);
-
-    } catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-router.put("/update/:id", async (req, res) => {
-    try{
-
-        const { first_name, last_name, username, email  } = req.body;
-
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        // get actual datetime in format YYYY-MM-DD HH:MM:SS
-        const date = new Date();
-
-
-        // update user
-        const sqlQuery = `UPDATE user SET first_name = ?, last_name = ?, username = ?, email = ?, updated_at = ? WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [first_name, last_name, username, email, date, req.params.id]);
-        res.status(200).json(result);
-
-    } catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-router.delete("/delete/:id", async (req, res) => {
-    try{
+        // get the total number of client
+        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "client"';
+        var result = await pool.query (sqlQuery);
         
-        const token = req.header('auth-token');
+        result = result[0].total;
+        result = parseInt(result);
 
-        // check if the token is valid
+        // get the total number of page
+        const pages = Math.ceil(result / limit);
 
-        if(!token) return res.status(401).json({message: "Access denied"});
+        // query to get the client
+        const sqlQuery2 = 'SELECT * FROM user WHERE role = "client" LIMIT ' + limit + ' OFFSET ' + offset;
+        var result2 = await pool.query (sqlQuery2);
 
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        // delete user
-        const sqlQuery = `DELETE FROM user WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [req.params.id]);
-        res.status(200).json(result);
-    } catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-router.put('/resetpassword', async (req, res) => {
-    try{
-        const { last_password, new_password } = req.body;
-
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        // check if the user exists
-        const checkUser = `SELECT * FROM user WHERE iduser = ?`;
-        const checkUserResult = await pool.query(checkUser, [req.user.id]);
-        if(checkUserResult.length == 0){
-            return res.status(400).json({message: "User does not exist"});
+        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        for (var i = 0; i < result2.length; i++) {
+            var date = new Date(result2[i].created_at);
+            result2[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var date = new Date(result2[i].updated_at);
+            result2[i].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
         }
 
-        // check if the password is correct
-        const validPassword = await bcrypt.compare(last_password, checkUserResult[0].password);
-        if (!validPassword) return res.status(400).json({message: "Invalid password"});
+        // send + pages number
+        res.status(200).json({result2, pages});
 
-        // get actual datetime in format YYYY-MM-DD HH:MM:SS
-        const date = new Date();
 
-        // hash the password
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(new_password, salt)
-
-        // update user password
-        const sqlQuery = `UPDATE user SET password = ?, updated_at = ? WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [hashedPassword, date, req.user.id]);
-        res.status(200).json(result);
-    } catch(err){
+    }catch(err){
         res.status(400).json({message: err.message});
     }
 });
 
 
+router.post("/get/restaurateur/:page", async(req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        
+        // get page number 
+        const page = req.params.page;
+
+        // get the number of client per page
+        const limit = 20;
+
+        // get the offset
+        const offset = (page - 1) * limit;
+
+        // get the total number of client
+        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "restaurateur"';
+        var result = await pool.query (sqlQuery);
+        
+        result = result[0].total;
+        result = parseInt(result);
+
+        // get the total number of page
+        const pages = Math.ceil(result / limit);
+
+        // query to get the client
+        const sqlQuery2 = 'SELECT * FROM user WHERE role = "restaurateur" LIMIT ' + limit + ' OFFSET ' + offset;
+        var result2 = await pool.query (sqlQuery2);
+
+        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        for (var i = 0; i < result2.length; i++) {
+            var date = new Date(result2[i].created_at);
+            result2[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var date = new Date(result2[i].updated_at);
+            result2[i].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        }
+
+        // send + pages number
+        res.status(200).json({result2, pages});
 
 
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
+router.post("/get/livreur/:page", async(req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        
+        // get page number 
+        const page = req.params.page;
+
+        // get the number of client per page
+        const limit = 20;
+
+        // get the offset
+        const offset = (page - 1) * limit;
+
+        // get the total number of client
+        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "livreur"';
+        var result = await pool.query (sqlQuery);
+        
+        result = result[0].total;
+        result = parseInt(result);
+
+        // get the total number of page
+        const pages = Math.ceil(result / limit);
+
+        // query to get the client
+        const sqlQuery2 = 'SELECT * FROM user WHERE role = "livreur" LIMIT ' + limit + ' OFFSET ' + offset;
+        var result2 = await pool.query (sqlQuery2);
+
+        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        for (var i = 0; i < result2.length; i++) {
+            var date = new Date(result2[i].created_at);
+            result2[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var date = new Date(result2[i].updated_at);
+            result2[i].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        }
+
+        // send + pages number
+        res.status(200).json({result2, pages});
+
+
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
 
 
 module.exports = router;

@@ -16,7 +16,7 @@ router.post("/list/clients", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "client"';
+        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "client" LIMIT 5';
         const result = await pool.query
         (sqlQuery);
         //console.log(result[0]);
@@ -45,7 +45,7 @@ router.post("/list/restaurateur", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "restaurateur"';
+        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "restaurateur" LIMIT 5';
         const result = await pool.query
         (sqlQuery);
         //console.log(result[0]);
@@ -74,7 +74,7 @@ router.post("/list/livreur", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "livreur"';
+        const sqlQuery = 'SELECT iduser,last_name,first_name,username,email,role,created_at FROM `user` WHERE role = "livreur" LIMIT 5';
         const result = await pool.query
         (sqlQuery);
         //console.log(result[0]);
