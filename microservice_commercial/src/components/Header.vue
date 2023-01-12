@@ -4,6 +4,7 @@
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/statistique" v-if="isLoggedIn" >Statistique</RouterLink>
         <RouterLink to="/users" v-if="isLoggedIn">Utilisateur</RouterLink>
+        <RouterLink to="/suivis-livraison" v-if="isLoggedIn">Livraison</RouterLink>
       </nav>
       <!-- if jwt is not set -->
       <nav class="end" v-if="!isLoggedIn">
