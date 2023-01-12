@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors')
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+require('./models/dbConfig')
 const app = express();
+
 
 
 
@@ -22,8 +25,12 @@ app.use(cors({
 /* Routes */
 
 const routes = require("./routes/connection")
+const commandes = require("./routes/commandes")
+const administration = require("./routes/administration")
 
 app.use('/commercial', routes)
+app.use('/commandes', commandes)
+app.use('/administration', administration)
 
 const port = 3001;
 app.listen(port, () => {

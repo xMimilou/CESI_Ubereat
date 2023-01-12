@@ -1,9 +1,3 @@
-<script setup lang="ts">
-defineProps<{
-  title: string
-  entete: string
-}>()
-</script>
 
 <template>
 
@@ -20,25 +14,8 @@ defineProps<{
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
-                <tr>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
-                <tr>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
-                <tr>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
-                <tr>
-                    <td>test</td>
-                    <td>test</td>
+                <tr v-for="list in lists">
+                    <td v-for="element in list">{{ element }}</td>
                 </tr>
             </tbody>
         </table>
@@ -49,7 +26,7 @@ defineProps<{
 </template>
 
 <script lang="ts">
-
+import axios from 'axios';
 export default{
     name: "list",
     props: {
@@ -60,24 +37,45 @@ export default{
         entete: {
             type: String,
             required: true
-        }
+        },
+        query: {
+          type: String,
+          required: true
+        },
     },
     data() {
         return {
             heading : [
 
-            ]
+            ],
+            lists: [],
+            listlength: 0,
+            headinglength: 0
         }
     },
     mounted() {
         //this.getCount()
         this.fetchHeader()
+        this.getList()
     },
     methods: {
         fetchHeader(){
             this.heading = this.entete.split(',')
             console.log(this.heading)
+            this.headinglength = this.heading.length
             
+        },
+        getList() {
+          var token = localStorage.getItem('token');
+          var request = 'http://localhost:3001' + this.query
+          axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+            this.lists = response.data
+            this.listlength = this.lists.length
+            
+          }).catch((error) => {
+            console.log(error)
+          })
+        
         }
     }
 }

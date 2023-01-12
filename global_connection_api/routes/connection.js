@@ -73,8 +73,8 @@ router.post('/login', async (req, res) => {
         const validPassword = await bcrypt.compare(password, checkUserResult[0].password);
         if (!validPassword) return res.status(400).json({message: "Invalid password"});
 
-        // create and assign a token
-        const token = jwt.sign({id: checkUserResult[0].iduser}, 'secret');
+        // create and assign a token to the user with expiration of 2h
+        const token = jwt.sign({ _id: checkUserResult[0].iduser }, 'secret', { expiresIn: '2h' });
 
         res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role});
 

@@ -20,7 +20,7 @@ CREATE TABLE `user` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `referal_code` varchar(45) NOT NULL,
-  `referal_by` varchar(45) NOT NULL,
+  `referal_by` varchar(45) NULL,
   `role` varchar(45) NOT NULL,
   PRIMARY KEY (`iduser`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

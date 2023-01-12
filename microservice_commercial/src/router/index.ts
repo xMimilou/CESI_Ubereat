@@ -33,6 +33,12 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/RegisterView.vue')
+    },
+    {
+      path: "/users",
+      name: "users",
+      component: () => import('../views/UsersView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })
@@ -57,11 +63,12 @@ router.beforeEach((to, from, next) => {
       });
 
 
-      
+
     }
-  }else{
+  } else {
     next();
   }
 });
+
 
 export default router
