@@ -19,12 +19,21 @@ export default {
           BrutTable: []
       };
   },
-  created() {
-    axios.get('http://localhost:5501/posts')
+  async mounted() {
+    setInterval(async () => {
+      //this.getData()
+    }, 3000)
+  },
+  OnSetup() {
+    this.getData()
+  },
+  methods: {
+    getData(){
+      console.log("Voici le username du livreur : " + this.usernameLivreur);
+      axios.get('http://localhost:5501/posts')
           .then(response => {
             console.log(response.data); 
             this.BrutTable = response.data;
-
             this.BrutTable.forEach((element) => {
             //console.log("Le statut : ");
             //console.log("Voici les éléments " + element.statusDeliver + " " + element.usernameLivreur + " " + this.usernameLivreur);
@@ -34,14 +43,14 @@ export default {
               this.FiltredTable.push(element);
             }
             });
-
            })
           .catch(error => {
             console.log(error);
   });
   console.log(this.FiltredTable);
-  
+    }
   },
+  
   }
 
 </script>

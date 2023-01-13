@@ -25,7 +25,7 @@ export default{
     }
   },mounted() {
   setInterval(() => {
-    //this.getData();
+    this.getData();
   }, 3000);
   //this.getData();
 },methods: {
@@ -83,7 +83,7 @@ export default{
   <h1> Requêtes en cours </h1>
   <div class="container">
     <div class="container" v-for="item in FiltredTable" :key="item._id">
-      <counters :username_customer='item.customer_username' :costumer_adress = 'item.delivery_person.delivery_location' :restaurant_name ='item.restaurant.name' :restaurant_adress='item.restaurant.location' :total_price='item.order.total_cost' :timeDelivered = 'item.order.time_placed' />
+      <counters :username_customer='item.username' :costumer_adress = 'item.delivery_person.delivery_location' :restaurant_name ='item.restaurant.name' :restaurant_adress='item.restaurant.location' :total_price='item.order.total_cost' :timeDelivered = 'item.order.time_placed' />
     </div>
   </div>
 </template>

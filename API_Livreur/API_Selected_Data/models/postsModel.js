@@ -26,7 +26,8 @@ const PostsModel = mongoose.model(
     total_price: {
         type: Number,
         required: true
-    },time_delivered:{
+    },
+    time_delivered:{
         type: String,
         required : true
     
