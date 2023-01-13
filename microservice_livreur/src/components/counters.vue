@@ -88,7 +88,7 @@ export default{
         onSubmit(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
           var usernameCollected = localStorage.getItem('username');
           console.log(usernameCollected);
-          this.$router.push("/choosencommand");
+
 
           console.log(this.username_customer);
           //this.Selectedtitle = title;
@@ -103,7 +103,7 @@ export default{
             usernameLivreur : usernameCollected
           };
           
-          
+
 
             
 
@@ -154,7 +154,7 @@ export default{
               status : "En cours"
             };
 
-            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.customer_username == this.username_customer && element.delivery_person.delivery_location == this.costumer_adress && element.restaurant.name == this.restaurant_name && element.restaurant.location == this.restaurant_adress && element.order.total_cost == this.total_price && element.order.time_placed == this.timeDelivered)
+            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.username == this.username_customer && element.delivery_person.delivery_location == this.costumer_adress && element.restaurant.name == this.restaurant_name && element.restaurant.location == this.restaurant_adress && element.order.total_cost == this.total_price && element.order.time_placed == this.timeDelivered)
             {
               console.log("L'id de la commande est : " + element._id);
               axios.put(`http://localhost:5500/posts/${element._id}/${usernameCollected}`, dataToPut)
@@ -173,7 +173,7 @@ export default{
             console.log(error);
           });
             
-
+          this.$router.replace({path: "/choosencommand"});
   
         
         },onRemoveCommand(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
