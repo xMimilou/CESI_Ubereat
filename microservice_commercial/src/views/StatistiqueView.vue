@@ -16,24 +16,25 @@ import axios from 'axios'
             <counters title="nombre de client" query="/commercial/total/client"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre de restaurateur" query="/commercial/total/restaurateur"/>
-        </div>
-        <div class="columns-3">
-            <counters title="nombre de livreur" query="/commercial/total/livreur"/>
-        </div>
-        <div class="columns-3">
-            <counters title="nombre total de commandes" query="/commandes/count/commandes"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="columns-3">
-            <counters title="Chiffre d'affaire" units="€" query="/commandes/count/CA"/>
+            <counters title="Nombre total d'utilisateur" query="/commercial/total/users"/>
         </div>
         <div class="columns-3">
             <counters title="Nombre de nouveau utilisateur" query="/commercial/new/users"/>
         </div>
         <div class="columns-3">
-            <counters title="Nombre total d'utilisateur" query="/commercial/total/users"/>
+            <counters title="Chiffre d'affaire" units="€" query="/commandes/count/CA"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns-3">
+            <counters title="nombre de restaurateur" query="/commercial/total/restaurateur"/>
+        </div>
+        <div class="columns-3">
+            <counters title="nombre de livreur" query="/commercial/total/livreur"/>
+        </div>
+        
+        <div class="columns-3">
+            <counters title="nombre total de commandes" query="/commandes/count/commandes"/>
         </div>
         <div class="columns-3">
             <counters title="Commandes par jours" query="/commandes/count/commandes/today"/>

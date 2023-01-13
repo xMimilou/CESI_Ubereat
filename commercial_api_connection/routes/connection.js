@@ -348,4 +348,98 @@ router.post("/get/livreur/:page", async(req, res) => {
 });
 
 
+router.post("/get/:id", async(req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // get the id of the user
+        const id = req.params.id;
+
+        // query to get the user
+        const sqlQuery = 'SELECT * FROM user WHERE iduser = ?';
+        var result = await pool.query (sqlQuery, [id]);
+
+        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        var date = new Date(result[0].created_at);
+        result[0].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        var date = new Date(result[0].updated_at);
+        result[0].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+
+        // send the user
+        res.status(200).json(result[0]);
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.put("/update/:id", async(req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // get the id of the user
+        const id = req.params.id;
+
+        // get the user data
+        var {first_name, last_name, email, role, isActive} = req.body;
+        if(isActive == true) isActive = 1;
+        else isActive = 0;
+        // get datetime for updated_at in format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        var date = new Date();
+        var updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+
+        // query to update the user
+        const sqlQuery = 'UPDATE user SET first_name = ?, last_name = ?, email = ?, role = ?, updated_at = ?, isActive = ? WHERE iduser = ?';
+        var result = await pool.query(sqlQuery, [first_name, last_name, email, role, updated_at, isActive, id]);
+
+        // send the user
+        res.status(200).json({message: "User updated"});
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+router.post("/delete/:id", async(req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // get the id of the user
+        const id = req.params.id;
+
+        // query to delete the user
+        const sqlQuery = 'DELETE FROM user WHERE iduser = ?';
+        var result = await pool.query(sqlQuery, [id]);  
+
+        // send the user
+        res.status(200).json({message: "User deleted"});
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
+
 module.exports = router;
