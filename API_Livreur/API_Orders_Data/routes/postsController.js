@@ -9,13 +9,15 @@ router.get('/', (req, res) => {
     else console.log("Error to get data : " + err);
   })
 });
-router.put("/:customer_username/:time_delivered", (req, res) => {
+router.put("/:_id/:delivername", (req, res) => {
   const updateRecord = {
-      "order.status": req.body.status
+      "order.status": req.body.status,
+      "delivery_person.deliver_username": req.params.delivername
+
   };
 
   PostsModel.findOneAndUpdate(
-      { "customer_username": req.params.customer_username, "order.time_delivered": req.params.time_delivered },
+      { "_id": req.params._id},
       { $set: updateRecord },
       { new: true },
       (err, docs) => {

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import axios from 'axios'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,5 +40,29 @@ const router = createRouter({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    var token = localStorage.getItem('token');
+    if (token == null || token == undefined) {
+      next({ name: 'login' });
+    } else {
+      // make axios post on tokenCheckup and token in header at auth-token
+      axios.post('http://localhost:3000/api/tokenCheckup', {}, { headers: { 'auth-token': token } }).then((response) => {
+        if (response.data.message == 'Access granted') {
+          next();
+        } else {
+          next({ name: 'login' });
+        }
+      }).catch((error) => {
+        console.log(error);
+        next({ name: 'login' });
+      });
 
+
+
+    }
+  } else {
+    next();
+  }
+});
 export default router

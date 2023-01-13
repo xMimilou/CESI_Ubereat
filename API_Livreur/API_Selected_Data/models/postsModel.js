@@ -5,7 +5,7 @@ const PostsModel = mongoose.model(
   {
     username: {
         type: String,
-        required: false
+        required: true
     },
     order_time: {
         type: String,
@@ -32,6 +32,10 @@ const PostsModel = mongoose.model(
     
     },
     statusDeliver:{
+        type: String,
+        required : true
+    },
+    usernameLivreur:{
         type: String,
         required : true
     }

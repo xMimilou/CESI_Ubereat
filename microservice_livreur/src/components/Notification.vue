@@ -24,7 +24,7 @@ export default {
     source = axios.CancelToken.source();
 
     const checkForNewOrders = () => {
-      axios.get('http://localhost:3000/orders', {
+      axios.get('http://localhost:5500/posts', {
         cancelToken: source.token
       }).then(response => {
         const newOrderReceived = response.data.some((order: Order) => !order.seen);
@@ -39,9 +39,9 @@ export default {
         console.log(error);
       });
     }
-    console.log('Livreur created');
+    //console.log('Livreur created');
     checkForNewOrders();
-    setInterval(checkForNewOrders, 5000);
+    setInterval(checkForNewOrders, 3000);
   },
   beforeDestroy() {
     source.cancel();
