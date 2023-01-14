@@ -21,12 +21,20 @@ const router = createRouter({
     {
       path: '/orders',
       name: 'Orders',
-      component: () => import('../views/ListOfCommandsView.vue')
+      component: () => import('../views/ListOfCommandsView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/choosencommand',
       name: 'ChoosenCommand',
-      component: () => import('../views/ChoosenCommand.vue')
+      component: () => import('../views/ChoosenCommand.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -37,6 +45,18 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/RegisterView.vue')
+    },
+    {
+      path: "/update/:id",
+      name: "update",
+      component: () => import('../views/UpdateView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/delete/:id",
+      name: "delete",
+      component: () => import('../views/DeleteView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })

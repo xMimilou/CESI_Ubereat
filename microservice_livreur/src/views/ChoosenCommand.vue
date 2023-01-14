@@ -2,6 +2,8 @@
   import { RouterLink, RouterView } from 'vue-router'
   import Notification from '../components/Notification.vue';
 import CountersChoosenCommand from '@/components/countersChoosenCommand.vue';
+import ActiveOrders from '@/components/ActiveOrders.vue';
+
 import axios from 'axios';
 
 </script>
@@ -16,7 +18,9 @@ export default {
           receivedUsername: "",
           usernameLivreur: localStorage.getItem("username"),
           FiltredTable: [],
-          BrutTable: []
+          BrutTable: [],
+          token: localStorage.getItem('token') // token should be stored securely
+
       };
   },
   async mounted() {
@@ -30,25 +34,22 @@ export default {
   methods: {
     getData(){
       console.log("Voici le username du livreur : " + this.usernameLivreur);
-      axios.get('http://localhost:5501/posts')
-          .then(response => {
-            console.log(response.data); 
-            this.BrutTable = response.data;
-            this.BrutTable.forEach((element) => {
-            //console.log("Le statut : ");
-            //console.log("Voici les éléments " + element.statusDeliver + " " + element.usernameLivreur + " " + this.usernameLivreur);
-            //console.log(element.statusDeliver != "Delivered" && element.usernameLivreur == this.usernameLivreur);
-            if(element.statusDeliver != "Delivered" && element.usernameLivreur == this.usernameLivreur)
-            {
-              this.FiltredTable.push(element);
+      this.getCommandes(this.usernameLivreur);
+      console.log(this.FiltredTable);
+    },
+    async getCommandes(deliverUsername:string) {
+    try {
+        const response = await axios.post("http://localhost:5502/commandes/selected/deliver", { deliverUsername }, {
+            headers: {
+                "auth-token": this.token
             }
-            });
-           })
-          .catch(error => {
-            console.log(error);
-  });
-  console.log(this.FiltredTable);
+        });
+        this.FiltredTable = response.data;
+        console.log(this.FiltredTable);
+    } catch (error) {
+        console.error(error);
     }
+  },
   },
   
   }
@@ -59,6 +60,6 @@ export default {
   
 <template>
   <div class="container" v-for="item in FiltredTable" :key="item._id">
-    <CountersChoosenCommand  :CustomerUsername="item.usernameLivreur" :CustomerAddress="item.costumerAddress" :RestaurantAddress="item.restaurantAdress" :RestaurantName="item.restaurantName" :Total_cost="item.total_price"/>
+    <ActiveOrders :RestaurantName="item.restaurant.name" :RestaurantAddress="item.restaurant.location" :CustomerUsername="item.username" :CustomerAddress="item.delivery_person.delivery_location" :TimePlaced="item.order.time_placed" :TimeDelivered="item.order.time_delivered"/>
   </div>
 </template>

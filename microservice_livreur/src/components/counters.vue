@@ -78,7 +78,11 @@ export default{
             Selectedtitle : "",
             SelectedOrder: false,
             ArrayToCollectID: [],
-            Empty: ""
+            Empty: "",
+            token: localStorage.getItem('token'), // token should be stored securely
+            username: localStorage.getItem('username'),
+            data: {},
+            commandes:[]
         };
     },
     mounted() {
@@ -89,120 +93,81 @@ export default{
           var usernameCollected = localStorage.getItem('username');
           console.log(usernameCollected);
 
-
-          console.log(this.username_customer);
-          //this.Selectedtitle = title;
-          const data = {
-            username : username_customer,
-            costumerAddress: costumer_adress,
-            restaurantAdress : restaurant_adress,
-            restaurantName : restaurant_name,
-            total_price: total_price,
-            time_delivered : timeDelivered,
-            statusDeliver : "En cours",
-            usernameLivreur : usernameCollected
-          };
-          
-
-
-            
-
-            // Récupération des données existantes
-            axios.get('http://localhost:5501/posts')
-            .then(response => {
-            // Vérification de l'existence de la donnée
-            const existingData = response.data;
-            let dataExist = false;
-            existingData.forEach(dataToCheck => {
-              console.log(dataToCheck);
-              console.log("Le username de la bdd " + dataToCheck.username + " le username de la bde " + data.username);
-            if (dataToCheck.usernameLivreur === data.usernameLivreur && dataToCheck.username === data.username && dataToCheck.costumerAddress === data.costumerAddress && dataToCheck.restaurantAdress === data.restaurantAdress && dataToCheck.restaurantName === data.restaurantName && dataToCheck.total_price === data.total_price && dataToCheck.time_delivered === data.time_delivered) {
-                dataExist = true;
-            }
-            });
-            if (dataExist) {
-              console.log('La donnée existe déjà');
-            } else {
-            // Envoi de la requête axios.post
-            axios.post('http://localhost:5501/posts', data)
-            .then(response => {
-              console.log(response.data);
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          /*
+          console.log(username_customer + " " + costumer_adress + " " + restaurant_name + " " + restaurant_adress + " " + total_price + " " + usernameCollected);
+          axios.post("http://localhost:5502/commandesSuivies/create", {
+              "username": username_customer,
+              "costumerAddress": costumer_adress,
+              "restaurantName": restaurant_name,
+              "restaurantAdress": restaurant_adress,
+              "total_price": total_price,
+              "order_time": timeDelivered,
+              "statusDeliver": "En cours",
+              "usernameLivreur": usernameCollected
+          }, {
+              headers: {
+                  "auth-token": this.token
               }
-            })
-            .catch(error => {
-              console.log('Erreur lors de la récupération des données existantes');
-            });
+          })
+          .then(response => console.log(response.data))
+          .catch(error => console.log(error));
+          
+          */
 
-          const dataToPut = {
-            statusDeliver : "En cours"
-          };
-          // Collecte de l'id de la commande
-          axios.get('http://localhost:5500/posts')
-          .then(response => {
-            //console.log(response.data); 
-            this.ArrayToCollectID = response.data;
-            //console.log(this.ArrayToCollectID);
-            
-            this.ArrayToCollectID.forEach((element) => {
-            //console.log("Le statut : ");
-            //console.log(element.order.status);
-            const dataToPut = {
-              status : "En cours"
-            };
 
-            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.username == this.username_customer && element.delivery_person.delivery_location == this.costumer_adress && element.restaurant.name == this.restaurant_name && element.restaurant.location == this.restaurant_adress && element.order.total_cost == this.total_price && element.order.time_placed == this.timeDelivered)
-            {
-              console.log("L'id de la commande est : " + element._id);
-              axios.put(`http://localhost:5500/posts/${element._id}/${usernameCollected}`, dataToPut)
-              .then(response => {
-                console.log(response.data);
-              })
-              .catch(error => {
-                console.log(error);
-            });
-              //localStorage.setItem('CommandID', element._id);
-            }
-            });
-
-           })
-          .catch(error => {
-            console.log(error);
-          });
-            
+          // Update de la table des commandes
+          
+          this.updateCommandesStatus(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered);
           this.$router.replace({path: "/choosencommand"});
   
         
         },onRemoveCommand(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
           
-          axios.get('http://localhost:5500/posts')
-          .then(response => {
-            //console.log(response.data); 
-            this.ArrayToCollectID = response.data;
-            //console.log(this.ArrayToCollectID);
-            
-            this.ArrayToCollectID.forEach((element) => {
-            //console.log("Le statut : ");
-            //console.log(element.order.status);
-            const dataToPut = {
-              status : "En cours"
-            };
+          this.getCommandes(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered);
 
-            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty && element.customer_username == username_customer && element.delivery_person.delivery_location == costumer_adress && element.restaurant.name == restaurant_name && element.restaurant.location == restaurant_adress && element.order.total_cost == total_price && element.order.time_placed == timeDelivered)
-            {
-              console.log("L'id de la commande est : " + element._id);
-              localStorage.setItem('CommandID', element._id);
-            }
+        },
+        async getCommandes(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
+          try {
+            const response = await axios.post("http://localhost:5502/commandes/selected", {
+                            username_customer,
+              costumer_adress,
+              restaurant_name,
+              restaurant_adress,
+              total_price,
+              timeDelivered
+            }, {
+              headers: {
+                "auth-token": this.token
+              }
             });
-
-           })
-          .catch(error => {
-            console.log(error);
-          });
-        }
+            this.commandes = response.data;
+            localStorage.setItem('CommandID', this.commandes[0]._id);
+            console.log(this.commandes[0]);
+          } catch (error) {
+            console.error(error);
+          }
+        },
+        async updateCommandesStatus(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
+            try {
+              const response = await axios.put("http://localhost:5502/commandes/update", {
+                username : username_customer,
+                costumerAddress: costumer_adress,
+                restaurantAdress : restaurant_adress,
+                restaurantName : restaurant_name,
+                total_price: total_price,
+                time_delivered : timeDelivered,
+                statusDeliver : "En cours",
+                usernameLivreur : this.username
+              }, {
+                headers: {
+                  "auth-token": this.token
+                }
+              });
+              console.log(response.data);
+            } catch (error) {
+              console.error(error);
+            }
+          }
     },
     components: { ChoosenCommandVue }
 }
