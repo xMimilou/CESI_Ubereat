@@ -242,5 +242,58 @@ router.post("/list/top/client", async (req, res) => {
     }
 });
 
+router.post("/user/:username", async (req, res) => {
+    try{ 
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        var commandesToday = [];
+
+        // get all commandes in mongo db with order.delivery = today and order.status != "delivered"
+        commandesModel.find({username: req.params.username}, function (err, commandes) {
+            // if there is an error
+            if (err) {
+                res.status(400).json({message: err.message});
+            }
+            // if there is no error
+            else {
+                // for all commandes check if the order.delivery is today in format YYYY-MM-DD
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+
+                // compare the order.delivery at format YYYY-MM-DD HH:mm with today at format YYYY-MM-DD
+                commandes.forEach(function(commande) {
+                    var commandeDate = commande.order.time_delivered.slice(0,10);
+                    if(commandeDate == today && commande.order.status != "delivered"){
+                        commandesToday.push(commande);
+                    }
+                });
+                res.status(200).json(commandesToday);
+
+                // return the array
+            }});
+
+
+            
+            
+
+
+
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+   
+
 module.exports = router;
 
