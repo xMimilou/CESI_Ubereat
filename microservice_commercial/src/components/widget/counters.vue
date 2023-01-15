@@ -15,7 +15,7 @@ var myvar:string = ""
 
 <template>
 
-  <div class="counters widget">
+  <div class="counters widget" v-if="!isLoading">
     <div class="counters__title">
       <h3>{{ title }}</h3>
     </div>
@@ -29,6 +29,19 @@ var myvar:string = ""
         </div>
       </div>
     </div>
+  </div>
+  <div class="counters" v-else>
+    <!-- display text at vertical and horizontal center-->
+    <div class="text-center">
+      <h1>Chargement des données</h1>
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
   </div>
 
 </template>
@@ -54,7 +67,8 @@ export default{
   },
   data() {
     return {
-      count: 'No data'
+      count: 'No data',
+      isLoading: true
     }
   },
   async mounted() {
@@ -72,7 +86,7 @@ export default{
       var request = 'http://localhost:3001' + this.query
       axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
         this.count = response.data
-        console.log(response.data)
+        this.isLoading = false
       }).catch((error) => {
         console.log(error)
       })
@@ -137,8 +151,8 @@ export default{
 
 .counters {
   width: 100%;
-  height: 300px;
-  max-height: 300px;
+  height: 150px;
+  max-height: 150px;
   background-color: var(--color-widget);
   border-radius: 10px;
   
@@ -194,6 +208,64 @@ export default{
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--color-text);
+}
+
+
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background:  hsla(160, 100%, 37%, 1);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
 }
 
 

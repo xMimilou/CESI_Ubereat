@@ -180,11 +180,16 @@ router.post("/graph/commandes/minutes", async (req, res) => {
                 // count the number of commandes with order.time_place is same as today
                 commandes.forEach(function(commande) {
                     var commandeTime = commande.order.time_placed.slice(11,16);
-                    chartData.forEach(function(data) {
-                        if(data[0] == commandeTime){
-                            data[1]++;
+                    // check if the day is the same
+                    if(commande.order.time_placed.slice(0,10) == date.toISOString().slice(0,10)){
+                        // check if the commande time is in the chartData array
+                        for(var i = 0; i < chartData.length; i++){
+                            if(chartData[i][0] == commandeTime){
+                                chartData[i][1]++;
+                            }
                         }
-                    });
+                    }
+
                 });
                 // reverse the array to have the last commande at the top except the first element
                 res.status(200).json(chartData);
@@ -297,7 +302,7 @@ router.post("/user/:username", async (req, res) => {
 router.post("/notification", async (req, res) => {
     try{
         
-        const token = req.header('auth-token').token;
+        const token = req.header('auth-token');
 
         // check if the token is valid
 
@@ -307,7 +312,8 @@ router.post("/notification", async (req, res) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
 
-        var username = req.header('auth-token').username;
+        var username = req.header('username');
+        var status = req.header('status');
 
         // get all commandes in mongo db with order.delivery = today and order.status != "delivered"
         commandesModel.find({}, function (err, commandes) {
@@ -318,12 +324,42 @@ router.post("/notification", async (req, res) => {
             // if there is no error
             else {
                 
-                // if commandes where username is equal to username in the token, check if status of the commandes was updated
+                // for all commandes check if the order.delivery is today in format YYYY-MM-DD
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+                console.log("--------------------");
+                isNewStatus = "";
+                // if commandes where username is equal to username in the token, check if status of the commandes was updated if true send notification with the new status
                 commandes.forEach(function(commande) {
                     if(commande.username == username){
-                        
+                        var commandeDate = commande.order.time_delivered.slice(0,10);
+                        // compare the order.delivery at format YYYY-MM-DD HH:mm with today at format YYYY-MM-DD HH:mm if time of today is lower than time of order.delivery 
+                        if(commande.order.status != status){
+                            if(commandeDate==today){
+                                // try if HH:mm of today is lower than HH:mm of order.delivery
+                                try{
+                                    var todayTime = today.slice(11,16);
+                                    var commandeTime = commande.order.time_delivered.slice(11,16);
+                                    if(todayTime < commandeTime){
+                                        console.log("notification sent");
+                                        isNewStatus = commande.order.status;
+                                    }
+                                } catch(err){
+                                    console.log(err.message);
+                                }
+                            }
+                        }
+
                     }
                 });
+                if (isNewStatus != ""){
+                res.status(200).json({status: isNewStatus});
+                } else {
+                res.status(200).json({status: "no change"});
+                }
                 
             }});
     } catch(err){

@@ -36,19 +36,34 @@ export default defineComponent({
         async getNotification() {
             var token = localStorage.getItem('token');
             var username = localStorage.getItem('username');
-            if (localStorage.getItem('notification_status') != null){
-                
+            var status = ''
+            if (localStorage.getItem('notification_status')) {
+                status = localStorage.getItem('notification_status')
+            }
+            else {
+                status = ''
+                console.log("no status")
             }
             var request = 'http://localhost:3001/commandes/notification'
-            axios.post(request, {}, { headers: { 'auth-token': token, 'username': username } }).then((response) => {
-                this.title = response.data.title
-                this.body = response.data.body
+            axios.post(request, {}, { headers: { 'auth-token': token, 'username': username, "status": status } }).then((response) => {
+                if (response.data.status != "no change") {
+                    this.show("Votre commandes arrive", response.data.status)
+                    localStorage.setItem('notification_status', response.data.status)
+                }
             }).catch((error) => {
                 console.log(error)
             })
         },
         close() {
             this.display = false
+        },
+        show(title: string, body: string) {
+            this.title = title
+            this.body = body
+            this.display = true
+            setTimeout(() => {
+                this.display = false
+            }, 10000)
         }
     }
 })

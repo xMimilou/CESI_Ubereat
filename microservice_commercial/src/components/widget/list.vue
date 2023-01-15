@@ -61,7 +61,6 @@ export default{
     methods: {
         fetchHeader(){
             this.heading = this.entete.split(',')
-            console.log(this.heading)
             this.headinglength = this.heading.length
             
         },
