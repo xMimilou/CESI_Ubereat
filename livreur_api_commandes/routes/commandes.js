@@ -46,7 +46,7 @@ router.post("/all/available", async (req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        console.log("Ici");
+        //console.log("Ici");
         const delivery_username = '';
         const status = "En cours";
 

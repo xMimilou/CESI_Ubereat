@@ -1,99 +1,128 @@
 <template>
+  <div class="counters widget" v-if="!SelectedOrder">
+    <div class="counters__title">
+      <h3>{{ username_customer }}</h3>
+    </div>
+    <div class="counters__content">
+      <div class="container">
+          <div class="col-4"><p>Addresse du client : {{ costumer_adress }}</p></div>
+          <div class="col-4"><p>Nom du restaurant : {{ restaurant_name }} / {{ restaurant_adress }} </p></div>
+          <div class="col-4">Horaire de livraison : {{ timeDelivered }}</div>
 
-    <div class="counters widget" v-if="!SelectedOrder">
-        <div class="counters__title">
-
+      </div>
+      <div class="bottom">
+        <div class="row">
+          <div class="col-6"><button
+              @click="
+                onSubmit(
+                  username_customer,
+                  costumer_adress,
+                  restaurant_name,
+                  restaurant_adress,
+                  total_price,
+                  timeDelivered
+                )
+              "
+              class="button"
+            >
+              Accepter
+            </button>
+</div>
+          <div class="col-6"><button
+              class="button"
+              @click="
+                onRemoveCommand(
+                  username_customer,
+                  costumer_adress,
+                  restaurant_name,
+                  restaurant_adress,
+                  total_price,
+                  timeDelivered
+                )
+              "
+            >
+              Refuser
+            </button></div>
         </div>
-        <div class="counters__content">
-        <div class="counters__content__item">
-            <div class="counters__content__item__text">
-
-            <div class="display_val">
-                <button @click="onSubmit(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" class="button">Accepter</button>
-                
-                <button class="button" @click="onRemoveCommand(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered)" >Refuser</button>
-            </div>
-            </div>
-        </div>
-        </div>
-        <h3> {{ username_customer }} </h3>
-        <h3>{{ costumer_adress }}</h3>
-            <h3>{{ restaurant_name }}</h3>
-    <h3>{{ restaurant_adress }}</h3>
-    <h3>{{ total_price }}</h3>
-    <h3> {{ timeDelivered }} </h3>
+      </div>
+    </div>
 
     
-    </div>
+  </div>
 
-    <div v-if="SelectedOrder">
-      <h1> </h1>
-    </div>
-
+  <div v-if="SelectedOrder">
+    <h1></h1>
+  </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import axios from 'axios';
-import counters from './counters.vue'
-import ChoosenCommandVue from '@/views/ChoosenCommand.vue';
-import LisOfCommandsView from '@/views/ListOfCommandsView.vue';
+import Vue from "vue";
+import axios from "axios";
+import counters from "./counters.vue";
+import ChoosenCommandVue from "@/views/ChoosenCommand.vue";
+import LisOfCommandsView from "@/views/ListOfCommandsView.vue";
 
+export default {
+  name: "counters",
+  props: {
+    costumer_adress: {
+      type: String,
+      required: true,
+    },
+    restaurant_name: {
+      type: String,
+      required: true,
+    },
+    restaurant_adress: {
+      type: String,
+      required: true,
+    },
+    total_price: {
+      type: String,
+      required: true,
+    },
+    timeDelivered: {
+      type: String,
+      required: true,
+    },
+    username_customer: {
+      type: String,
+      required: true,
+    },
+    Selectedtitled: {
+      type: String,
+      default: "",
+      required: false,
+    },
+  },
+  data() {
+    return {
+      count: 10,
+      Selectedtitle: "",
+      SelectedOrder: false,
+      ArrayToCollectID: [],
+      Empty: "",
+      token: localStorage.getItem("token"), // token should be stored securely
+      username: localStorage.getItem("username"),
+      data: {},
+      commandes: [],
+    };
+  },
+  mounted() {
+    //this.getCount()
+  },
+  methods: {
+    onSubmit(
+      username_customer: string,
+      costumer_adress: string,
+      restaurant_name: string,
+      restaurant_adress: string,
+      total_price: string,
+      timeDelivered: string
+    ) {
+      var usernameCollected = localStorage.getItem("username");
+      console.log(usernameCollected);
 
-export default{
-    name: "counters",
-    props: {
-        costumer_adress: {
-            type: String,
-            required: true
-        },
-        restaurant_name: {
-            type: String,
-            required: true
-        },
-        restaurant_adress: {
-            type: String,
-            required: true
-        },
-        total_price: {
-            type: String,
-            required: true
-        },
-        timeDelivered: {
-            type: String,
-            required: true
-        },
-        username_customer: {
-            type: String,
-            required: true
-        },
-        Selectedtitled: {
-          type: String,
-          default : "",
-          required : false
-        }
-    },
-    data() {
-        return {
-            count: 10,
-            Selectedtitle : "",
-            SelectedOrder: false,
-            ArrayToCollectID: [],
-            Empty: "",
-            token: localStorage.getItem('token'), // token should be stored securely
-            username: localStorage.getItem('username'),
-            data: {},
-            commandes:[]
-        };
-    },
-    mounted() {
-        //this.getCount()
-    },
-    methods: {
-        onSubmit(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
-          var usernameCollected = localStorage.getItem('username');
-          console.log(usernameCollected);
-
-          /*
+      /*
           console.log(username_customer + " " + costumer_adress + " " + restaurant_name + " " + restaurant_adress + " " + total_price + " " + usernameCollected);
           axios.post("http://localhost:5502/commandesSuivies/create", {
               "username": username_customer,
@@ -114,74 +143,128 @@ export default{
           
           */
 
+      // Update de la table des commandes
 
-          // Update de la table des commandes
-          
-          this.updateCommandesStatus(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered);
-          this.$router.replace({path: "/choosencommand"});
-  
-        
-        },onRemoveCommand(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
-          
-          this.getCommandes(username_customer,costumer_adress,restaurant_name,restaurant_adress,total_price,timeDelivered);
-
-        },
-        async getCommandes(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
-          try {
-            const response = await axios.post("http://localhost:5502/commandes/selected", {
-                            username_customer,
-              costumer_adress,
-              restaurant_name,
-              restaurant_adress,
-              total_price,
-              timeDelivered
-            }, {
-              headers: {
-                "auth-token": this.token
-              }
-            });
-            this.commandes = response.data;
-            localStorage.setItem('CommandID', this.commandes[0]._id);
-            console.log(this.commandes[0]);
-          } catch (error) {
-            console.error(error);
-          }
-        },
-        async updateCommandesStatus(username_customer : string, costumer_adress: string, restaurant_name: string, restaurant_adress: string, total_price: string, timeDelivered: string) {
-            try {
-              const response = await axios.put("http://localhost:5502/commandes/update", {
-                username : username_customer,
-                costumerAddress: costumer_adress,
-                restaurantAdress : restaurant_adress,
-                restaurantName : restaurant_name,
-                total_price: total_price,
-                time_delivered : timeDelivered,
-                statusDeliver : "En cours",
-                usernameLivreur : this.username
-              }, {
-                headers: {
-                  "auth-token": this.token
-                }
-              });
-              console.log(response.data);
-            } catch (error) {
-              console.error(error);
-            }
-          }
+      this.updateCommandesStatus(
+        username_customer,
+        costumer_adress,
+        restaurant_name,
+        restaurant_adress,
+        total_price,
+        timeDelivered
+      );
+      this.$router.replace({ path: "/choosencommand" });
     },
-    components: { ChoosenCommandVue }
-}
+    onRemoveCommand(
+      username_customer: string,
+      costumer_adress: string,
+      restaurant_name: string,
+      restaurant_adress: string,
+      total_price: string,
+      timeDelivered: string
+    ) {
+      this.getCommandes(
+        username_customer,
+        costumer_adress,
+        restaurant_name,
+        restaurant_adress,
+        total_price,
+        timeDelivered
+      );
+    },
+    async getCommandes(
+      username_customer: string,
+      costumer_adress: string,
+      restaurant_name: string,
+      restaurant_adress: string,
+      total_price: string,
+      timeDelivered: string
+    ) {
+      try {
+        const response = await axios.post(
+          "http://localhost:5502/commandes/selected",
+          {
+            username_customer,
+            costumer_adress,
+            restaurant_name,
+            restaurant_adress,
+            total_price,
+            timeDelivered,
+          },
+          {
+            headers: {
+              "auth-token": this.token,
+            },
+          }
+        );
+        this.commandes = response.data;
+        localStorage.setItem("CommandID", this.commandes[0]._id);
+        console.log(this.commandes[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateCommandesStatus(
+      username_customer: string,
+      costumer_adress: string,
+      restaurant_name: string,
+      restaurant_adress: string,
+      total_price: string,
+      timeDelivered: string
+    ) {
+      try {
+        const response = await axios.put(
+          "http://localhost:5502/commandes/update",
+          {
+            username: username_customer,
+            costumerAddress: costumer_adress,
+            restaurantAdress: restaurant_adress,
+            restaurantName: restaurant_name,
+            total_price: total_price,
+            time_delivered: timeDelivered,
+            statusDeliver: "En cours",
+            usernameLivreur: this.username,
+          },
+          {
+            headers: {
+              "auth-token": this.token,
+            },
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+  components: { ChoosenCommandVue },
+};
 </script>
 
 <style scoped>
-.display_val {
+
+.bottom{
+  /* display this element at bottom of the counter */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* align center */
+  text-align: center;
+}
+
+.row{
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  margin-left: auto;
-  font-size: 15px;
+  width: 100%;
+  margin: 0 auto;
+  /* align center */
+  text-align: center;
 }
+
+
 /* drow line after title */
 .counters__title::after {
   content: "";
@@ -204,26 +287,15 @@ export default{
   height: 20%;
   justify-content: start;
   color: hsla(160, 100%, 37%, 1);
+  margin-left: 5px;
 }
-/* .counters__title {
-  display: flex;
-  flex: 1;
-  width: 70%;
-  margin: 20px auto;
-  line-height: 1em;
-  font-weight: 50px;
-  font-size: 20px;
-  height: 20%;
-  justify-content: start;
-  color: hsla(160, 100%, 37%, 1);
-} */
 .counters {
   width: 100%;
-  height: 300px;
-  max-height: 300px;
+  height: 200px;
+  max-height: 200px;
   background-color: var(--color-widget);
   border-radius: 10px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -233,56 +305,19 @@ export default{
 .counters__content {
   width: 100%;
   height: 80%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.counters__content__item {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.counters__content__item__number {
-  width: 100%;
-  height: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.counters__content__item__number h1 {
-  font-size: 2rem;
-  font-weight: 500;
-  color: var(--color-text);
-}
-.counters__content__item__text {
-  width: 100%;
-  height: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.counters__content__item__text h3 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--color-text);
-}
 
-
+}
 .button {
-        padding: 10px 50px;
-        margin: 10px 4px;
-        color: hsla(160, 100%, 37%, 1);
-        font-family: sans-serif;
-        text-transform: uppercase;
-        text-align: center;
-        position: relative;
-        text-decoration: none;
-        display: inline-block;
-      }
-
+  padding: 10px 50px;
+  margin: 10px 4px;
+  color: hsla(160, 100%, 37%, 1);
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+}
 
 .button {
   border: 1px solid transparent;
