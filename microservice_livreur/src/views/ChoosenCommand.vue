@@ -25,7 +25,7 @@ export default {
   },
   async mounted() {
     setInterval(async () => {
-      //this.getData()
+      this.getData()
     }, 3000)
   },
   OnSetup() {

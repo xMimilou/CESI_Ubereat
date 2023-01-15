@@ -27,7 +27,7 @@ export default{
     }
   },mounted() {
   setInterval(() => {
-    //this.getData();
+    this.getData();
   }, 3000);
   //this.getData();
 },methods: {
