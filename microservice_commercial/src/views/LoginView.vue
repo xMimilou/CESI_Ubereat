@@ -57,15 +57,20 @@ export default{
                 username: this.form.username,
                 password: this.form.password
             }
+            this.LogoutUser();
             const response = await axios.post('http://localhost:3000/api/login', data);
             // get jwt token in response and store it in local storage
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
             
-            location.reload()
             this.$router.push('/');
-        }
+        },
+        LogoutUser(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+        },
     }
 
 }

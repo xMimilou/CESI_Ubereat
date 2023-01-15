@@ -56,7 +56,6 @@ import notificationVue from '@/components/notification.vue'
         </div>
     </div>
 </div>
-
 </template>
 
 <style scoped>
@@ -118,6 +117,5 @@ import notificationVue from '@/components/notification.vue'
     align-items: center;
     margin: 5px;
 }
-
 
 </style>
