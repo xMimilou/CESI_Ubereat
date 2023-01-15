@@ -27,7 +27,7 @@
             >
               Accepter
             </button>
-</div>
+        </div>
           <div class="col-6"><button
               class="button"
               @click="

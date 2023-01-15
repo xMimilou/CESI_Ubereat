@@ -21,6 +21,7 @@ export default {
       UndesirableIDS: [],
       token: localStorage.getItem("token"), // token should be stored securely
       username: localStorage.getItem("username"),
+      isLoadding: true,
     };
   },
   mounted() {
@@ -33,13 +34,13 @@ export default {
     async getData() {
       // Partie des valeurs indésirables
       let id = localStorage.getItem("CommandID");
-      console.log(id);
+      //console.log(id);
       if (id != "") {
         this.UndesirableIDS.push(id);
         localStorage.setItem("CommandID", "");
       }
-      console.log("Voici les id à ne pas afficher : ");
-      console.log(this.UndesirableIDS);
+      //console.log("Voici les id à ne pas afficher : ");
+      //console.log(this.UndesirableIDS);
 
       // Récupération des données
       try {
@@ -61,6 +62,7 @@ export default {
             this.FiltredTable.push(element);
           }
         });
+        this.isLoadding = false;
       } catch (error) {
         console.error(error);
       }
@@ -71,7 +73,7 @@ export default {
 
 <template>
   <h1 class="text-center">Requêtes en cours</h1>
-  <div class="container">
+  <div class="container" v-if="!isLoadding">
     <div class="row">
       <div class="col-3" v-for="item in FiltredTable" :key="item._id">
         <counters
@@ -82,6 +84,18 @@ export default {
           :total_price="item.order.total_cost"
           :timeDelivered="item.order.time_placed"
         />
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <!-- display text at vertical and horizontal center-->
+    <div class="text-center">
+      <h1>Chargement des données</h1>
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   </div>
@@ -122,4 +136,89 @@ export default {
   flex: 0 0 auto;
   width: 25%;
 }
+
+/* animation text loading */
+.loading {
+  position: relative;
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  0% {
+    color: hsla(160, 100%, 37%, 1);
+  }
+  50% {
+    color: hsla(160, 100%, 37%, 0.5);
+  }
+  100% {
+    color: hsla(160, 100%, 37%, 1);
+  }
+}
+
+/* animation loading */
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: hsla(160, 100%, 37%, 1);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+
 </style>

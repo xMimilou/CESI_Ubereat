@@ -2,15 +2,21 @@
 
     <div class="counters widget">
       <div v-if="showElement">
-        
-        <h1> Nom du restaurant : {{  RestaurantName }}</h1>
-        <h1> Adresse du restaurant : {{  RestaurantAddress }}</h1>
-        <h1> Date de la commande : {{  TimePlaced }}</h1>
-        <h1> Date de la livraison prévue : {{  TimeDelivered }}</h1>
-        <h3> {{ ErrorDisplay }}</h3>
-        <input type="text" placeholder="Entrez le code de la commande" v-model="inputContentRestaurateur" />  
-        <button class="button" @click="doneOrder">Confirmer la reception</button>
-      
+        <div class="counters__title">
+          <h3>{{ RestaurantName }}</h3>
+        </div>
+        <div class="container">
+          <div class="col-4"><p> Adresse du restaurant : {{  RestaurantAddress }}</p></div>
+          <div class="col-4"><p>Date de la commande : {{  TimePlaced }}</p></div>
+          <div class="col-4">Date de la livraison prévue : {{  TimeDelivered }}</div>
+          <div class="col-4 error">{{ ErrorDisplay }}</div>
+        </div>
+        <input class="input-text" type="text" placeholder="Entrez le code de la commande" v-model="inputContentRestaurateur" />  
+        <div class="bottom">
+          <div class="row">
+            <button class="button" @click="doneOrder">Confirmer la reception</button>
+          </div>
+        </div>
       </div>
         
         
@@ -161,13 +167,21 @@ export default{
 </script>
 
 <style scoped>
-.display_val {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  font-size: 15px;
+
+.input-text {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    padding: 12px 20px;
+    resize: vertical;
+}
+
+.error{
+  color: red;
 }
 /* drow line after title */
 .counters__title::after {

@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('../views/ProfileView.vue'),
+      component: () => import('../views/UpdateView.vue'),
       meta: { requiresAuth: true }
     },
     {
@@ -53,7 +53,7 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: "/delete/:id",
+      path: "/delete",
       name: "delete",
       component: () => import('../views/DeleteView.vue'),
       meta: { requiresAuth: true }

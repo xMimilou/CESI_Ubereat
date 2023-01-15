@@ -66,11 +66,18 @@
           <label>Compte actif</label>
           <input type="checkbox" v-model="form.isActive" />
         </div>
-
+        <div class="row">
         <button class="btn btn-primary btn-block" type="submit">
           Modifier
         </button>
 
+        <!-- add button to delete user  on click redirect to /delete-->
+        <router-link :to="'/delete'">
+          <button class="btn btn-danger btn-block" type="button">
+            Supprimer
+          </button>
+        </router-link>
+        </div>
       </form>
 
 
@@ -99,12 +106,12 @@ export default {
     };
   },
   mounted() {
-    this.getList();
+    this.getUser();
   },
   methods: {
-    getList() {
+    getUser() {
       var token = localStorage.getItem("token");
-      var request = "http://localhost:3001/commercial/get/" + this.$route.params.id;
+      var request = "http://localhost:3000/api/user";
       axios
         .post(request, {}, { headers: { "auth-token": token } })
         .then((response) => {
@@ -114,6 +121,7 @@ export default {
             }else{
                 this.form.isActive = true;
             }
+            console.log(this.form);
         })
         .catch((error) => {
           console.log(error);
@@ -130,7 +138,7 @@ export default {
           isActive: this.form.isActive,
         };
         const response = await axios.put(
-          "http://localhost:3001/commercial/update/" + this.$route.params.id,
+          "http://localhost:3001/commercial/update",
           data, { headers: { "auth-token": localStorage.getItem("token") } }
         );
         this.$router.push("/users");
@@ -147,7 +155,7 @@ export default {
 .row{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
 }
@@ -165,6 +173,7 @@ export default {
   width: 80%;
   flex-direction: column;
   margin: 0 auto;
+  margin-top: 50px;
 }
 
 .card__content {
@@ -227,8 +236,7 @@ export default {
   justify-content: center;
   align-items: center;
   /* align table center */
-  margin-left: auto;
-  margin-right: auto;
+
   /* display grid border */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
