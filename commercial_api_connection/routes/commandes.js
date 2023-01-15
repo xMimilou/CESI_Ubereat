@@ -293,7 +293,41 @@ router.post("/user/:username", async (req, res) => {
         res.status(400).json({message: err.message});
     }
 });
-   
+
+router.post("/notification", async (req, res) => {
+    try{
+        
+        const token = req.header('auth-token').token;
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        var username = req.header('auth-token').username;
+
+        // get all commandes in mongo db with order.delivery = today and order.status != "delivered"
+        commandesModel.find({}, function (err, commandes) {
+            // if there is an error
+            if (err) {
+                res.status(400).json({message: err.message});
+            }
+            // if there is no error
+            else {
+                
+                // if commandes where username is equal to username in the token, check if status of the commandes was updated
+                commandes.forEach(function(commande) {
+                    if(commande.username == username){
+                        
+                    }
+                });
+                
+            }});
+    }
+});
 
 module.exports = router;
 

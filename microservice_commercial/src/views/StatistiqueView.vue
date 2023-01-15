@@ -4,12 +4,12 @@ import counters from '../components/widget/counters.vue'
 import graph from '../components/widget/graph.vue'
 import list from '../components/widget/list.vue'
 import axios from 'axios'
-
+import notificationVue from '@/components/notification.vue'
 
 </script>
 
 <template>
-
+    <notificationVue/>
 <div class="container">
     <div class="row">
         <div class="columns-3">
