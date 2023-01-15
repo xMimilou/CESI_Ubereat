@@ -1,2 +1,0 @@
-﻿# CESI_Ubereat
-test
