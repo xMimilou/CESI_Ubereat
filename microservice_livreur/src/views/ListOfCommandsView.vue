@@ -21,15 +21,17 @@ export default{
 
       ],
       Empty: "",
-      UndesirableIDS : []
+      UndesirableIDS : [],
+      token: localStorage.getItem('token'), // token should be stored securely
+      username: localStorage.getItem('username')
     }
   },mounted() {
   setInterval(() => {
-    this.getData();
+    //this.getData();
   }, 3000);
   //this.getData();
 },methods: {
-    getData() {
+    async getData() {
 
       // Partie des valeurs indésirables
       let id = localStorage.getItem("CommandID");
@@ -43,34 +45,28 @@ export default{
 
 
       // Récupération des données
-      axios.get('http://localhost:5500/posts')
-          .then(response => {
-            //console.log(response.data); 
-            this.Selectedtitle = response.data;
+      try {
+        const response = await axios.post("http://localhost:5502/commandes/all/available", {}, {
+          headers: {
+            "auth-token": this.token
+          }
+        });
+        this.Selectedtitle = response.data;
             //console.log(this.Selectedtitle);
             
             this.FiltredTable = [];
             this.Selectedtitle.forEach((element) => {
             
-            //console.log("Le statut : ");
-            //console.log(element.order.status);
-            if(element.order.status != "Delivered" && element.delivery_person.deliver_username == this.Empty)
-            {
-              
-              
               if(!this.UndesirableIDS.includes(element._id))
               {
                 this.FiltredTable.push(element);
               }
               
-            }
+      });
 
-            });
-
-           })
-          .catch(error => {
-            console.log(error);
-  });
+      } catch (error) {
+        console.error(error);
+      }
 
     }
     
