@@ -5,7 +5,7 @@ import Notification from './components/Notification.vue';
 </script>
 
 <template>
-
+  <Notification />
   <Header />
   <RouterView />
 </template>

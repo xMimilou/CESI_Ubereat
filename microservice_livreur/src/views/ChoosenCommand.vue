@@ -21,11 +21,14 @@ export default {
           BrutTable: [],
           token: localStorage.getItem('token'), // token should be stored securely
           isLoadding: true,
+          state: localStorage.setItem("state", "choosencommand")
       };
   },
   async mounted() {
     setInterval(async () => {
-      this.getData()
+      if (localStorage.getItem("state") == "choosencommand") {
+        this.getData();
+      }
     }, 3000)
   },
   OnSetup() {
@@ -64,7 +67,7 @@ export default {
   <div class="container" v-if="!isLoadding">
     <div class="row">
       <div class="col-3" v-for="item in FiltredTable" :key="item._id">
-        <ActiveOrders :RestaurantName="item.restaurant.name" :RestaurantAddress="item.restaurant.location" :CustomerUsername="item.username" :CustomerAddress="item.delivery_person.delivery_location" :TimePlaced="item.order.time_placed" :TimeDelivered="item.order.time_delivered"/>
+        <ActiveOrders :RestaurantName="item.restaurant.name" :RestaurantAddress="item.restaurant.location" :CustomerUsername="item.username" :CustomerAddress="item.delivery_person.delivery_location" :TimePlaced="item.order.time_placed" :TimeDelivered="item.order.time_delivered" :Status ="item.order.status" />
       </div>
     </div>
   </div>

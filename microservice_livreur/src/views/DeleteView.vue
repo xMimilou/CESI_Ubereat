@@ -15,13 +15,23 @@ export default{
   mounted(){
     var token = localStorage.getItem('token');
       console.log(token)
-      var request = 'http://localhost:3001/commercial/delete/' + this.$route.params.id
+      var request = 'http://localhost:3000/api/delete'
       axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
-        this.$router.push("/users");
+        this.LogoutUser();
       }).catch((error) => {
         console.log(error)
       })
      
+  },methods: {
+      LogoutUser(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+            localStorage.removeItem('state');
+            localStorage.removeItem('CommandID');
+            this.$router.push('/login');
+        }
+
   }
 }
 </script>

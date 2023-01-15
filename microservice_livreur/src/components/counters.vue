@@ -93,6 +93,10 @@ export default {
       default: "",
       required: false,
     },
+    id: {
+      type: String,
+      required: true,
+    }
   },
   data() {
     return {
@@ -224,6 +228,7 @@ export default {
             time_delivered: timeDelivered,
             statusDeliver: "En cours",
             usernameLivreur: this.username,
+            id : this.id
           },
           {
             headers: {

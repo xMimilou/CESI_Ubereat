@@ -22,13 +22,17 @@ export default {
       token: localStorage.getItem("token"), // token should be stored securely
       username: localStorage.getItem("username"),
       isLoadding: true,
+      intervalId: 0,
+      state : localStorage.setItem("state", "listofcommands")
     };
   },
   mounted() {
-    setInterval(() => {
-      this.getData();
+    this.intervalId = setInterval(() => {
+      if(localStorage.getItem("state") == "listofcommands")
+      {
+        this.getData();
+      }
     }, 3000);
-    //this.getData();
   },
   methods: {
     async getData() {
@@ -39,7 +43,7 @@ export default {
         this.UndesirableIDS.push(id);
         localStorage.setItem("CommandID", "");
       }
-      //console.log("Voici les id à ne pas afficher : ");
+      console.log("Voici les id à ne pas afficher : ");
       //console.log(this.UndesirableIDS);
 
       // Récupération des données
@@ -83,6 +87,7 @@ export default {
           :restaurant_adress="item.restaurant.location"
           :total_price="item.order.total_cost"
           :timeDelivered="item.order.time_placed"
+          :id = "item._id"
         />
       </div>
     </div>
