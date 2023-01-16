@@ -40,22 +40,19 @@ export default {
       console.log(this.FiltredTable);
     },
     async getCommandes(deliverUsername:string) {
-        try {
-      const response = await axios.get("http://localhost:5502/commandes/selected/deliver", {
-          headers: {
-              "auth-token": this.token
-          },
-          params: {
-              deliverUsername
-          }
-      });
-      this.FiltredTable = response.data;
-      console.log(this.FiltredTable);
-      this.isLoadding = false;
-  } catch (error) {
-      console.error(error);
-  }
-  },
+    try {
+        const response = await axios.post("http://localhost:5502/commandes/selected/deliver", { deliverUsername }, {
+            headers: {
+                "auth-token": this.token
+            }
+        });
+        this.FiltredTable = response.data;
+        console.log(this.FiltredTable);
+        this.isLoadding = false;
+    } catch (error) {
+        console.error(error);
+    }
+},
   },
   
   }

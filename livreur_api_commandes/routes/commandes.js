@@ -36,6 +36,37 @@ router.get("/count", async (req, res) => {
     }
 });
 
+
+router.post("/count/username", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        const user = req.body.username;
+        //console.log(user);
+        // count all commandes in the database mongo
+        commandesModel.countDocuments({'username': {$eq: user}}, function (err, count) {
+            if (err) {
+                res.status(400).json({message: err.message});
+            } else {
+
+                res.status(200).json(count);
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
 router.get("/all", async (req, res) => {
     try{
         const token = req.header('auth-token');
@@ -91,7 +122,7 @@ router.get("/all/available", async (req, res) => {
     }
 });
 
-router.get("/all/username", async (req, res) => {
+router.post("/all/username", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -119,16 +150,20 @@ router.get("/all/username", async (req, res) => {
     }
 });
 
-router.get("/selected", async (req, res) => {
-    try {
+router.post("/selected", async (req, res) => {
+    try{
         const token = req.header('auth-token');
+
         // check if the token is valid
+
         if(!token) return res.status(401).json({message: "Access denied"});
+
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        const id = req.query.id;
-        console.log(id);
+        
+        const { id } = req.body;
+        const status = "En cours";
         commandesModel.find({
             '_id':{$eq: id}
         }, (err, docs) => {
@@ -138,13 +173,14 @@ router.get("/selected", async (req, res) => {
                 res.status(500).send({error: 'Error getting data from the database'});
             }
         });
-    } catch (error) {
-        res.status(400).json({message: error.message});
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
     }
 });
 
-router.get("/selected/deliver", async (req, res) => {
-    try {
+router.post("/selected/deliver", async (req, res) => {
+    try{
         const token = req.header('auth-token');
 
         // check if the token is valid
@@ -154,16 +190,23 @@ router.get("/selected/deliver", async (req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        const deliverUsername = req.query.deliverUsername;
-        commandesModel.find({'delivery_person.deliver_username':{$eq: deliverUsername}}, (err, docs) => {
+
+        const deliverUsername =  req.body.deliverUsername;
+        const status = "Delivered";
+        //console.log(deliverUsername + " " + status);
+        commandesModel.find({
+            'delivery_person.deliver_username':{$eq: deliverUsername},
+            'order.status': {$ne: status}
+        }, (err, docs) => {
             if(!err) res.send(docs);
             else {
                 console.log("Error to get data : " + err);
                 res.status(500).send({error: 'Error getting data from the database'});
             }
         });
-    } catch (error) {
-        res.status(400).json({message: error.message});
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
     }
 });
 
@@ -279,28 +322,6 @@ router.put("/update/validation/client", async (req, res) => {
         res.json({message: "Code Client Valide"});
     } catch(err){
         res.status(400).json({message: err.message});
-    }
-});
-
-router.delete("/:id", async (req, res) => {
-    try {
-        const token = req.header('auth-token');
-        // check if the token is valid
-        if(!token) return res.status(401).json({message: "Access denied"});
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-        const id = req.params.id;
-        commandesModel.deleteOne({_id: id}, (err) => {
-            if (!err) {
-                res.send({message: "Commande supprimée avec succès"});
-            } else {
-                console.log("Error to delete data : " + err);
-                res.status(500).send({error: 'Error deleting data from the database'});
-            }
-        });
-    } catch (error) {
-        res.status(400).json({message: error.message});
     }
 });
 

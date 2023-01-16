@@ -157,7 +157,7 @@ export default {
         total_price,
         timeDelivered
       );
-      this.$router.replace({ path: "/choosencommand" });
+      this.$router.replace({ path: "/acceptedcommands" });
     },
     onRemoveCommand(
       username_customer: string,
@@ -184,25 +184,20 @@ export default {
       total_price: string,
       timeDelivered: string
     ) {
+      console.log(this.id);
       try {
-    const response = await axios.get(
-      "http://localhost:5502/commandes/selected",
-      {
-        headers: {
-          "auth-token": this.token,
-        },
-        params: {
-          id: this.id
-        }
-      }
-    );
-    this.commandes = response.data[0];
-    var id = this.commandes._id;
-    localStorage.setItem("CommandID", id);
-    //console.log(this.commandes._id);
-  } catch (error) {
-    console.error(error);
-  }
+        const response = await axios.post("http://localhost:5502/commandes/selected", { id: this.id }, {
+            headers: {
+                "auth-token": this.token
+            }
+        });
+        this.commandes = response.data[0];
+        var id = this.commandes._id;
+        localStorage.setItem("CommandID", id);
+        console.log(this.commandes);
+    } catch (error) {
+        console.error(error);
+    }
     },
     async updateCommandesStatus(
       username_customer: string,
