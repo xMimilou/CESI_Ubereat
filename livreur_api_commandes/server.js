@@ -25,10 +25,10 @@ app.use(cors({
 /* Routes */
 
 const commandes = require("./routes/commandes")
-const commandesSuivies = require("./routes/commandesSuivies")
+
 
 app.use('/commandes', commandes)
-app.use('/commandesSuivies', commandesSuivies)
+
 
 const port = 5502;
 app.listen(port, () => {

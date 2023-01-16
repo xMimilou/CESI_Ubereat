@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
   import Notification from '../components/Notification.vue';
-import CountersChoosenCommand from '@/components/countersChoosenCommand.vue';
 import ActiveOrders from '@/components/ActiveOrders.vue';
 
 import axios from 'axios';
@@ -12,7 +11,7 @@ import axios from 'axios';
 
 <script lang="ts">
 export default {
-  name: "choosenCommand",
+  name: "acceptedCommandsView",
   data() {
       return {
           receivedUsername: "",
@@ -41,18 +40,21 @@ export default {
       console.log(this.FiltredTable);
     },
     async getCommandes(deliverUsername:string) {
-    try {
-        const response = await axios.post("http://localhost:5502/commandes/selected/deliver", { deliverUsername }, {
-            headers: {
-                "auth-token": this.token
-            }
-        });
-        this.FiltredTable = response.data;
-        console.log(this.FiltredTable);
-        this.isLoadding = false;
-    } catch (error) {
-        console.error(error);
-    }
+        try {
+      const response = await axios.get("http://localhost:5502/commandes/selected/deliver", {
+          headers: {
+              "auth-token": this.token
+          },
+          params: {
+              deliverUsername
+          }
+      });
+      this.FiltredTable = response.data;
+      console.log(this.FiltredTable);
+      this.isLoadding = false;
+  } catch (error) {
+      console.error(error);
+  }
   },
   },
   

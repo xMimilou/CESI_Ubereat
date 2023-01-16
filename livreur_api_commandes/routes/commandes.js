@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const { commandesModel } = require('../models/commandesModels');
 const { default: mongoose } = require('mongoose');
 
-router.post("/count", async (req, res) => {
+router.get("/count", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -36,7 +36,7 @@ router.post("/count", async (req, res) => {
     }
 });
 
-router.post("/all", async (req, res) => {
+router.get("/all", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -61,7 +61,7 @@ router.post("/all", async (req, res) => {
     }
 });
 
-router.post("/all/available", async (req, res) => {
+router.get("/all/available", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -91,7 +91,7 @@ router.post("/all/available", async (req, res) => {
     }
 });
 
-router.post("/all/username", async (req, res) => {
+router.get("/all/username", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -119,29 +119,18 @@ router.post("/all/username", async (req, res) => {
     }
 });
 
-router.post("/selected", async (req, res) => {
-    try{
+router.get("/selected", async (req, res) => {
+    try {
         const token = req.header('auth-token');
-
         // check if the token is valid
-
         if(!token) return res.status(401).json({message: "Access denied"});
-
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-
-        const { username_customer, costumer_adress, restaurant_name, restaurant_adress, total_price, timeDelivered } = req.body;
-        const status = "En cours";
-        console.log(username_customer + " " + costumer_adress + " " + restaurant_name + " " + restaurant_adress + " " + total_price + " " + timeDelivered);
+        const id = req.query.id;
+        console.log(id);
         commandesModel.find({
-            'delivery_person.deliver_username':{$eq: ""},
-            'order.status': {$eq: status},
-            'username': {$eq: username_customer},
-            'delivery_person.delivery_location': {$eq: costumer_adress},
-            'restaurant.name': {$eq: restaurant_name},
-            'restaurant.location': {$eq: restaurant_adress},
-            'order.total_cost': {$eq: total_price}
+            '_id':{$eq: id}
         }, (err, docs) => {
             if(!err) res.send(docs);
             else {
@@ -149,14 +138,13 @@ router.post("/selected", async (req, res) => {
                 res.status(500).send({error: 'Error getting data from the database'});
             }
         });
-        
-    } catch(err){
-        res.status(400).json({message: err.message});
+    } catch (error) {
+        res.status(400).json({message: error.message});
     }
 });
 
-router.post("/selected/deliver", async (req, res) => {
-    try{
+router.get("/selected/deliver", async (req, res) => {
+    try {
         const token = req.header('auth-token');
 
         // check if the token is valid
@@ -166,23 +154,16 @@ router.post("/selected/deliver", async (req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-
-        const deliverUsername =  req.body.deliverUsername;
-        const status = "Delivered";
-        //console.log(deliverUsername + " " + status);
-        commandesModel.find({
-            'delivery_person.deliver_username':{$eq: deliverUsername},
-            'order.status': {$ne: status}
-        }, (err, docs) => {
+        const deliverUsername = req.query.deliverUsername;
+        commandesModel.find({'delivery_person.deliver_username':{$eq: deliverUsername}}, (err, docs) => {
             if(!err) res.send(docs);
             else {
                 console.log("Error to get data : " + err);
                 res.status(500).send({error: 'Error getting data from the database'});
             }
         });
-        
-    } catch(err){
-        res.status(400).json({message: err.message});
+    } catch (error) {
+        res.status(400).json({message: error.message});
     }
 });
 
@@ -301,7 +282,27 @@ router.put("/update/validation/client", async (req, res) => {
     }
 });
 
-
+router.delete("/:id", async (req, res) => {
+    try {
+        const token = req.header('auth-token');
+        // check if the token is valid
+        if(!token) return res.status(401).json({message: "Access denied"});
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        const id = req.params.id;
+        commandesModel.deleteOne({_id: id}, (err) => {
+            if (!err) {
+                res.send({message: "Commande supprimée avec succès"});
+            } else {
+                console.log("Error to delete data : " + err);
+                res.status(500).send({error: 'Error deleting data from the database'});
+            }
+        });
+    } catch (error) {
+        res.status(400).json({message: error.message});
+    }
+});
 
 module.exports = router;
 

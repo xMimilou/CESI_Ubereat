@@ -164,7 +164,7 @@ router.put("/update", async (req, res) => {
     }
 });
 
-router.post("/user", async (req, res) => {
+router.get("/user", async (req, res) => {
     try{
         const token = req.header('auth-token');
 

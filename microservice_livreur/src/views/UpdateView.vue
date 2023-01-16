@@ -96,10 +96,9 @@ export default {
       var token = localStorage.getItem("token");
       var request = "http://localhost:3000/api/user";
       axios
-        .post(request, {}, { headers: { "auth-token": token } })
+        .get(request, { headers: { "auth-token": token } })
         .then((response) => {
-            this.form = response.data;
-            console.log(this.form);
+            this.form = response.data[0];
         })
         .catch((error) => {
           console.log(error);

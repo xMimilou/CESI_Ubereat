@@ -25,9 +25,9 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/choosencommand',
-      name: 'ChoosenCommand',
-      component: () => import('../views/ChoosenCommand.vue'),
+      path: '/acceptedcommands',
+      name: 'AcceptedCommands',
+      component: () => import('../views/AcceptedCommandsView.vue'),
       meta: { requiresAuth: true }
     },
     {

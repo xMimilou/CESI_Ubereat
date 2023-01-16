@@ -12,26 +12,22 @@ export default {
     return {
       commandes: [],
       token: localStorage.getItem('token'), // token should be stored securely
-      username: localStorage.getItem('username')
+      username: localStorage.getItem('username'),
+      id : "63c503b2bb246effadcb2c7c"
     };
   },
   methods: {
     async getCommandes() {
       try {
-        console.log(this.username);
-        const response = await axios.post("http://localhost:5502/commandes/all/username", {
-          username : this.username
-        }, {
-          headers: {
-            "auth-token": this.token
-          }
-        });
-        this.commandes = response.data;
-        console.log(this.commandes);
-      } catch (error) {
-        console.error(error);
+    await axios.delete("http://localhost:5502/commandes/" + this.id, {
+      headers: {
+        "auth-token": this.token,
       }
-    }
+    });
+    console.log("Commande supprimée avec succès");
+  } catch (error) {
+    console.error(error);
   }
+    }}
 };
 </script>

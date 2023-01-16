@@ -42,7 +42,7 @@
     </div>
 </template>
 <script lang="ts">
-import ChoosenCommandVue from '@/views/ChoosenCommand.vue';
+import ChoosenCommandVue from '@/views/AcceptedCommandsView.vue';
 import axios from "axios";
 
 

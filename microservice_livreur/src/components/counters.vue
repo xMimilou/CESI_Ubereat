@@ -58,7 +58,7 @@
 import Vue from "vue";
 import axios from "axios";
 import counters from "./counters.vue";
-import ChoosenCommandVue from "@/views/ChoosenCommand.vue";
+import AcceptedCommands from "@/views/AcceptedCommandsView.vue";
 import LisOfCommandsView from "@/views/ListOfCommandsView.vue";
 
 export default {
@@ -185,28 +185,24 @@ export default {
       timeDelivered: string
     ) {
       try {
-        const response = await axios.post(
-          "http://localhost:5502/commandes/selected",
-          {
-            username_customer,
-            costumer_adress,
-            restaurant_name,
-            restaurant_adress,
-            total_price,
-            timeDelivered,
-          },
-          {
-            headers: {
-              "auth-token": this.token,
-            },
-          }
-        );
-        this.commandes = response.data;
-        localStorage.setItem("CommandID", this.commandes[0]._id);
-        console.log(this.commandes[0]);
-      } catch (error) {
-        console.error(error);
+    const response = await axios.get(
+      "http://localhost:5502/commandes/selected",
+      {
+        headers: {
+          "auth-token": this.token,
+        },
+        params: {
+          id: this.id
+        }
       }
+    );
+    this.commandes = response.data[0];
+    var id = this.commandes._id;
+    localStorage.setItem("CommandID", id);
+    //console.log(this.commandes._id);
+  } catch (error) {
+    console.error(error);
+  }
     },
     async updateCommandesStatus(
       username_customer: string,
@@ -242,7 +238,7 @@ export default {
       }
     },
   },
-  components: { ChoosenCommandVue },
+  components: { AcceptedCommands },
 };
 </script>
 

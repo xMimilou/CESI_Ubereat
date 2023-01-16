@@ -39,27 +39,26 @@ export default {
       this.showNotification = false;
     },
     async getData() {
-      try {
-        const response = await axios.post(
-          "http://localhost:5502/commandes/count",
-          {},
-          {
-            headers: {
-              "auth-token": this.token,
-            },
-          }
-        );
-
-        if(this.count != response.data)
-        {
-          this.showNotification = true;
-          this.count = response.data;
-          console.log(this.count);
-        }
-      } catch (error) {
-        console.error(error);
+  try {
+    const response = await axios.get(
+      "http://localhost:5502/commandes/count",
+      {
+        headers: {
+          "auth-token": this.token,
+        },
       }
+    );
+
+    if(this.count != response.data)
+    {
+      this.showNotification = true;
+      this.count = response.data;
+      console.log(this.count);
     }
+  } catch (error) {
+    console.error(error);
+  }
+}
 }
 }
 </script>
