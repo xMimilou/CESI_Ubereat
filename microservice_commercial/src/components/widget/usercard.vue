@@ -158,7 +158,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin: 5px;
 }
 
@@ -252,7 +252,7 @@ th {
   height: 80%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   /* add vertical scrool bar */
   
 }

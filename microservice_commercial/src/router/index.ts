@@ -62,6 +62,11 @@ const router = createRouter({
       path: "/suivis-livraison",
       name: "suivis-livraison",
       component: () => import('../views/LivraisonView.vue'),
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import('../views/ProfileView.vue'),
     }
   ]
 })
