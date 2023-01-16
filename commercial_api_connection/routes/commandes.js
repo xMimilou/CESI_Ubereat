@@ -330,7 +330,7 @@ router.post("/notification", async (req, res) => {
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
-                console.log("--------------------");
+                //console.log("--------------------");
                 isNewStatus = "";
                 // if commandes where username is equal to username in the token, check if status of the commandes was updated if true send notification with the new status
                 commandes.forEach(function(commande) {
@@ -344,7 +344,7 @@ router.post("/notification", async (req, res) => {
                                     var todayTime = today.slice(11,16);
                                     var commandeTime = commande.order.time_delivered.slice(11,16);
                                     if(todayTime < commandeTime){
-                                        console.log("notification sent");
+                                        //console.log("notification sent");
                                         isNewStatus = commande.order.status;
                                     }
                                 } catch(err){
