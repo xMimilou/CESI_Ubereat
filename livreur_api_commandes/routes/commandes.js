@@ -9,6 +9,32 @@ const jwt = require('jsonwebtoken');
 const { commandesModel } = require('../models/commandesModels');
 const { default: mongoose } = require('mongoose');
 
+router.post("/count", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // count all commandes in the database mongo
+        commandesModel.countDocuments({}, function (err, count) {
+            if (err) {
+                res.status(400).json({message: err.message});
+            } else {
+
+                res.status(200).json(count);
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
 
 router.post("/all", async (req, res) => {
     try{
@@ -114,11 +140,11 @@ router.post("/selected/deliver", async (req, res) => {
         });
 
         const deliverUsername =  req.body.deliverUsername;
-        const status = "En cours";
+        const status = "Delivered";
         //console.log(deliverUsername + " " + status);
         commandesModel.find({
             'delivery_person.deliver_username':{$eq: deliverUsername},
-            'order.status': {$eq: status}
+            'order.status': {$ne: status}
         }, (err, docs) => {
             if(!err) res.send(docs);
             else {
@@ -144,16 +170,17 @@ router.put("/update", async (req, res) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
 
-        const {username, costumerAddress, restaurantAdress, restaurantName, total_price, time_delivered, statusDeliver, usernameLivreur} = req.body;
-        console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + total_price + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur);
-
+        const {username, costumerAddress, restaurantAdress, restaurantName, total_price, time_delivered, statusDeliver, usernameLivreur, id} = req.body;
+        //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + total_price + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur);
+        console.log(id);
         const commande = await commandesModel.findOne({
             'username': {$eq: username},
             'delivery_person.deliver_username': {$eq: ""},
             'delivery_person.delivery_location': {$eq: costumerAddress},
             'restaurant.location': {$eq: restaurantAdress},
             'restaurant.name': {$eq: restaurantName},
-            'order.total_cost': {$eq: total_price}
+            'order.total_cost': {$eq: total_price},
+            '_id': {$eq: id}
 
 
         });

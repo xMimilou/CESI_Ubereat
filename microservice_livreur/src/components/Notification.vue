@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <notification v-if="showNotification" :message="notificationMessage" />
+  <div class="notification" v-if="showNotification">
+      <div class="notification__content">
+          <div class="notification__content__title">
+              <h3> Nouvelle commande disponible </h3>
+              <button class="notification__content__title__close" @click="close">X</button>
+          </div>
+      </div>
   </div>
 </template>
 <script lang="ts">
@@ -17,34 +22,104 @@ export default {
   data() {
     return {
       showNotification: false,
-      notificationMessage: ''
+      notificationMessage: '',
+      title: '',
+      token: localStorage.getItem("token"),
+      count:''
     }
   },
-  created() {
-    source = axios.CancelToken.source();
+  mounted() {
+    setInterval(() => {
+        this.getData();
+    }, 10000);
+    this.getData();
+  },methods: {
+  close()
+    {
+      this.showNotification = false;
+    },
+    async getData() {
+      try {
+        const response = await axios.post(
+          "http://localhost:5502/commandes/count",
+          {},
+          {
+            headers: {
+              "auth-token": this.token,
+            },
+          }
+        );
 
-    const checkForNewOrders = () => {
-      axios.get('http://localhost:5500/posts', {
-        cancelToken: source.token
-      }).then(response => {
-        const newOrderReceived = response.data.some((order: Order) => !order.seen);
-        if (newOrderReceived) {
+        if(this.count != response.data)
+        {
           this.showNotification = true;
-          this.notificationMessage = 'Nouvelle commande reçue!';
-          setTimeout(() => {
-            this.showNotification = false;
-          }, 3000);
+          this.count = response.data;
+          console.log(this.count);
         }
-      }).catch(error => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.error(error);
+      }
     }
-    //console.log('Livreur created');
-    checkForNewOrders();
-    setInterval(checkForNewOrders, 3000);
-  },
-  beforeDestroy() {
-    source.cancel();
-  }
-};
+}
+}
 </script>
+
+
+<style scoped>
+/* display notification at right top with appearing animation and desepear animation */
+.notification {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #ccc;
+    animation: appear 0.5s ease-in-out;
+    z-index: 999;
+}
+
+.notification__content {
+    padding: 10px;
+}
+
+.notification__content__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification__content__title__close {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.notification__content__body {
+    margin-top: 10px;
+}
+
+@keyframes appear {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes disappear {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+
+</style>
+

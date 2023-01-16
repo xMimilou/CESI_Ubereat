@@ -131,7 +131,7 @@ router.get("/all", async (req, res) => {
 router.put("/update", async (req, res) => {
     try{
 
-        const { first_name, last_name, username, email  } = req.body;
+        var { first_name, last_name, email  } = req.body;
 
         const token = req.header('auth-token');
 
@@ -144,16 +144,20 @@ router.put("/update", async (req, res) => {
         });
 
         // retrieve user id from token
-        const decoded = jwt.verify(token, 'secret');
+        var decoded = parseInt(jwt.verify(token, 'secret')._id);
+        console.log(decoded);
+        console.log(first_name);
+        console.log(last_name);
+        console.log(email);
 
         // get actual datetime in format YYYY-MM-DD HH:MM:SS
-        const date = new Date();
-
-
+        var date = new Date();
+        var updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        
         // update user
-        const sqlQuery = `UPDATE user SET first_name = ?, last_name = ?, username = ?, email = ?, updated_at = ? WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [first_name, last_name, username, email, date, decoded._id]);
-        res.status(200).json(result);
+        const sqlQuery = `UPDATE user SET first_name = ?, last_name = ?, email = ?, updated_at = ? WHERE iduser = ?`;
+        const result = await pool.query(sqlQuery, [first_name, last_name, email, updated_at, decoded]);
+        res.status(200).json({message: "User updated successfully"});
 
     } catch(err){
         res.status(400).json({message: err.message});
@@ -192,7 +196,7 @@ router.post("/user", async (req, res) => {
 });
         
 
-router.delete("/delete/:id", async (req, res) => {
+router.post("/delete", async (req, res) => {
     try{
         
         const token = req.header('auth-token');
@@ -206,12 +210,12 @@ router.delete("/delete/:id", async (req, res) => {
         });
 
         // retrieve the userid from the token
-        const decoded = jwt.verify(token, 'secret');
+        var decodedID = parseInt(jwt.verify(token, 'secret')._id);
 
         // delete user
         const sqlQuery = `DELETE FROM user WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [decoded._id]);
-        res.status(200).json(result);
+        const result = await pool.query(sqlQuery, [decodedID]);
+        res.status(200).json({message: "User deleted successfully"});
     } catch(err){
         res.status(400).json({message: err.message});
     }

@@ -6,7 +6,7 @@
         <h3>{{ form.username }}</h3>
       </div>
       <div class="card_content">
-        <form @submit.prevent="createNewUser">
+        <form @submit.prevent="updateUser">
         <div class="row">
             <div class="form-group">
               <label>Nom</label>
@@ -45,27 +45,9 @@
           </div>
 
         </div>
-      
-        <div class="form-group">
-          <label>Role</label>
-          <select
-            class="form-control"
-            v-model="form.role"
-            id="role"
-            name="role"
-          >
-            <option value="client">Client</option>
-            <option value="restaurateur">Restaurateur</option>
-            <option value="livreur">Livreur</option>
-            <option value="commercial">Commercial</option>
-          </select>
-        </div>
 
         <!-- add check box pour suspendre un compte -->
-        <div class="form-group">
-          <label>Compte actif</label>
-          <input type="checkbox" v-model="form.isActive" />
-        </div>
+       
         <div class="row">
         <button class="btn btn-primary btn-block" type="submit">
           Modifier
@@ -95,18 +77,19 @@ export default {
     return {
       // define variable
       title: "",
+      username: localStorage.getItem("username"),
       form: {
         first_name: "",
         last_name: "",
         username: "",
-        email: "",
-        role: "",
-        isActive: true,
+        email: ""
       },
+      state: localStorage.setItem("state","UpdateDelete")
     };
   },
   mounted() {
     this.getUser();
+    
   },
   methods: {
     getUser() {
@@ -116,33 +99,29 @@ export default {
         .post(request, {}, { headers: { "auth-token": token } })
         .then((response) => {
             this.form = response.data;
-            if(this.form.isActive == 0){
-                this.form.isActive = false;
-            }else{
-                this.form.isActive = true;
-            }
             console.log(this.form);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    async createNewUser() {
+    async updateUser() {
       try {
         /* send to api http://localhost:3000/users data nom and prenom as json in body with post method */
         var data = {
           first_name: this.form.first_name,
           last_name: this.form.last_name,
-          email: this.form.email,
-          role: this.form.role,
-          isActive: this.form.isActive,
+          email: this.form.email
         };
         const response = await axios.put(
-          "http://localhost:3001/commercial/update",
+          "http://localhost:3000/api/update",
           data, { headers: { "auth-token": localStorage.getItem("token") } }
         );
-        this.$router.push("/users");
-      } catch (error) {
+      this.form.email = "";
+      this.form.first_name = "";
+      this.form.last_name = "";
+      }    
+      catch (error) {
         console.error(error);
       }
     },

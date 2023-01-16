@@ -5,7 +5,6 @@
         <RouterLink to="/orders" v-if="isLoggedIn" >Commandes</RouterLink>
         <RouterLink to="/choosencommand" v-if="isLoggedIn" >Commandes en cours </RouterLink>
 
-        <RouterLink to="/users" v-if="isLoggedIn">Utilisateur</RouterLink>
       </nav>
       <!-- if jwt is not set -->
       <nav class="end" v-if="!isLoggedIn">

@@ -18,20 +18,26 @@
           </div>
         </div>
       </div>
-        
-        
-        <div v-if="!showElement">
-        
-        <h1> Nom du client : {{  CustomerUsername }}</h1>
-        <h1> Adresse du client : {{  CustomerAddress }}</h1>
-        <h1> Date de la commande : {{  TimePlaced }}</h1>
-        <h1> Date de la livraison prévue : {{  TimeDelivered }}</h1>
-        <h3> {{ ErrorDisplay }}</h3>
-        <input type="text" placeholder="Entrez le code de la commande" v-model="inputContentClient" />
 
-        <button class="button" @click="doneOrder">Terminer la livraison </button>
 
+      <div v-if="!showElement">
+        <div class="counters__title">
+          <h3>{{ CustomerUsername }}</h3>
         </div>
+        <div class="container">
+          <div class="col-4"><p> Adresse du client : {{  CustomerAddress }}</p></div>
+          <div class="col-4"><p>Date de la commande : {{  TimePlaced }}</p></div>
+          <div class="col-4">Date de la livraison prévue : {{  TimeDelivered }}</div>
+          <div class="col-4 error">{{ ErrorDisplay }}</div>
+        </div>
+        <input class="input-text" type="text" placeholder="Entrez le code de la commande" v-model="inputContentClient" />  
+        <div class="bottom">
+          <div class="row">
+            <button class="button" @click="doneOrder">Terminer la livraison</button>
+          </div>
+        </div>
+      </div>
+        
        
     </div>
 </template>
@@ -68,9 +74,22 @@ export default{
         {
             type: String,
             required: true
+        },
+        Status:
+        {
+            type: String,
+            required: true
         }
 
         
+    },
+    mounted() {
+      console.log("L'état vaut " + this.Status);
+        if(this.Status == "En cours"){
+          this.showElement = true;
+        }else if(this.Status == "Livraison"){
+          this.showElement = false;
+        }
     },
     data() {
         return {
@@ -128,6 +147,7 @@ export default{
               }
             } catch (error) {
               console.error(error);
+              this.ErrorDisplay = "Code invalide";
             }
             }else if(etape == "2")
             {
@@ -157,6 +177,7 @@ export default{
               }
             } catch (error) {
               console.error(error);
+              this.ErrorDisplay = "Code invalide";
             }
             }
 
