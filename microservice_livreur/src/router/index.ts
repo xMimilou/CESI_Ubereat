@@ -47,9 +47,9 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue')
     },
     {
-      path: "/update/:id",
-      name: "update",
-      component: () => import('../views/UpdateView.vue'),
+      path: "/profiled",
+      name: "profie",
+      component: () => import('../views/ProfileView.vue'),
       meta: { requiresAuth: true }
     },
     {

@@ -91,6 +91,34 @@ router.post("/all/available", async (req, res) => {
     }
 });
 
+router.post("/all/username", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        var username = req.body.username;
+        commandesModel.find({
+            'username':{$eq: username}
+        }, (err, docs) => {
+            if(!err) res.send(docs);
+            else {
+                console.log("Error to get data : " + err);
+                res.status(500).send({error: 'Error getting data from the database'});
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
 router.post("/selected", async (req, res) => {
     try{
         const token = req.header('auth-token');
@@ -272,6 +300,8 @@ router.put("/update/validation/client", async (req, res) => {
         res.status(400).json({message: err.message});
     }
 });
+
+
 
 module.exports = router;
 
