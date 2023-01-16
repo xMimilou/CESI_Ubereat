@@ -88,7 +88,7 @@ router.post("/tokenCheckup", async(req, res) => {
         // check jwt token
         
         const token = req.header('auth-token');
-        console.log(token);
+        //console.log(token);
 
         // check if the token is valid
 
@@ -97,7 +97,6 @@ router.post("/tokenCheckup", async(req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-        console.log("Access granted");
         res.status(200).json({message: "Access granted"});
     }
     catch(err){
@@ -145,10 +144,10 @@ router.put("/update", async (req, res) => {
 
         // retrieve user id from token
         var decoded = parseInt(jwt.verify(token, 'secret')._id);
-        console.log(decoded);
-        console.log(first_name);
-        console.log(last_name);
-        console.log(email);
+        //console.log(decoded);
+        //console.log(first_name);
+        //console.log(last_name);
+        //console.log(email);
 
         // get actual datetime in format YYYY-MM-DD HH:MM:SS
         var date = new Date();
@@ -262,6 +261,37 @@ router.put('/resetpassword', async (req, res) => {
     }
 });
 
+
+router.get('/user', async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        // retrieve the userid from the token
+        const decoded = jwt.verify(token, 'secret');
+
+        // return user from database
+
+        const sqlQuery = `SELECT * FROM user WHERE iduser = ?`;
+        var result = await pool.query(sqlQuery, [decoded._id]);
+        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
+        var date = new Date(result[0].created_at);
+        result[0].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        var date = new Date(result[0].updated_at);
+        result[0].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+
+        res.status(200).json(result);
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
 
 
 

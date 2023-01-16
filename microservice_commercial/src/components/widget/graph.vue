@@ -165,7 +165,7 @@ export default {
   height: 80%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .counters__content > * {
