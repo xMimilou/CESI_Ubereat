@@ -87,6 +87,7 @@ router.get("/list/restaurateur", async(req, res) => {
             // change date in created_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
             query_result[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
         }
+        
         res.status(200).json(query_result);
     }catch(err){
         res.status(400).json({message: err.message});
