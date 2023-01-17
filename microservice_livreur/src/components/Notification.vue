@@ -32,14 +32,17 @@ export default {
     setInterval(() => {
         this.getData();
     }, 10000);
-    this.getData();
   },methods: {
   close()
     {
       this.showNotification = false;
     },
     async getData() {
-  try {
+      console.log(localStorage.getItem("EtatNotifs"));
+      if(localStorage.getItem("EtatNotifs")== "true")
+      {
+      try {
+
     const response = await axios.get(
       "http://localhost:5502/commandes/count",
       {
@@ -48,16 +51,26 @@ export default {
         },
       }
     );
+    console.log(response.data + " " +  this.count);
+    if(this.count =="")
+      {
+        this.count = response.data;
+        console.log(this.count);
+      }else 
+      {
+        if(this.count < response.data)
+      {
+        this.showNotification = true;
+        this.count = response.data;
+        console.log(this.count);
+      }
 
-    if(this.count != response.data)
-    {
-      this.showNotification = true;
-      this.count = response.data;
-      console.log(this.count);
     }
+
   } catch (error) {
     console.error(error);
   }
+}
 }
 }
 }
