@@ -73,9 +73,9 @@ export default {
   methods: {
     getList() {
       var token = localStorage.getItem("token");
-      var request = "http://localhost:3001/commercial/get/"+ this.$route.params.query +"/"+ this.$route.params.page;
+      var request = "http://localhost/admin/get/"+ this.$route.params.query +"/"+ this.$route.params.page;
       axios
-        .post(request, {}, { headers: { "auth-token": token } })
+        .get(request, { headers: { "auth-token": token } })
         .then((response) => {
             this.total_pages = response.data.pages;
             this.lists = response.data.result2;

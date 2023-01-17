@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import axios from 'axios';
-// delete user by query the api http://localhost:3001/commercial/delete/:id with jwt token
 export default{
   name: "delete",
   data() {
@@ -13,10 +12,10 @@ export default{
     }
   },
   mounted(){
-    var token = localStorage.getItem('token');
+      var token = localStorage.getItem('token');
       console.log(token)
-      var request = 'http://localhost:3001/commercial/delete/' + this.$route.params.id
-      axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+      var request = 'http://localhost/admin/delete/' + this.$route.params.id
+      axios.delete(request, { headers: { 'auth-token': token } }).then((response) => {
         this.$router.push("/users");
       }).catch((error) => {
         console.log(error)

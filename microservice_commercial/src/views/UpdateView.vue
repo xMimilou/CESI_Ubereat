@@ -104,12 +104,12 @@ export default {
   methods: {
     getList() {
       var token = localStorage.getItem("token");
-      var request = "http://localhost:3001/commercial/get/" + this.$route.params.id;
+      var request = "http://localhost/admin/get/" + this.$route.params.id;
       axios
-        .post(request, {}, { headers: { "auth-token": token } })
+        .get(request, { headers: { "auth-token": token } })
         .then((response) => {
             this.form = response.data;
-            if(this.form.isActive == 0){
+            if(this.form.isActive == true){
                 this.form.isActive = false;
             }else{
                 this.form.isActive = true;
@@ -130,7 +130,7 @@ export default {
           isActive: this.form.isActive,
         };
         const response = await axios.put(
-          "http://localhost:3001/commercial/update/" + this.$route.params.id,
+          "http://localhost/admin/update/" + this.$route.params.id,
           data, { headers: { "auth-token": localStorage.getItem("token") } }
         );
         this.$router.push("/users");
@@ -155,9 +155,7 @@ export default {
 
 .card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 340px;
+  height: 350px;
   background: var(--color-widget);
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

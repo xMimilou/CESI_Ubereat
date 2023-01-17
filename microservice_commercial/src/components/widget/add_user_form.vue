@@ -148,11 +148,10 @@ export default {
           role: this.form.role,
         };
         const response = await axios.post(
-          "http://localhost:3000/api/register",
+          "http://localhost/admin/register",
           data
         );
         console.log(response);
-        this.$router.push("/login");
       } catch (error) {
         console.error(error);
       }

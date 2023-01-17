@@ -22,7 +22,7 @@ const router = createRouter({
       path: '/statistique',
       name: 'statistique',
       component: () => import('../views/StatistiqueView.vue'),
-      meta: { requiresAuth: true }
+      //meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -38,25 +38,25 @@ const router = createRouter({
       path: "/users",
       name: "users",
       component: () => import('../views/UsersView.vue'),
-      meta: { requiresAuth: true }
+      //meta: { requiresAuth: true }
     },
     {
       path: "/update/:id",
       name: "update",
       component: () => import('../views/UpdateView.vue'),
-      meta: { requiresAuth: true }
+      //meta: { requiresAuth: true }
     },
     {
       path: "/delete/:id",
       name: "delete",
       component: () => import('../views/DeleteView.vue'),
-      meta: { requiresAuth: true }
+      //meta: { requiresAuth: true }
     },
     {
       path: "/display/:query/:page",
       name: "display",
       component: () => import('../views/DisplayView.vue'),
-      meta: { requiresAuth: true }
+      //meta: { requiresAuth: true }
     },
     {
       path: "/suivis-livraison",

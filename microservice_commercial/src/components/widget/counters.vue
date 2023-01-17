@@ -82,9 +82,9 @@ export default{
   methods: {
     getCount() {
       var token = localStorage.getItem('token');
-      console.log(token)
-      var request = 'http://localhost:3001' + this.query
-      axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+      var request = 'http://localhost' + this.query
+
+      axios.get(request,{ headers: { 'auth-token': token } }).then((response) => {
         this.count = response.data
         this.isLoading = false
       }).catch((error) => {

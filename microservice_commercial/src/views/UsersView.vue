@@ -11,7 +11,7 @@ import axios from "axios";
       <div class="columns-6">
         <userlist
           title="Clients"
-          query="/administration/list/clients"
+          query="/admin/list/clients"
           entete="nom,prenom,username,email,role,created,update,delete"
           displayall="client"
           :limit="5"
@@ -20,7 +20,7 @@ import axios from "axios";
       <div class="columns-6">
         <userlist
           title="Restaurateur"
-          query="/administration/list/restaurateur"
+          query="/admin/list/restaurateur"
           entete="nom,prenom,username,email,role,created,update,delete"
           displayall="restaurateur"
           :limit="5"
@@ -31,7 +31,7 @@ import axios from "axios";
       <div class="columns-6">
         <userlist
           title="Livreur"
-          query="/administration/list/livreur"
+          query="/admin/list/livreur"
           entete="nom,prenom,username,email,role,created,update,delete"
           displayall="livreur"
           :limit="5"

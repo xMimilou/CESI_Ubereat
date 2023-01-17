@@ -74,25 +74,24 @@ export default {
       form: {
         username: "",
       },
-      // make commandes as an array of objects with the following keys _id, name, location, total_cost, time_delivered, status, deliver_username, delivery_location, username
-        commandes: [
-            {
-            _id: "",
-            restaurant: {
-                name: "",
-                location: "",
-            },
-            order:{
-                total_cost: "",
-                time_delivered: "",
-                status: "",
-            },
-            delivery_person: {
-                deliver_username: "",
-                delivery_location: "",
-            },
-            username: "",
-            },
+      commandes: [
+          {
+          _id: "",
+          restaurant: {
+              name: "",
+              location: "",
+          },
+          order:{
+              total_cost: "",
+              time_delivered: "",
+              status: "",
+          },
+          delivery_person: {
+              deliver_username: "",
+              delivery_location: "",
+          },
+          username: "",
+          },
         ],
     };
   },
@@ -102,33 +101,15 @@ export default {
   methods: {
     async GetUserCommand() {
       try {
-        /* send to api http://localhost:3000/users data nom and prenom as json in body with post method */
         var data = {
           username: this.form.username,
         };
         const response = await axios.post(
-          "http://localhost:3001/commandes/user/" + this.form.username,
+          "http://localhost/commandes/user/" + this.form.username,
           data, { headers: { "auth-token": localStorage.getItem("token") } }
         );
-
-        // for (var i = 0; i < response.data.length; i++) {
-        //   this.commandes[i].username = response.data[i].username;
-        //     this.commandes[i].name = response.data[i].restaurant.name;
-        //     this.commandes[i].location = response.data[i].restaurant.location;
-        //     this.commandes[i].total_cost = response.data[i].order.total_cost;
-        //     this.commandes[i].time_delivered = response.data[i].order.time_delivered;
-        //     this.commandes[i].status = response.data[i].order.status;
-        //     this.commandes[i].deliver_username = response.data[i].delivery_person.deliver_username;
-        //     this.commandes[i].delivery_location = response.data[i].delivery_person.delivery_location;
-        //     this.commandes[i]._id = response.data[i]._id;
-        // }
-        // get the response data and put it in the commandes array
-
         this.commandes = response.data;
         console.log(this.commandes);
-
-
-        
       } catch (error) {
         console.error(error);
       }
