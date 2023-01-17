@@ -186,7 +186,7 @@ export default {
     ) {
       console.log(this.id);
       try {
-        const response = await axios.post("http://localhost:5502/commandes/selected", { id: this.id }, {
+        const response = await axios.post("http://localhost/commandes/selected", { id: this.id }, {
             headers: {
                 "auth-token": this.token
             }
@@ -209,7 +209,7 @@ export default {
     ) {
       try {
         const response = await axios.put(
-          "http://localhost:5502/commandes/update",
+          "http://localhost/commandes/update",
           {
             username: username_customer,
             costumerAddress: costumer_adress,

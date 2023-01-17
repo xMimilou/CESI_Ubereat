@@ -57,7 +57,7 @@ export default{
                 username: this.form.username,
                 password: this.form.password
             }
-            const response = await axios.post('http://localhost:3000/api/login', data);
+            const response = await axios.post('http://localhost/auth/login', data);
             // get jwt token in response and store it in local storage
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', response.data.username);

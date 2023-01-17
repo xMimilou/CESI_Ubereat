@@ -119,7 +119,7 @@ export default{
             }
             if(etape == "1"){
               try {
-              const response = await axios.put("http://localhost:5502/commandes/update/validation/restaurant", {
+              const response = await axios.put("http://localhost/commandes/update/validation/restaurant", {
                 username : username_customer,
                 costumerAddress: costumer_adress,
                 restaurantAdress : restaurant_adress,
@@ -152,7 +152,7 @@ export default{
             }else if(etape == "2")
             {
               try {
-              const response = await axios.put("http://localhost:5502/commandes/update/validation/client", {
+              const response = await axios.put("http://localhost/commandes/update/validation/client", {
                 username : username_customer,
                 costumerAddress: costumer_adress,
                 restaurantAdress : restaurant_adress,

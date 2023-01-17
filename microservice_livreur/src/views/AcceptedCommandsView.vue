@@ -41,7 +41,7 @@ export default {
     },
     async getCommandes(deliverUsername:string) {
     try {
-        const response = await axios.post("http://localhost:5502/commandes/selected/deliver", { deliverUsername }, {
+        const response = await axios.post("http://localhost/commandes/selected/deliver", { deliverUsername }, {
             headers: {
                 "auth-token": this.token
             }

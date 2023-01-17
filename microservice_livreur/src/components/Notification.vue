@@ -44,7 +44,7 @@ export default {
       try {
 
     const response = await axios.get(
-      "http://localhost:5502/commandes/count",
+      "http://localhost/commandes/count",
       {
         headers: {
           "auth-token": this.token,

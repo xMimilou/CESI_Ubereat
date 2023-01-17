@@ -251,37 +251,6 @@ router.get("/all/username", async (req, res) => {
 });
 
 
-router.get("/selected/deliver", async (req, res) => {
-    try{
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        const deliverUsername =  req.body.deliverUsername;
-        const status = "Delivered";
-        //console.log(deliverUsername + " " + status);
-        commandesModel.find({
-            'delivery_person.deliver_username':{$eq: deliverUsername},
-            'order.status': {$ne: status}
-        }, (err, docs) => {
-            if(!err) res.send(docs);
-            else {
-                console.log("Error to get data : " + err);
-                res.status(500).send({error: 'Error getting data from the database'});
-            }
-        });
-        
-    } catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
 
 
 router.get("/graph/commandes/minutes", async (req, res) => {
@@ -537,6 +506,70 @@ router.get("/notification", async (req, res) => {
 /* ---- POST REQUESTS ---- */
 /* ----------------------- */
 
+
+router.post("/selected/deliver", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        const deliverUsername =  req.body.deliverUsername;
+        const status = "Delivered";
+        //console.log(deliverUsername + " " + status);
+        commandesModel.find({
+            'delivery_person.deliver_username':{$eq: deliverUsername},
+            'order.status': {$ne: status}
+        }, (err, docs) => {
+            if(!err) res.send(docs);
+            else {
+                console.log("Error to get data : " + err);
+                res.status(500).send({error: 'Error getting data from the database'});
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
+
+router.post("/selected", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+        
+        const { id } = req.body;
+        const status = "En cours";
+        commandesModel.find({
+            '_id':{$eq: id}
+        }, (err, docs) => {
+            if(!err) res.send(docs);
+            else {
+                console.log("Error to get data : " + err);
+                res.status(500).send({error: 'Error getting data from the database'});
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
 /* ----------------------- */
 /* ---- PUT REQUESTS ----- */
 /* ----------------------- */
@@ -558,17 +591,9 @@ router.put("/update", async (req, res) => {
         //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + total_price + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur);
         console.log(id);
         const commande = await commandesModel.findOne({
-            'username': {$eq: username},
-            'delivery_person.deliver_username': {$eq: ""},
-            'delivery_person.delivery_location': {$eq: costumerAddress},
-            'restaurant.location': {$eq: restaurantAdress},
-            'restaurant.name': {$eq: restaurantName},
-            'order.total_cost': {$eq: total_price},
             '_id': {$eq: id}
-
-
         });
-        if(!commande) return res.status(404).json({message: "Commande not found"});
+        if(!commande) return res.status(401).json({message: "Commande not found"});
         commande.status = statusDeliver;
         commande.delivery_person.deliver_username = usernameLivreur;
         await commande.save();

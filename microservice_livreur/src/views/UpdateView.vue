@@ -94,7 +94,7 @@ export default {
   methods: {
     getUser() {
       var token = localStorage.getItem("token");
-      var request = "http://localhost:3000/api/user";
+      var request = "http://localhost/auth/user";
       axios
         .get(request, { headers: { "auth-token": token } })
         .then((response) => {
@@ -113,7 +113,7 @@ export default {
           email: this.form.email
         };
         const response = await axios.put(
-          "http://localhost:3000/api/update",
+          "http://localhost/auth/update",
           data, { headers: { "auth-token": localStorage.getItem("token") } }
         );
       this.form.email = "";
@@ -138,85 +138,85 @@ export default {
     width: 100%;
 }
 
-
+ 
 .card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 340px;
-  background: var(--color-widget);
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 80%;
-  flex-direction: column;
-  margin: 0 auto;
-  margin-top: 50px;
-}
-
-.card__content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.counters__title::after {
-  content: "";
-  display: block;
-  width: 70%;
-  height: 2px;
-  background-color: hsla(0, 0%, 59%, 0.2);
-  margin: 0 auto;
-  /* vertical align center */
-  margin-top: 12px;
-}
-
-.counters__title {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  margin: 20px auto;
-  line-height: 1em;
-  font-weight: 50px;
-  font-size: 20px;
-  height: 20%;
-  justify-content: start;
-  color: hsla(160, 100%, 37%, 1);
-  margin-left: 5px;
-}
-
-.form-group {
-  margin-bottom: 0.5rem;
-  width: 100%;
-}
-.form-control {
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  width: 100%;
-}
-
-
-.btn {
-  background: hsla(160, 100%, 37%, 1);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  /* align item center of the line */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* align table center */
-
-  /* display grid border */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 270px;
+    background: var(--color-widget);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 80%;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+  .card__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .counters__title::after {
+    content: "";
+    display: block;
+    width: 70%;
+    height: 2px;
+    background-color: hsla(0, 0%, 59%, 0.2);
+    margin: 0 auto;
+    /* vertical align center */
+    margin-top: 12px;
+  }
+  
+  .counters__title {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    line-height: 1em;
+    font-weight: 50px;
+    font-size: 20px;
+    height: 20%;
+    justify-content: start;
+    color: hsla(160, 100%, 37%, 1);
+    margin-left: 5px;
+  }
+  
+  .form-group {
+    margin-bottom: 0.5rem;
+    width: 100%;
+    padding: 5px;
+  }
+  .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+  }
+  
+  
+  .btn {
+    background: hsla(160, 100%, 37%, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    /* align item center of the line */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* align table center */
+    /* display grid border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
 
 </style>
+

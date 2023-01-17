@@ -15,8 +15,8 @@ export default{
   mounted(){
     var token = localStorage.getItem('token');
       console.log(token)
-      var request = 'http://localhost:3000/api/delete'
-      axios.post(request, {}, { headers: { 'auth-token': token } }).then((response) => {
+      var request = 'http://localhost/auth/delete'
+      axios.delete(request, { headers: { 'auth-token': token } }).then((response) => {
         this.LogoutUser();
       }).catch((error) => {
         console.log(error)

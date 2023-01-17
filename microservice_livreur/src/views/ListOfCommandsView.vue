@@ -49,7 +49,7 @@ export default {
   // Récupération des données
   try {
     const response = await axios.get(
-      "http://localhost:5502/commandes/all/available",
+      "http://localhost/commandes/all/available",
       {
         headers: {
           "auth-token": this.token,

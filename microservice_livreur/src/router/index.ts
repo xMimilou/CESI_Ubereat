@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
       next({ name: 'login' });
     } else {
       // make axios post on tokenCheckup and token in header at auth-token
-      axios.post('http://localhost:3000/api/tokenCheckup', {}, { headers: { 'auth-token': token } }).then((response) => {
+      axios.get('http://localhost/auth/tokenCheckup', { headers: { 'auth-token': token } }).then((response) => {
         if (response.data.message == 'Access granted') {
           next();
         } else {

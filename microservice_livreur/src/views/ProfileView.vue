@@ -21,7 +21,7 @@ export default {
     async getCommandes() {
       var username = "Juleeien";
       try {
-  const response = await axios.post("http://localhost:5502/commandes/count/username", {
+  const response = await axios.post("http://localhost/commandes/count/username", {
     username
   }, {
     headers: {
