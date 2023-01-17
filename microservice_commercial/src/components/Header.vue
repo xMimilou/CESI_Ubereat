@@ -54,7 +54,7 @@ export default {
                 return false;
             }else{
                 try {
-                    const response = await axios.post('http://localhost:3000/api/tokenCheckup', {}, { headers: { 'auth-token': token } });
+                    const response = await axios.get('http://localhost/auth/tokenCheckup', { headers: { 'auth-token': token } });
                     if (response.data.message == 'Access granted') {
                         return true;
                     } else {

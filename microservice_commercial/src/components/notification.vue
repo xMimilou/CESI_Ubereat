@@ -44,8 +44,8 @@ export default defineComponent({
                 status = ''
                 console.log("no status")
             }
-            var request = 'http://localhost:3001/commandes/notification'
-            axios.post(request, {}, { headers: { 'auth-token': token, 'username': username, "status": status } }).then((response) => {
+            var request = 'http://localhost/commandes/notification'
+            axios.get(request, { headers: { 'auth-token': token, 'username': username, "status": status } }).then((response) => {
                 if (response.data.status != "no change") {
                     this.show("Votre commandes arrive", response.data.status)
                     localStorage.setItem('notification_status', response.data.status)

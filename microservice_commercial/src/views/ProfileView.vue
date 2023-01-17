@@ -90,7 +90,7 @@
     methods: {
       getList() {
         var token = localStorage.getItem("token");
-        var request = "http://localhost:3000/api/user";
+        var request = "http://localhost/auth/user";
         axios
           .get(request, { headers: { "auth-token": token } })
           .then((response) => {
@@ -109,7 +109,7 @@
             email: this.form.email,
           };
           const response = await axios.put(
-            "http://localhost:3000/api/update",
+            "http://localhost/auth/update",
             data, { headers: { "auth-token": localStorage.getItem("token") } }
           );
           this.$router.push("/profile");
@@ -134,9 +134,9 @@
   
   .card {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    height: 340px;
+    height: 250px;
     background: var(--color-widget);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -151,7 +151,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
   
   .counters__title::after {
@@ -169,7 +169,6 @@
     display: flex;
     flex: 1;
     width: 100%;
-    margin: 20px auto;
     line-height: 1em;
     font-weight: 50px;
     font-size: 20px;
@@ -182,6 +181,7 @@
   .form-group {
     margin-bottom: 0.5rem;
     width: 100%;
+    padding: 5px;
   }
   .form-control {
     border: 1px solid #ced4da;

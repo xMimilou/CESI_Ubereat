@@ -12,21 +12,9 @@ var referralCodes = require("referral-codes")
 /* ----------------------- */
 
 
-router.get('user/:id', async function(req, res) {
-
-    try{
-        const sqlQuery = `SELECT * FROM user WHERE iduser = ?`;
-        const result = await pool.query(sqlQuery, [req.params.id]);
-        res.status(200).json(result);
-
-    }catch(err){
-        res.status(400).json({message: err.message});
-    }
-
-    
-});
 
 
+/* use one time */
 router.get('/user', async (req, res) => {
     try{
         const token = req.header('auth-token');
@@ -61,7 +49,7 @@ router.get('/user', async (req, res) => {
 
 /* ----------------------- */
 
-router.post("/tokenCheckup", async(req, res) => {
+router.get("/tokenCheckup", async(req, res) => {
     try{
         // check jwt token
         
@@ -145,7 +133,7 @@ router.get("/user", async (req, res) => {
 /* ---- POST REQUESTS ---- */
 /* ----------------------- */
 
-
+/* use one time to create the user table in the database */
 router.post('/register', async (req, res) => {
     try{
         const { first_name, last_name, username, password, email, referal_by, role } = req.body;
@@ -183,6 +171,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
+/* use 1 time */
 router.post('/login', async (req, res) => {
     try{
         const { username, password } = req.body;
@@ -212,6 +201,7 @@ router.post('/login', async (req, res) => {
 /* ---- PUT REQUESTS ----- */
 /* ----------------------- */
 
+/* use 1 time : update user */
 router.put("/update", async (req, res) => {
     try{
 

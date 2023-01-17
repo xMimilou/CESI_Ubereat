@@ -146,7 +146,7 @@ export default {
             referal_by: this.form.referal_by,
             role: this.form.role,
         }
-        const response = await axios.post('http://localhost:3000/api/register', data);
+        const response = await axios.post('http://localhost/auth/register', data);
         console.log(response);
         this.$router.push('/login');
       } catch (error) {

@@ -13,13 +13,13 @@ import notificationVue from '@/components/notification.vue'
 <div class="container">
     <div class="row">
         <div class="columns-3">
-            <counters title="nombre de client" query="/commercial/total/client"/>
+            <counters title="nombre de client" query="/admin/total/client"/>
         </div>
         <div class="columns-3">
-            <counters title="Nombre total d'utilisateur" query="/commercial/total/users"/>
+            <counters title="Nombre total d'utilisateur" query="/admin/total/users"/>
         </div>
         <div class="columns-3">
-            <counters title="Nombre de nouveau utilisateur" query="/commercial/new/users"/>
+            <counters title="Nombre de nouveau utilisateur" query="/admin/new/users"/>
         </div>
         <div class="columns-3">
             <counters title="Chiffre d'affaire" units="€" query="/commandes/count/CA"/>
@@ -27,10 +27,10 @@ import notificationVue from '@/components/notification.vue'
     </div>
     <div class="row">
         <div class="columns-3">
-            <counters title="nombre de restaurateur" query="/commercial/total/restaurateur"/>
+            <counters title="nombre de restaurateur" query="/admin/total/restaurateur"/>
         </div>
         <div class="columns-3">
-            <counters title="nombre de livreur" query="/commercial/total/livreur"/>
+            <counters title="nombre de livreur" query="/admin/total/livreur"/>
         </div>
         
         <div class="columns-3">
@@ -48,7 +48,7 @@ import notificationVue from '@/components/notification.vue'
     <div class="row">
         <!-- Display list of last 5 new poeple col-6 -->
         <div class="columns-6">
-            <list title="Derniers clients" query="/commercial/list/lastuser" entete="nom,prenom,username,email,role,created" :limit="5"/>
+            <list title="Derniers clients" query="/admin/list/lastuser" entete="nom,prenom,username,email,role,created" :limit="5"/>
         </div>
         <!-- Top 5 des clients avec le plus de commandes-->
         <div class="columns-6">

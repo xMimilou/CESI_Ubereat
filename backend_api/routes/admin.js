@@ -8,6 +8,30 @@ const jwt = require("jsonwebtoken");
 /* ---- GET REQUESTS ----- */
 /* ----------------------- */
 
+router.get('user/:id', async function(req, res) {
+
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        const sqlQuery = `SELECT * FROM user WHERE iduser = ?`;
+        const result = await pool.query(sqlQuery, [req.params.id]);
+        res.status(200).json(result);
+
+    }catch(err){
+        res.status(400).json({message: err.message});
+    }
+
+    
+});
+
 
 router.get("/list/clients", async(req, res) => {
     try{
@@ -276,9 +300,8 @@ router.get("/new/users", async(req, res) => {
     }
 });
 
-
-
-router.get("/get/client/:page", async(req, res) => {
+/* number of use 3 times : use for get user by role */
+router.get("/get/:role/:page", async(req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -290,8 +313,12 @@ router.get("/get/client/:page", async(req, res) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
         
+        // get role
+        const role = req.params.role;
+        
         // get page number 
         const page = req.params.page;
+
 
         // get the number of client per page
         const limit = 20;
@@ -300,7 +327,7 @@ router.get("/get/client/:page", async(req, res) => {
         const offset = (page - 1) * limit;
 
         // get the total number of client
-        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "client"';
+        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "' + role + '"';
         var result = await pool.query (sqlQuery);
         
         result = result[0].total;
@@ -310,113 +337,7 @@ router.get("/get/client/:page", async(req, res) => {
         const pages = Math.ceil(result / limit);
 
         // query to get the client
-        const sqlQuery2 = 'SELECT * FROM user WHERE role = "client" LIMIT ' + limit + ' OFFSET ' + offset;
-        var result2 = await pool.query (sqlQuery2);
-
-        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
-        for (var i = 0; i < result2.length; i++) {
-            var date = new Date(result2[i].created_at);
-            result2[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-            var date = new Date(result2[i].updated_at);
-            result2[i].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-        }
-
-        // send + pages number
-        res.status(200).json({result2, pages});
-
-
-    }catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-
-router.get("/get/restaurateur/:page", async(req, res) => {
-    try{
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-        
-        // get page number 
-        const page = req.params.page;
-
-        // get the number of client per page
-        const limit = 20;
-
-        // get the offset
-        const offset = (page - 1) * limit;
-
-        // get the total number of client
-        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "restaurateur"';
-        var result = await pool.query (sqlQuery);
-        
-        result = result[0].total;
-        result = parseInt(result);
-
-        // get the total number of page
-        const pages = Math.ceil(result / limit);
-
-        // query to get the client
-        const sqlQuery2 = 'SELECT * FROM user WHERE role = "restaurateur" LIMIT ' + limit + ' OFFSET ' + offset;
-        var result2 = await pool.query (sqlQuery2);
-
-        // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
-        for (var i = 0; i < result2.length; i++) {
-            var date = new Date(result2[i].created_at);
-            result2[i].created_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-            var date = new Date(result2[i].updated_at);
-            result2[i].updated_at = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-        }
-
-        // send + pages number
-        res.status(200).json({result2, pages});
-
-
-    }catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
-
-
-router.get("/get/livreur/:page", async(req, res) => {
-    try{
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-        
-        // get page number 
-        const page = req.params.page;
-
-        // get the number of client per page
-        const limit = 20;
-
-        // get the offset
-        const offset = (page - 1) * limit;
-
-        // get the total number of client
-        const sqlQuery = 'SELECT COUNT(*) AS total FROM user WHERE role = "livreur"';
-        var result = await pool.query (sqlQuery);
-        
-        result = result[0].total;
-        result = parseInt(result);
-
-        // get the total number of page
-        const pages = Math.ceil(result / limit);
-
-        // query to get the client
-        const sqlQuery2 = 'SELECT * FROM user WHERE role = "livreur" LIMIT ' + limit + ' OFFSET ' + offset;
+        const sqlQuery2 = 'SELECT * FROM user WHERE role = "'+ role +'" LIMIT ' + limit + ' OFFSET ' + offset;
         var result2 = await pool.query (sqlQuery2);
 
         // change date format for created_at and updated_at into format YYYY/MM/DD HH:mm containing 0 for exemple janvier = 01
@@ -518,8 +439,7 @@ router.put("/update/:id", async(req, res) => {
 /* ---- DELETE REQUESTS -- */
 /* ----------------------- */
 
-
-
+/* using count : 1 */
 router.delete("/delete/:id", async(req, res) => {
     try{
         const token = req.header('auth-token');

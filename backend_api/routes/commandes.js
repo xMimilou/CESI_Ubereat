@@ -408,6 +408,8 @@ router.get("/list/top/client", async (req, res) => {
     }
 });
 
+
+/* return all commands made by user in correct time periode */
 router.get("/user/:username", async (req, res) => {
     try{ 
         const token = req.header('auth-token');

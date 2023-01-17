@@ -84,9 +84,9 @@ export default {
     },
     getList() {
       var token = localStorage.getItem("token");
-      var request = "http://localhost:3001" + this.query;
+      var request = "http://localhost" + this.query;
       axios
-        .post(request, {}, { headers: { "auth-token": token } })
+        .get(request, { headers: { "auth-token": token } })
         .then((response) => {
           // for each array add 2 new element like update : <a href="/edit/{{id}}">Edit</a> and delete : <a href="/delete/{{id}}">Delete</a>
           this.lists = response.data;
