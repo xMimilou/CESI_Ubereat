@@ -32,34 +32,46 @@ export default {
     setInterval(() => {
         this.getData();
     }, 10000);
-    this.getData();
   },methods: {
   close()
     {
       this.showNotification = false;
     },
     async getData() {
+      console.log(localStorage.getItem("EtatNotifs"));
+      if(localStorage.getItem("EtatNotifs")== "true")
+      {
       try {
-        const response = await axios.post(
-          "http://localhost:5502/commandes/count",
-          {},
-          {
-            headers: {
-              "auth-token": this.token,
-            },
-          }
-        );
 
-        if(this.count != response.data)
-        {
-          this.showNotification = true;
-          this.count = response.data;
-          console.log(this.count);
-        }
-      } catch (error) {
-        console.error(error);
+    const response = await axios.get(
+      "http://localhost:5502/commandes/count",
+      {
+        headers: {
+          "auth-token": this.token,
+        },
       }
+    );
+    console.log(response.data + " " +  this.count);
+    if(this.count =="")
+      {
+        this.count = response.data;
+        console.log(this.count);
+      }else 
+      {
+        if(this.count < response.data)
+      {
+        this.showNotification = true;
+        this.count = response.data;
+        console.log(this.count);
+      }
+
     }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+}
 }
 }
 </script>

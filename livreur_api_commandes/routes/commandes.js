@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const { commandesModel } = require('../models/commandesModels');
 const { default: mongoose } = require('mongoose');
 
-router.post("/count", async (req, res) => {
+router.get("/count", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -36,7 +36,38 @@ router.post("/count", async (req, res) => {
     }
 });
 
-router.post("/all", async (req, res) => {
+
+router.post("/count/username", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        const user = req.body.username;
+        //console.log(user);
+        // count all commandes in the database mongo
+        commandesModel.countDocuments({'username': {$eq: user}}, function (err, count) {
+            if (err) {
+                res.status(400).json({message: err.message});
+            } else {
+
+                res.status(200).json(count);
+            }
+        });
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
+router.get("/all", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -61,7 +92,7 @@ router.post("/all", async (req, res) => {
     }
 });
 
-router.post("/all/available", async (req, res) => {
+router.get("/all/available", async (req, res) => {
     try{
         const token = req.header('auth-token');
 
@@ -130,18 +161,11 @@ router.post("/selected", async (req, res) => {
         jwt.verify(token, 'secret', (err, decoded) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
-
-        const { username_customer, costumer_adress, restaurant_name, restaurant_adress, total_price, timeDelivered } = req.body;
+        
+        const { id } = req.body;
         const status = "En cours";
-        console.log(username_customer + " " + costumer_adress + " " + restaurant_name + " " + restaurant_adress + " " + total_price + " " + timeDelivered);
         commandesModel.find({
-            'delivery_person.deliver_username':{$eq: ""},
-            'order.status': {$eq: status},
-            'username': {$eq: username_customer},
-            'delivery_person.delivery_location': {$eq: costumer_adress},
-            'restaurant.name': {$eq: restaurant_name},
-            'restaurant.location': {$eq: restaurant_adress},
-            'order.total_cost': {$eq: total_price}
+            '_id':{$eq: id}
         }, (err, docs) => {
             if(!err) res.send(docs);
             else {
@@ -300,8 +324,6 @@ router.put("/update/validation/client", async (req, res) => {
         res.status(400).json({message: err.message});
     }
 });
-
-
 
 module.exports = router;
 

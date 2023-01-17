@@ -29,6 +29,7 @@ export default{
             localStorage.removeItem('role');
             localStorage.removeItem('state');
             localStorage.removeItem('CommandID');
+            localStorage.setItem('EtatNotifs','false');
             this.$router.push('/login');
         }
 

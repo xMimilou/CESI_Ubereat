@@ -3,7 +3,7 @@
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/orders" v-if="isLoggedIn" >Commandes</RouterLink>
-        <RouterLink to="/choosencommand" v-if="isLoggedIn" >Commandes en cours </RouterLink>
+        <RouterLink to="/acceptedcommands" v-if="isLoggedIn" >Commandes en cours </RouterLink>
 
       </nav>
       <!-- if jwt is not set -->
@@ -44,6 +44,7 @@ export default {
             localStorage.removeItem('username');
             localStorage.removeItem('role');
             this.$router.push('/login');
+            localStorage.setItem("EtatNotifs", "false");
             this.refreshPage();
         },
         async IsLoggin(){
@@ -54,8 +55,10 @@ export default {
                 try {
                     const response = await axios.post('http://localhost:3000/api/tokenCheckup', {}, { headers: { 'auth-token': token } });
                     if (response.data.message == 'Access granted') {
+                        localStorage.setItem("EtatNotifs", "true");  
                         return true;
                     } else {
+                        localStorage.setItem("EtatNotifs", "false");
                         return false;
                     }
                 } catch (error) {

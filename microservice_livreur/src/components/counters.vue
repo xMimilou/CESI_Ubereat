@@ -58,7 +58,7 @@
 import Vue from "vue";
 import axios from "axios";
 import counters from "./counters.vue";
-import ChoosenCommandVue from "@/views/ChoosenCommand.vue";
+import AcceptedCommands from "@/views/AcceptedCommandsView.vue";
 import LisOfCommandsView from "@/views/ListOfCommandsView.vue";
 
 export default {
@@ -157,7 +157,7 @@ export default {
         total_price,
         timeDelivered
       );
-      this.$router.replace({ path: "/choosencommand" });
+      this.$router.replace({ path: "/acceptedcommands" });
     },
     onRemoveCommand(
       username_customer: string,
@@ -184,29 +184,20 @@ export default {
       total_price: string,
       timeDelivered: string
     ) {
+      console.log(this.id);
       try {
-        const response = await axios.post(
-          "http://localhost:5502/commandes/selected",
-          {
-            username_customer,
-            costumer_adress,
-            restaurant_name,
-            restaurant_adress,
-            total_price,
-            timeDelivered,
-          },
-          {
+        const response = await axios.post("http://localhost:5502/commandes/selected", { id: this.id }, {
             headers: {
-              "auth-token": this.token,
-            },
-          }
-        );
-        this.commandes = response.data;
-        localStorage.setItem("CommandID", this.commandes[0]._id);
-        console.log(this.commandes[0]);
-      } catch (error) {
+                "auth-token": this.token
+            }
+        });
+        this.commandes = response.data[0];
+        var id = this.commandes._id;
+        localStorage.setItem("CommandID", id);
+        console.log(this.commandes);
+    } catch (error) {
         console.error(error);
-      }
+    }
     },
     async updateCommandesStatus(
       username_customer: string,
@@ -242,7 +233,7 @@ export default {
       }
     },
   },
-  components: { ChoosenCommandVue },
+  components: { AcceptedCommands },
 };
 </script>
 

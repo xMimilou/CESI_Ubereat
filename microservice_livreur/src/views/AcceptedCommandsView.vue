@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
   import Notification from '../components/Notification.vue';
-import CountersChoosenCommand from '@/components/countersChoosenCommand.vue';
 import ActiveOrders from '@/components/ActiveOrders.vue';
 
 import axios from 'axios';
@@ -12,7 +11,7 @@ import axios from 'axios';
 
 <script lang="ts">
 export default {
-  name: "choosenCommand",
+  name: "acceptedCommandsView",
   data() {
       return {
           receivedUsername: "",
@@ -53,7 +52,7 @@ export default {
     } catch (error) {
         console.error(error);
     }
-  },
+},
   },
   
   }
