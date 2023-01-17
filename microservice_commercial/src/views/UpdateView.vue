@@ -155,9 +155,7 @@ export default {
 
 .card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 340px;
+  height: 300px;
   background: var(--color-widget);
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
