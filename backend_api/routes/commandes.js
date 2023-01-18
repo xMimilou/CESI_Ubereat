@@ -587,15 +587,22 @@ router.put("/update", async (req, res) => {
             if(err) return res.status(401).json({message: "Access denied"});
         });
 
-        const {username, costumerAddress, restaurantAdress, restaurantName, total_price, time_delivered, statusDeliver, usernameLivreur, id} = req.body;
+        const {statusDeliver, usernameLivreur} = req.body;
+        const { id } = req.body;
+
+        console.log("Je passe bien ici !");
+        console.log(id);
         //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + total_price + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur);
         console.log(id);
         const commande = await commandesModel.findOne({
             '_id': {$eq: id}
         });
+        console.log(commande);
         if(!commande) return res.status(401).json({message: "Commande not found"});
-        commande.status = statusDeliver;
+        commande.order.status = statusDeliver;
         commande.delivery_person.deliver_username = usernameLivreur;
+        console.log(commande);
+
         await commande.save();
         res.json({message: "Commande updated"});
     } catch(err){

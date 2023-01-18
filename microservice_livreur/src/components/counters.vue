@@ -211,12 +211,6 @@ export default {
         const response = await axios.put(
           "http://localhost/commandes/update",
           {
-            username: username_customer,
-            costumerAddress: costumer_adress,
-            restaurantAdress: restaurant_adress,
-            restaurantName: restaurant_name,
-            total_price: total_price,
-            time_delivered: timeDelivered,
             statusDeliver: "En cours",
             usernameLivreur: this.username,
             id : this.id
