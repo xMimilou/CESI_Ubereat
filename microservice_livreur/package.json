@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite && tailwindcss -i ./src/assets/css/tailwind.css -o ./src/assets/css/tailwind.css",
+    "dev": "vite --port 8002",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "tailwindcompile": "tailwindcss -i ./src/assets/css/tailwind.css -o ./src/assets/css/tailwind.css",

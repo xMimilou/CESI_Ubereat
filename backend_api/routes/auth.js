@@ -204,6 +204,7 @@ router.post('/login', async (req, res) => {
 
         res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role});
 
+
     } catch(err){
         res.status(500).json({message: err.message});
     }

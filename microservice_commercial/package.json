@@ -2,8 +2,8 @@
   "name": "microservice_commercial",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "dev": "vite && tailwindcss -i ./src/assets/css/tailwind.css -o ./src/assets/css/tailwind.css",
+  "scripts": { 
+    "dev": "vite --port 8000",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "tailwindcompile": "tailwindcss -i ./src/assets/css/tailwind.css -o ./src/assets/css/tailwind.css",
