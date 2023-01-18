@@ -79,7 +79,7 @@ export default {
 
 <template>
   <h1 class="text-center">Requêtes en cours</h1>
-  <div class="container" v-if="!isLoadding">
+  <div class="container-fluid" v-if="!isLoadding">
     <div class="row">
       <div class="col-3" v-for="item in FiltredTable" :key="item._id">
         <counters
@@ -116,7 +116,7 @@ export default {
   color: hsla(160, 100%, 37%, 1);
 }
 
-.container {
+.container-fluid {
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;

@@ -4,7 +4,7 @@
       <h3>{{ username_customer }}</h3>
     </div>
     <div class="counters__content">
-      <div class="container">
+      <div class="container-fluid">
           <div class="col-4"><p>Addresse du client : {{ costumer_adress }}</p></div>
           <div class="col-4"><p>Nom du restaurant : {{ restaurant_name }} / {{ restaurant_adress }} </p></div>
           <div class="col-4">Horaire de livraison : {{ timeDelivered }}</div>
@@ -248,17 +248,27 @@ export default {
   /* align center */
   text-align: center;
 }
-
-.row{
+.row {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 0 auto;
+  height: 100%;
+}
+.counters__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   /* align center */
   text-align: center;
+  /* vertical align center */
+  position: relative;
 }
+
 
 
 /* drow line after title */
@@ -288,7 +298,7 @@ export default {
 .counters {
   width: 100%;
   height: 200px;
-  max-height: 200px;
+  max-height: 250px;
   background-color: var(--color-widget);
   border-radius: 10px;
 
@@ -356,4 +366,11 @@ export default {
   border-left: 1px solid #b6cdef;
   border-right: 1px solid #6098ff;
 }
+
+.button {
+  border: 1px solid transparent;
+  -webkit-transition: all 0.4s cubic-bezier(0.5, 0.24, 0, 1);
+  transition: all 0.4s cubic-bezier(0.5, 0.24, 0, 1);
+}
+
 </style>
