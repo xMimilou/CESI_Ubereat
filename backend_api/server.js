@@ -31,9 +31,9 @@ const administration = require("./routes/admin")
 app.use('/auth', routes)
 app.use('/commandes', commandes)
 app.use('/admin', administration)
-// app.use('/', (req, res) => {
-//     res.send('Hello World!')
-// });
+app.use('/', (req, res) => {
+     res.send('Hello World!')
+});
 const port = 3000;
 app.listen(port, () => {
     console.log(`Serveur en écoute sur le port ${port}`);
