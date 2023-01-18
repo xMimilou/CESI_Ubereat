@@ -248,6 +248,14 @@ export default {
   /* align center */
   text-align: center;
 }
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 .counters__item {
   display: flex;
   flex-direction: column;
@@ -359,15 +367,10 @@ export default {
   border-right: 1px solid #6098ff;
 }
 
-.col-4 {
-  width: 25%;
-  padding: 0 15px;
-}
-
-.container-fluid {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+.button {
+  border: 1px solid transparent;
+  -webkit-transition: all 0.4s cubic-bezier(0.5, 0.24, 0, 1);
+  transition: all 0.4s cubic-bezier(0.5, 0.24, 0, 1);
 }
 
 </style>
