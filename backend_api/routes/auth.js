@@ -138,6 +138,11 @@ router.post('/register', async (req, res) => {
     try{
         const { first_name, last_name, username, password, email, referal_by, role } = req.body;
         
+        // check for fields required 
+        if (!first_name || !last_name || !email || !password || !username || !role) {
+            return res.status(400).send({ error: 'Fields are required.' });
+        }
+
         // generate a unique referal number
         var referal_code = referralCodes.generate({
             pattern: '#####-##-###'
@@ -153,6 +158,13 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({message: "User already exists"});
         }
 
+        // check if referal_by exists
+        const checkReferal = `SELECT * FROM user WHERE referal_code = ?`;
+        const checkReferalResult = await pool.query(checkReferal, [referal_by])
+        if(checkReferalResult.length == 0){
+            return res.status(400).json({message: "Referal code doesn't exist"});
+        }
+        
 
         // get actual datetime in format YYYY-MM-DD HH:MM:SS
         const date = new Date();
