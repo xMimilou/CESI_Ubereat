@@ -202,7 +202,18 @@ router.post('/login', async (req, res) => {
         // create and assign a token to the user with expiration of 2h
         const token = jwt.sign({ _id: checkUserResult[0].iduser }, 'secret', { expiresIn: '2h' });
 
-        res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role});
+        // give redirect address depending on the role
+        if(checkUserResult[0].role == "commercial"){
+            res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role, redirect: ":8000"});
+        } else if(checkUserResult[0].role == "client"){
+            res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role, redirect: ":8001"});
+        } else if(checkUserResult[0].role == "livreur"){
+            res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role, redirect: ":8002"});
+        } else if(checkUserResult[0].role == "restaurateur"){
+            res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role, redirect: ":8003"});
+        } else {
+            res.header('auth-token', token).json({token: token, username: username, role: checkUserResult[0].role, redirect: ":8003"});
+        }
 
 
     } catch(err){

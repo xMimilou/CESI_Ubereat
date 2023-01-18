@@ -60,11 +60,17 @@ export default{
             this.LogoutUser();
             const response = await axios.post('http://localhost/auth/login', data);
             // get jwt token in response and store it in local storage
+
+            // redirect = :8000
+            const redirect_page = "http://localhost" + response.data.redirect + "?token=" + response.data.token + "&username=" + response.data.username + "&role=" + response.data.role;
+
+            // go on another website
+            window.location.href = redirect_page;
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
-            
-            this.$router.push('/');
+
+
         },
         LogoutUser(){
             localStorage.removeItem('token');
