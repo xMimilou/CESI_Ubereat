@@ -63,22 +63,5 @@ const restaurantSchema = new Schema({
         required: true
     }
 }, { collection: 'restaurants' });
-const orderSchema = new mongoose.Schema({
-    client: { type: String },
-    restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
-    order: {
-        menus: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Menu' }],
-        total_cost: { type: Number },
-        status: { type: String },
-        time_placed: { type: Date },
-        time_delivered: { type: Date },
-        delivery_person: {
-            deliver_username: { type: String },
-            delivery_location: { type: String },
-        },
-    },
-    code_client: { type: String },
-    code_restaurant: { type: String },
-}, { collection: 'orders' });
 
 module.exports = { commandesModel };
