@@ -1,6 +1,6 @@
 "use strict";
 const { mongoose, Schema } = require('mongoose');
-const DATABASE_URL = '127.0.0.1:27017/restorer_database';
+const DATABASE_URL = '127.0.0.1:27017/cesi_ubereat';
 mongoose.connect(`mongodb://${DATABASE_URL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true

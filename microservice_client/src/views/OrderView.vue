@@ -68,7 +68,7 @@ export default defineComponent({
     async function deleteCommand(id: number) {
       try {
         const response = await axios.delete(
-          `http://localhost:5502/commandes/${id}`,
+          `http://localhost/commandes/${id}`,
           { headers: { "auth-token": localStorage.getItem("token") } }
         );
         console.log(response.data)

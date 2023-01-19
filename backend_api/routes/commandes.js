@@ -161,34 +161,6 @@ router.get("/count/CA", async (req, res) => {
 
 
 
-router.get("/count/username", async (req, res) => {
-    try{
-        const token = req.header('auth-token');
-
-        // check if the token is valid
-
-        if(!token) return res.status(401).json({message: "Access denied"});
-
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err) return res.status(401).json({message: "Access denied"});
-        });
-
-        const user = req.body.username;
-        //console.log(user);
-        // count all commandes in the database mongo
-        commandesModel.countDocuments({'username': {$eq: user}}, function (err, count) {
-            if (err) {
-                res.status(400).json({message: err.message});
-            } else {
-
-                res.status(200).json(count);
-            }
-        });
-        
-    } catch(err){
-        res.status(400).json({message: err.message});
-    }
-});
 
 
 router.get("/all/available", async (req, res) => {
@@ -394,7 +366,7 @@ router.get("/user/:username", async (req, res) => {
         var commandesToday = [];
 
         // get all commandes in mongo db with order.delivery = today and order.status != "delivered"
-        commandesModel.find({username: req.params.username}, function (err, commandes) {
+        commandesModel.find({client: req.params.username}, function (err, commandes) {
             // if there is an error
             if (err) {
                 res.status(400).json({message: err.message});
@@ -507,6 +479,37 @@ router.get("/notification", async (req, res) => {
 /* ----------------------- */
 
 
+router.post("/count/username", async (req, res) => {
+    try{
+        const token = req.header('auth-token');
+
+        // check if the token is valid
+
+        if(!token) return res.status(401).json({message: "Access denied"});
+
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if(err) return res.status(401).json({message: "Access denied"});
+        });
+
+        const user = req.body.username;
+        //console.log(user);
+        // count all commandes in the database mongo where client is equal to user
+        commandesModel.countDocuments({client: user}, function (err, count) {
+            if (err) {
+                res.status(400).json({message: err.message});
+            }
+            else {
+                res.status(200).json({count: count});
+            }
+        }
+        );
+        
+    } catch(err){
+        res.status(400).json({message: err.message});
+    }
+});
+
+
 router.post("/selected/deliver", async (req, res) => {
     try{
         const token = req.header('auth-token');
@@ -590,7 +593,6 @@ router.put("/update", async (req, res) => {
         const {statusDeliver, usernameLivreur} = req.body;
         const { id } = req.body;
 
-        console.log("Je passe bien ici !");
         console.log(id);
         //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + total_price + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur);
         console.log(id);
@@ -626,15 +628,15 @@ router.put("/update/validation/restaurant", async (req, res) => {
         const statusDeliver = "Livraison";
  
         //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + time_placed + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur + "" + inputContent);
-        console.log("Nom du livreur " + usernameLivreur);
-        console.log("Adresse du client " + costumerAddress);
-        console.log("Adresse du restaurant " + restaurantAdress);
-        console.log("Nom du restaurant " + restaurantName);
-        console.log("Code du restaurant " + inputContent);
-        console.log("Nom du client " + username);
+        // console.log("Nom du livreur " + usernameLivreur);
+        // console.log("Adresse du client " + costumerAddress);
+        // console.log("Adresse du restaurant " + restaurantAdress);
+        // console.log("Nom du restaurant " + restaurantName);
+        // console.log("Code du restaurant " + inputContent);
+        // console.log("Nom du client " + username);
 
         const commande = await commandesModel.findOne({
-            'username': {$eq: username},
+            'client': {$eq: username},
             'delivery_person.deliver_username': {$eq: usernameLivreur},
             'delivery_person.delivery_location': {$eq: costumerAddress},
             'restaurant.location': {$eq: restaurantAdress},
@@ -665,15 +667,15 @@ router.put("/update/validation/client", async (req, res) => {
         console.log("test");
         const {username, costumerAddress, restaurantAdress, restaurantName, time_delivered, inputContent, time_placed, usernameLivreur} = req.body;
         const statusDeliver = "Delivered";
-        console.log("Nom du livreur " + usernameLivreur);
-        console.log("Adresse du client " + costumerAddress);
-        console.log("Adresse du restaurant " + restaurantAdress);
-        console.log("Nom du restaurant " + restaurantName);
-        console.log("Code du client " + inputContent);
-        console.log("Nom du client " + username);
+        // console.log("Nom du livreur " + usernameLivreur);
+        // console.log("Adresse du client " + costumerAddress);
+        // console.log("Adresse du restaurant " + restaurantAdress);
+        // console.log("Nom du restaurant " + restaurantName);
+        // console.log("Code du client " + inputContent);
+        // console.log("Nom du client " + username);
         
         const commande = await commandesModel.findOne({
-            'username': {$eq: username},
+            'client': {$eq: username},
             'delivery_person.deliver_username': {$eq: usernameLivreur},
             'delivery_person.delivery_location': {$eq: costumerAddress},
             'restaurant.location': {$eq: restaurantAdress},

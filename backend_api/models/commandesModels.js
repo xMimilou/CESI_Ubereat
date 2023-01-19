@@ -1,23 +1,26 @@
 const mongoose = require('mongoose');
 
-
-const commandesModel = new mongoose.Schema({
-    client: { type: String },
-    restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
-    order: {
-        menus: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Menu' }],
-        total_cost: { type: Number },
-        status: { type: String },
-        time_placed: { type: Date },
-        time_delivered: { type: Date },
-        delivery_person: {
-            deliver_username: { type: String },
-            delivery_location: { type: String },
+const commandesModel = mongoose.model(
+    "orders", 
+    {
+        "client": { type: String, required: true }, // reference of restaurant id
+        "restaurant": { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+        "order": {
+            "menus": [{ type: mongoose.Schema.Types.ObjectId, ref: 'Menu' }],
+            "total_cost": { type: Number },
+            "status": { type: String },
+            "time_placed": { type: Date },
+            "time_delivered": { type: Date },
+            "delivery_person": {
+                "deliver_username": { type: String },
+                "delivery_location": { type: String },
+            },
         },
+        "code_client": { type: String },
+        "code_restaurant": { type: String },
     },
-    code_client: { type: String },
-    code_restaurant: { type: String },
-}, { collection: 'orders' });
+    "orders"
+);
 
 
 const articleSchema = new mongoose.Schema({
