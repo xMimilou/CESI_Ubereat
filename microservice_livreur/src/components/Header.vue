@@ -48,8 +48,14 @@ export default {
           localStorage.removeItem('token');
           localStorage.removeItem('username');
           localStorage.removeItem('role');
-          this.$router.push('/login');
-          this.refreshPage();
+          
+          const redirect_page = "http://localhost:8005";
+
+          // go on another website
+          window.location.href = redirect_page;
+          
+          //this.$router.push('/login');
+          //this.refreshPage();
       },
       async IsLoggin(){
           var token = localStorage.getItem('token');
