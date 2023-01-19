@@ -42,9 +42,8 @@ export default defineComponent({
   methods: {
     async handleSubmit() {
       try {
-        await axios.post(
+        await axios.delete(
           "delete",
-          { password: this.password },
           { headers: { "auth-token": localStorage.getItem("token") } }
         );
         store.dispatch("user", null);

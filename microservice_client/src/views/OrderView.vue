@@ -55,7 +55,7 @@ export default defineComponent({
     async function getCommand() {
       try {
         const response = await axios.post(
-          "http://localhost:5502/commandes/all/username",
+          "http://localhost/commandes/all/username",
           { username: store.getters.user.username },
           { headers: { "auth-token": localStorage.getItem("token") } }
         );

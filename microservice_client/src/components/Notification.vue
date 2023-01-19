@@ -43,7 +43,7 @@ export default defineComponent ({
     async getData() {
       try {
         const response = await axios.post(
-          "http://localhost:5502/commandes/count/username",
+          "http://localhost/commandes/count/username",
           { username: this.user.username },
           { headers: { "auth-token": localStorage.getItem("token") } }
         );

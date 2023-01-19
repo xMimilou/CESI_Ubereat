@@ -129,6 +129,31 @@ router.get("/user", async (req, res) => {
     }
 });
 
+router.get('/referal', async (req, res) => {
+    try {
+  
+      const token = req.header('auth-token');
+      // check if the token is valid
+      if (!token) return res.status(401).json({ message: "Access denied" });
+  
+      const user_id = jwt.verify(token, process.env.SECRET);
+  
+      const checkQuery = `SELECT COUNT(*) as count FROM user WHERE referal_code = (SELECT referal_by FROM user WHERE iduser = ?)`;
+      const result = await pool.query(checkQuery, [user_id.id]);
+  
+      if (result[0].count > 0) {
+        return res.status(200).json({ message: "Referal code is valid", valid: true });
+      } else {
+        return res.status(200).json({ message: "Referal code is not valid", valid: false });
+      }
+  
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  
+  });
+  
+
 /* ----------------------- */
 /* ---- POST REQUESTS ---- */
 /* ----------------------- */

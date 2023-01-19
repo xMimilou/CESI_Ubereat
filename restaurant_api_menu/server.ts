@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;  
+const PORT = 3002;  
 
 const articleRoutes = require('./routes/article');
 const menuRoutes = require('./routes/menu');
@@ -12,10 +12,10 @@ const restaurantRoutes = require('./routes/restaurant');
 app.use(cors());
 
 app.use(express.json());
-app.use('/api/restorer/articles', articleRoutes);
-app.use('/api/restorer/menus', menuRoutes);
-app.use('/api/restorer/orders', orderRoutes);
-app.use('/api/restorer/restaurants', restaurantRoutes);
+app.use('/restorer/articles', articleRoutes);
+app.use('/restorer/menus', menuRoutes);
+app.use('/restorer/orders', orderRoutes);
+app.use('/restorer/restaurants', restaurantRoutes);
 
 
 app.get("/", (req: any, res: any, next: any) => {

@@ -20,7 +20,7 @@ const commandesModel = new mongoose.Schema({
 }, { collection: 'orders' });
 
 
-const articleSchema = new Schema({
+const articleSchema = new mongoose.Schema({
     name: String,
     type: String,
     quantity: Number,
@@ -29,12 +29,12 @@ const articleSchema = new Schema({
         type: String,
     }
 }, { collection: 'articles' });
-const menuSchema = new Schema({
+const menuSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    articles: [{ type: Schema.Types.ObjectId, ref: 'Article' }],
+    articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
     price: {
         type: Number,
         required: true
@@ -44,7 +44,7 @@ const menuSchema = new Schema({
         required: false
     }
 }, { collection: 'menus' });
-const restaurantSchema = new Schema({
+const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true

@@ -92,7 +92,7 @@ export default defineComponent({
 
     async function checkReferal() {
       try {
-        const response = await axios.get("http://localhost:3000/api/referal", {
+        const response = await axios.get("http://localhost/auth/referal", {
           headers: { "auth-token": localStorage.getItem("token") },
         });
         if (response.data.valid) {
