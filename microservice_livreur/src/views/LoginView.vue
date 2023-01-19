@@ -37,9 +37,12 @@
 
 <script lang="ts">
 import axios from 'axios';
+import { useStore } from "vuex";
+import { defineComponent } from "vue";
+
 // import localStorage
 
-export default{
+export default defineComponent({
     data(){
         return{
             form:{
@@ -47,6 +50,10 @@ export default{
                 password: ''
             }
         };
+    },
+    setup() {
+        const store = useStore();
+        return { store };
     },
     methods:{
         refreshPage() {
@@ -59,21 +66,26 @@ export default{
                 username: this.form.username,
                 password: this.form.password
             }
+            this.LogoutUser();
             const response = await axios.post('http://localhost/auth/login', data);
             // get jwt token in response and store it in local storage
 
             // redirect = :8000
-            const redirect_page = "http://localhost" + response.data.redirect + "?token=" + response.data.token + "&username=" + response.data.username + "&role=" + response.data.role;
 
-            // go on another website
-            window.location.href = redirect_page;
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('username', response.data.username);
-            localStorage.setItem('role', response.data.role);
-        }
+            this.store.dispatch("user", response.data);
+            
+            this.$router.push('/');
+        },
+        LogoutUser(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+            this.store.dispatch("user", null);
+        },
+
     }
 
-}
+})
 
 </script>
 

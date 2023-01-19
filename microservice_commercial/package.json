@@ -2,7 +2,7 @@
   "name": "microservice_commercial",
   "version": "0.0.0",
   "private": true,
-  "scripts": { 
+  "scripts": {
     "dev": "vite --port 8000",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
