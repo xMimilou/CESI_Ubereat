@@ -2,11 +2,12 @@
   <header>
     <nav>
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/orders" v-if="user" >Commandes</RouterLink>
-      <RouterLink to="/acceptedcommands" v-if="user" >Commandes en cours </RouterLink>
+      <RouterLink to="/statistique" v-if="isLoggedIn" >Statistique</RouterLink>
+      <RouterLink to="/users" v-if="isLoggedIn">Utilisateur</RouterLink>
+      <RouterLink to="/suivis-livraison" v-if="isLoggedIn">Livraison</RouterLink>
     </nav>
     <!-- if jwt is not set -->
-    <nav class="end" v-if="!user">
+    <nav class="end" v-if="!isLoggedIn">
       <RouterLink  to="/login">Login</RouterLink>
       <RouterLink to="/register">Register</RouterLink>
       
@@ -23,13 +24,10 @@
 <script lang="ts">
 import axios from 'axios'
 import { mapGetters} from "vuex";
+import { useStore } from "vuex";
 
 export default {
   name: 'App',
-  computed: {
-    ...mapGetters(["user"])
-      }
-  ,
   data() {
       return {
           isLoggedIn: false

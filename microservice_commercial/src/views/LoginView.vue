@@ -71,8 +71,9 @@ export default defineComponent({
             // get jwt token in response and store it in local storage
 
             // redirect = :8000
-
-            this.store.dispatch("user", response.data);
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('username', response.data.username);
+            localStorage.setItem('role', response.data.role);
             
             this.$router.push('/');
         },
@@ -80,7 +81,6 @@ export default defineComponent({
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             localStorage.removeItem('role');
-            this.store.dispatch("user", null);
         },
 
     }

@@ -56,6 +56,15 @@ import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Nav",
+  
+  created() {
+    const store = useStore();
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      store.commit("user", user);
+    }
+  },
   setup() {
     const store = useStore();
     const router = useRouter();

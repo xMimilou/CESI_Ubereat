@@ -66,14 +66,6 @@ export default defineComponent({
   components: {
     RestaurantComponent,
   },
-  created() {
-    const store = useStore();
-    let user = localStorage.getItem("user");
-    if (user) {
-      user = JSON.parse(user);
-      store.commit("user", user);
-    }
-  },
   data: () => {
     return {
       restaurants: [],

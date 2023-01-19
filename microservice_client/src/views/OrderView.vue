@@ -9,8 +9,6 @@
           <thead>
             <tr>
               <th scope="col">id</th>
-              <th scope="col">restaurant</th>
-              <th scope="col">localisation</th>
               <th scope="col">Total Price</th>
               <th scope="col">deliver username</th>
               <th scope="col">client username</th>
@@ -23,11 +21,9 @@
           <tbody>
             <tr v-for="commande in commandes" :key="commande._id">
               <td>{{ commande._id }}</td>
-              <td>{{ commande.restaurant.name }}</td>
-              <td>{{ commande.restaurant.location }}</td>
               <td>{{ commande.order.total_cost }}</td>
               <td>{{ commande.delivery_person.deliver_username }}</td>
-              <td>{{ commande.username }}</td>
+              <td>{{ commande.client }}</td>
               <td>{{ commande.delivery_person.delivery_location }}</td>
               <td>{{ commande.order.time_delivered }}</td>
               <td>{{ commande.order.status }}</td>
@@ -55,7 +51,7 @@ export default defineComponent({
     async function getCommand() {
       try {
         const response = await axios.post(
-          "http://localhost/commandes/all/username",
+          "http://localhost:3000/commandes/all/username",
           { username: store.getters.user.username },
           { headers: { "auth-token": localStorage.getItem("token") } }
         );

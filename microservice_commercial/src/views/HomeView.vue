@@ -1,16 +1,11 @@
 <script lang="ts">
 import HelloWorldVue from '@/components/HelloWorld.vue';
 import { existsTypeAnnotation } from '@babel/types';
-import { useStore } from "vuex";
 
 export default({
   name: 'HomeView',
   components: {
     HelloWorldVue
-  },
-  setup() {
-    const store = useStore();
-    return { store };
   },
   mounted() {
 
@@ -26,7 +21,6 @@ export default({
         localStorage.setItem('user', username);
         localStorage.setItem('role', role);
 
-        this.store.dispatch("user", username);
         console.log("user", username);
     }
   }

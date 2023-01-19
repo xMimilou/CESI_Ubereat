@@ -18,13 +18,11 @@
   
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
   import { defineComponent } from 'vue';
   import NavBar from '@/components/NavBar.vue';
   import LeftSideBar from '@/components/LeftSideBar.vue';
-  import RightSideBar from '@/components/RightSideBar.vue';
-  import axios from "axios";
-  import { useStore } from "vuex";
+  import RightSideBar from '@/components/RightSideBar.vue'
 
   defineComponent({
     data(){
@@ -36,19 +34,7 @@
       NavBar,
       LeftSideBar,
       RightSideBar
-    },
-    setup() {
-    const store = useStore();
-
-    async function created() {
-      const response = await axios.get("user");
-      store.dispatch("user", response.data);
     }
-
-    return {
-      created,
-    };
-  },
   });
 
 </script>

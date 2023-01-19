@@ -52,7 +52,7 @@ import notificationVue from '@/components/notification.vue'
         </div>
         <!-- Top 5 des clients avec le plus de commandes-->
         <div class="columns-6">
-            <list title="Top 5 des clients" query="/commandes/list/top/client" entete="username,depense" :limit="5"/>
+            <list title="Top 5 des clients" query="/commandes/list/top/client" entete="client,depense" :limit="5"/>
         </div>
     </div>
 </div>

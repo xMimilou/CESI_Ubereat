@@ -208,7 +208,7 @@ router.get("/all/username", async (req, res) => {
 
         var username = req.body.username;
         commandesModel.find({
-            'username':{$eq: username}
+            'client':{$eq: username}
         }, (err, docs) => {
             if(!err) res.send(docs);
             else {
