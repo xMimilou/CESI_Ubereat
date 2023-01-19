@@ -16,7 +16,6 @@
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 import ProductComponent from "../components/Product.vue";
-
 export default defineComponent({
   name: "Home",
   components: {
@@ -33,4 +32,3 @@ export default defineComponent({
   
 <style scope>
 </style>
-  

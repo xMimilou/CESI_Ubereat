@@ -1,16 +1,37 @@
-<script setup lang="ts">
+<script lang="ts">
 import HelloWorldVue from '@/components/HelloWorld.vue';
+import { existsTypeAnnotation } from '@babel/types';
+import { useStore } from "vuex";
 
-// if params in urls is not empty and equal to token, username, role store it in local storage
-const params = new URLSearchParams(window.location.search);
-if (params.get('token') != null && params.get('username') != null && params.get('role') != null) {
-    localStorage.setItem('token', params.get('token'));
-    localStorage.setItem('username', params.get('username'));
-    localStorage.setItem('role', params.get('role'));
+export default({
+  name: 'HomeView',
+  components: {
+    HelloWorldVue
+  },
+  setup() {
+    const store = useStore();
+    return { store };
+  },
+  mounted() {
 
-    // redirect to home page
-    window.location.href = "http://localhost:8002";
-}
+    const params = new URLSearchParams(window.location.search);
+    var token = params.get('token');
+    var username = params.get('username');
+    var role = params.get('role');
+
+    if(token != null && username != null && role != null)
+    {
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', username);
+        localStorage.setItem('role', role);
+
+        this.store.dispatch("user", username);
+        console.log("user", username);
+    }
+  }
+});
+
 </script>
 
 <template>

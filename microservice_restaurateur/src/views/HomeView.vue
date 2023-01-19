@@ -1,13 +1,33 @@
-<script  lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+<template>
+  <div class="home">
+    <!-- <Products></Products> -->
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Products from '@/components/Products.vue'
 import { useStore } from "vuex";
-export default {
+
+export default defineComponent({
   name: 'HomeView',
-  setup() {
+  components: {
+    Products
+  },
+  created() {
+    const store = useStore();
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      store.commit("user", user);
+    }
+  },
+  setup(){
     const store = useStore();
     return { store };
   },
   mounted() {
+
     const params = new URLSearchParams(window.location.search);
     var token = params.get('token');
     var username = params.get('username');
@@ -22,24 +42,9 @@ export default {
 
         this.store.dispatch("user", username);
         console.log("user", username);
-        localStorage.setItem('EtatNotifs', "true");
     
     }
 
-  },created() {
-    const store = useStore();
-    let user = localStorage.getItem("user");
-    if (user) {
-      user = JSON.parse(user);
-      store.commit("user", user);
-    }
   },
-  }
-
-
-
+});
 </script>
-
-<template>
-    <h1></h1>
-</template>
