@@ -64,7 +64,7 @@ const orderSchema = new mongoose.Schema({
     },
     code_client: { type: String },
     code_restaurant: { type: String },
-}, { collection: 'articles' });
+}, { collection: 'orders' });
 module.exports.Article = mongoose.model('Article', articleSchema, 'articles');
 module.exports.Menu = mongoose.model('Menu', menuSchema, 'menus');
 module.exports.Order = mongoose.model('Order', orderSchema, 'orders');
