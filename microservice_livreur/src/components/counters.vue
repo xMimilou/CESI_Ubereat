@@ -6,7 +6,6 @@
     <div class="counters__content">
       <div class="container-fluid">
           <div class="col-4"><p>Addresse du client : {{ costumer_adress }}</p></div>
-          <div class="col-4"><p>Nom du restaurant : {{ restaurant_name }} / {{ restaurant_adress }} </p></div>
           <div class="col-4">Horaire de livraison : {{ timeDelivered }}</div>
 
       </div>
