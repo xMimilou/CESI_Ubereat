@@ -8,8 +8,6 @@ export default {
     return { store };
   },
   mounted() {
-    console.log("mounted");
-
     const params = new URLSearchParams(window.location.search);
     var token = params.get('token');
     var username = params.get('username');
@@ -19,7 +17,7 @@ export default {
     {
 
         localStorage.setItem('token', token);
-        localStorage.setItem('username', username);
+        localStorage.setItem('user', username);
         localStorage.setItem('role', role);
 
         this.store.dispatch("user", username);

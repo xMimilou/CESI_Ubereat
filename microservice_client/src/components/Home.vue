@@ -36,6 +36,7 @@ import { mapGetters } from "vuex";
 import RestaurantComponent from "./Restaurant.vue";
 import { fetchRestaurants } from "../data/products";
 import axios from "axios";
+import { useStore } from "vuex";
 
 export interface Article {
     name: string,
@@ -65,6 +66,14 @@ export default defineComponent({
   components: {
     RestaurantComponent,
   },
+  created() {
+    const store = useStore();
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      store.commit("user", user);
+    }
+  },
   data: () => {
     return {
       restaurants: [],
@@ -74,7 +83,24 @@ export default defineComponent({
     fetchRestaurants().then((res) => {
        this.restaurants = res;
        console.log(this.restaurants)
-    })
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    var token = params.get('token');
+    var username = params.get('username');
+    var role = params.get('role');
+
+    if(token != null && username != null && role != null)
+    {
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
+        localStorage.setItem('role', role);
+
+        this.store.dispatch("user", username);
+        console.log("user", username);
+    
+    }
 
   },
   computed: {
@@ -88,7 +114,11 @@ export default defineComponent({
     },
   },
   setup() {
+    
+    
     const balance = ref(0);
+    const store = useStore();
+    
 
     async function checkReferal() {
       try {
@@ -106,9 +136,7 @@ export default defineComponent({
       }
     }
     checkReferal();
-    return {
-      balance,
-    };
+    return { store, balance };
   },
   
 });

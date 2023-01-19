@@ -62,7 +62,7 @@ export default defineComponent({
           password: password.value,
         });
         localStorage.setItem("token", response.data.token);
-        store.dispatch("user", response.data);
+        localStorage.setItem("user", JSON.stringify(response.data));
         console.log(response.data)
         router.push("/");
       } catch (e) {
