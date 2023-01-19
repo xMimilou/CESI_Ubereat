@@ -66,6 +66,7 @@ export default {
     this.Selectedtitle.forEach((element) => {
       if (!this.UndesirableIDS.includes(element._id)) {
         this.FiltredTable.push(element);
+        console.log(this.FiltredTable);
       }
     });
     this.isLoadding = false;
@@ -83,8 +84,8 @@ export default {
     <div class="row">
       <div class="col-3" v-for="item in FiltredTable" :key="item._id">
         <counters
-          :username_customer="item.username"
-          :costumer_adress="item.delivery_person.delivery_location"
+          :username_customer="item.client"
+          :costumer_adress="item.order.delivery_person.delivery_location"
           :restaurant_name="item.restaurant.name"
           :restaurant_adress="item.restaurant.location"
           :total_price="item.order.total_cost"

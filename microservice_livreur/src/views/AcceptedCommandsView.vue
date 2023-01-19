@@ -66,7 +66,7 @@ export default {
   <div class="container" v-if="!isLoadding">
     <div class="row">
       <div class="col-3" v-for="item in FiltredTable" :key="item._id">
-        <ActiveOrders :RestaurantName="item.restaurant.name" :RestaurantAddress="item.restaurant.location" :CustomerUsername="item.username" :CustomerAddress="item.delivery_person.delivery_location" :TimePlaced="item.order.time_placed" :TimeDelivered="item.order.time_delivered" :Status ="item.order.status" />
+        <ActiveOrders :idOrder="item._id" :CustomerUsername="item.client" :CustomerAddress="item.order.delivery_person.delivery_location" :TimePlaced="item.order.time_placed" :TimeDelivered="item.order.time_delivered" :Status ="item.order.status" />
       </div>
     </div>
   </div>

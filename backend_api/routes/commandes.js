@@ -176,10 +176,10 @@ router.get("/all/available", async (req, res) => {
         });
         //console.log("Ici");
         const delivery_username = '';
-        const status = "En cours";
+        const status = "Validé";
 
         commandesModel.find({
-            'delivery_person.deliver_username':{$eq: delivery_username},
+            'order.delivery_person.deliver_username':{$eq: delivery_username},
             'order.status': {$eq: status}}, (err, docs) => {
             if(!err) res.send(docs);
             else {
@@ -523,13 +523,14 @@ router.post("/selected/deliver", async (req, res) => {
         });
 
         const deliverUsername =  req.body.deliverUsername;
-        const status = "Delivered";
+        const status = "Délivré";
         //console.log(deliverUsername + " " + status);
         commandesModel.find({
-            'delivery_person.deliver_username':{$eq: deliverUsername},
+            'order.delivery_person.deliver_username':{$eq: deliverUsername},
             'order.status': {$ne: status}
         }, (err, docs) => {
             if(!err) res.send(docs);
+            
             else {
                 console.log("Error to get data : " + err);
                 res.status(500).send({error: 'Error getting data from the database'});
@@ -599,11 +600,11 @@ router.put("/update", async (req, res) => {
         const commande = await commandesModel.findOne({
             '_id': {$eq: id}
         });
-        console.log(commande);
+        //console.log(commande);
         if(!commande) return res.status(401).json({message: "Commande not found"});
         commande.order.status = statusDeliver;
-        commande.delivery_person.deliver_username = usernameLivreur;
-        console.log(commande);
+        commande.order.delivery_person.deliver_username = usernameLivreur;
+        //console.log(commande);
 
         await commande.save();
         res.json({message: "Commande updated"});
@@ -626,7 +627,9 @@ router.put("/update/validation/restaurant", async (req, res) => {
 
         const {username, costumerAddress, restaurantAdress, restaurantName, time_delivered, inputContent, time_placed, usernameLivreur} = req.body;
         const statusDeliver = "Livraison";
- 
+        const { id } = req.body;
+        console.log(id);
+        console.log(inputContent);
         //console.log(username + " " + costumerAddress + " " + restaurantAdress + " " + restaurantName + " " + time_placed + " " + time_delivered + " " + statusDeliver + " " + usernameLivreur + "" + inputContent);
         // console.log("Nom du livreur " + usernameLivreur);
         // console.log("Adresse du client " + costumerAddress);
@@ -636,11 +639,7 @@ router.put("/update/validation/restaurant", async (req, res) => {
         // console.log("Nom du client " + username);
 
         const commande = await commandesModel.findOne({
-            'client': {$eq: username},
-            'delivery_person.deliver_username': {$eq: usernameLivreur},
-            'delivery_person.delivery_location': {$eq: costumerAddress},
-            'restaurant.location': {$eq: restaurantAdress},
-            'restaurant.name': {$eq: restaurantName},
+            '_id': {$eq: id},
             'code_restaurateur': {$eq: inputContent}
         });
         if(!commande) return res.status(404).json({message: "Commande not found"});
@@ -666,7 +665,8 @@ router.put("/update/validation/client", async (req, res) => {
         });
         console.log("test");
         const {username, costumerAddress, restaurantAdress, restaurantName, time_delivered, inputContent, time_placed, usernameLivreur} = req.body;
-        const statusDeliver = "Delivered";
+        const statusDeliver = "Délivré";
+        const { id } = req.body;
         // console.log("Nom du livreur " + usernameLivreur);
         // console.log("Adresse du client " + costumerAddress);
         // console.log("Adresse du restaurant " + restaurantAdress);
@@ -675,11 +675,7 @@ router.put("/update/validation/client", async (req, res) => {
         // console.log("Nom du client " + username);
         
         const commande = await commandesModel.findOne({
-            'client': {$eq: username},
-            'delivery_person.deliver_username': {$eq: usernameLivreur},
-            'delivery_person.delivery_location': {$eq: costumerAddress},
-            'restaurant.location': {$eq: restaurantAdress},
-            'restaurant.name': {$eq: restaurantName},
+            '_id': {$eq: id},
             'code_client': {$eq: inputContent}
         });
         if(!commande) return res.status(404).json({message: "Commande not found"});

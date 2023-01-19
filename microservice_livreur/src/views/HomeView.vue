@@ -24,11 +24,20 @@ export default {
 
         this.store.dispatch("user", username);
         console.log("user", username);
+        localStorage.setItem('EtatNotifs', "true");
     
     }
 
+  },created() {
+    const store = useStore();
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      store.commit("user", user);
+    }
   },
-}
+  }
+
 
 
 </script>

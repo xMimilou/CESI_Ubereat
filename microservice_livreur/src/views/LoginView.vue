@@ -72,7 +72,7 @@ export default defineComponent({
 
             // redirect = :8000
 
-            this.store.dispatch("user", response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
             
             this.$router.push('/');
         },
@@ -80,7 +80,7 @@ export default defineComponent({
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             localStorage.removeItem('role');
-            this.store.dispatch("user", null);
+            localStorage.setItem("user", "");
         },
 
     }

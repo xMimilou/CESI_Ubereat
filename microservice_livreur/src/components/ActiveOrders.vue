@@ -3,10 +3,10 @@
     <div class="counters widget">
       <div v-if="showElement">
         <div class="counters__title">
-          <h3>{{ RestaurantName }}</h3>
+          <h3>Restaurant</h3>
         </div>
         <div class="container">
-          <div class="col-4"><p> Adresse du restaurant : {{  RestaurantAddress }}</p></div>
+          <div class="col-4"><p>Id de la commande : {{  idOrder }}</p></div>
           <div class="col-4"><p>Date de la commande : {{  TimePlaced }}</p></div>
           <div class="col-4">Date de la livraison prévue : {{  TimeDelivered }}</div>
           <div class="col-4 error">{{ ErrorDisplay }}</div>
@@ -49,14 +49,6 @@ import axios from "axios";
 export default{
     name: "activeOrders",
     props: {
-        RestaurantAddress: {
-            type: String,
-            required: true
-        },
-        RestaurantName: {
-            type: String,
-            required: true
-        },
         CustomerUsername: {
             type: String,
             required: true
@@ -79,7 +71,12 @@ export default{
         {
             type: String,
             required: true
-        }
+        },
+        idOrder:
+        {
+            type: String,
+            required: false
+        },
 
         
     },
@@ -120,13 +117,7 @@ export default{
             if(etape == "1"){
               try {
               const response = await axios.put("http://localhost/commandes/update/validation/restaurant", {
-                username : username_customer,
-                costumerAddress: costumer_adress,
-                restaurantAdress : restaurant_adress,
-                restaurantName : restaurant_name,
-                time_delivered : timeDelivered,
-                time_placed : timePlaced,
-                usernameLivreur : this.username,
+                id : this.idOrder,
                 inputContent : inputContent
               }, {
                 headers: {
@@ -153,13 +144,7 @@ export default{
             {
               try {
               const response = await axios.put("http://localhost/commandes/update/validation/client", {
-                username : username_customer,
-                costumerAddress: costumer_adress,
-                restaurantAdress : restaurant_adress,
-                restaurantName : restaurant_name,
-                time_delivered : timeDelivered,
-                time_placed : timePlaced,
-                usernameLivreur : this.username,
+                id : this.idOrder,
                 inputContent : inputContent
               }, {
                 headers: {
