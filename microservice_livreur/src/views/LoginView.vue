@@ -53,6 +53,8 @@ export default{
             location.reload()
         },
         async LoginUser(){
+
+            
             var data = {
                 username: this.form.username,
                 password: this.form.password
